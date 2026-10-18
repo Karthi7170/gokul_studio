@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, BadgeCheck, CalendarDays, Camera, Check, CheckCircle2, ChevronRight, Clipboard, Clock3, Copy, CreditCard, Download, FileText, Landmark, Lock, Mail, MapPin, MessageCircle, Phone, UserRound, Wallet } from 'lucide-react';
 import { BackButton, DetailLine, Header, Logo, OutlineButton, PrimaryButton, ScreenTitle, StatusBadge, Stepper } from '../components/UI';
 import { useBooking } from '../context/BookingContext';
-import { SERVICES, IMAGE_URL, formatDate, inr, getQuote, to12h } from '../data/services';
+import { SERVICES, IMAGE_URL, THUMBNAIL_URL, formatDate, inr, getQuote, to12h } from '../data/services';
 import { downloadQuotation } from '../utils/quotationPdf';
 import { bookingMessage, openWhatsApp, shareDetails } from '../utils/sharing';
 const methodNames=['UPI','Credit / Debit Card','Net Banking','Wallets'] as const;
@@ -15,7 +15,7 @@ export function Quotation(){
  <section className="quote-section"><div className="quote-title"><span><UserRound size={17}/> Customer Details</span><button onClick={()=>nav('/profile')}>View</button></div><p><UserRound size={14}/>{booking.fullName}</p><p><Phone size={14}/>{booking.phone}</p><p><Mail size={14}/>{booking.email}</p></section>
  <section className="quote-section"><div className="quote-title"><span><CalendarDays size={17}/> Event Details</span><button onClick={()=>nav('/booking-details')}>✎ Edit</button></div><p><CalendarDays size={14}/>{formatDate(booking.date)}</p><p><Clock3 size={14}/>{to12h(booking.time)} IST</p><p><MapPin size={14}/>{booking.venue}</p><p><Camera size={14}/>{booking.eventType}</p></section>
  <section className="quote-section"><div className="quote-title"><span><Camera size={17}/> Selected Service Details</span><button onClick={()=>nav('/book')}>✎ Edit</button></div>
- <div className="quote-selected"><img src={IMAGE_URL(selected.image)} alt=""/><div><strong>{selected.name}</strong><p>{selected.detail}</p></div></div>
+ <div className="quote-selected"><img src={THUMBNAIL_URL(selected)} alt=""/><div><strong>{selected.name}</strong><p>{selected.detail}</p></div></div>
  <ul className="quote-inclusions">{selected.included.map(feature=><li key={feature}><Check size={12}/>{feature}</li>)}</ul><div className="quotation-table"><div className="quote-table-head"><span>Service</span><span>Qty</span><span>Rate</span><span>Amount</span></div>{quote.lines.map(line=><div className="quote-table-row" key={line.label}><span>{line.label}</span><span>{line.qty}</span><span>{inr(line.rate)}</span><span>{inr(line.qty*line.rate)}</span></div>)}
  <div className="quote-totals"><div><span>Subtotal</span><b>{inr(quote.subtotal)}</b></div><div><span>Discount (if any)</span><b>-{inr(quote.discount)}</b></div></div>
  <div className="quote-grand-total"><strong>Total Amount</strong><strong>{inr(quote.total)}</strong></div></div>
@@ -31,7 +31,7 @@ export function Payment(){
  const pay=()=>{setLoading(true);window.setTimeout(()=>{confirm();setLoading(false);nav('/confirmed',{replace:true});},900)};
  return <div className="inner-screen page-flow payment-screen"><Header title="Payment Details" back="/quotation"/><div className="page-padding">
  <div className="payment-logo"><Logo compact/></div><div className="payment-summary"><h3><CreditCard size={19}/> Booking Summary</h3>
- <div className="payment-service"><img src={IMAGE_URL(selected.image)} alt=""/><div><strong>{selected.name}</strong><p>Selected package · Illustrative estimate</p></div></div>
+ <div className="payment-service"><img src={THUMBNAIL_URL(selected)} alt=""/><div><strong>{selected.name}</strong><p>Selected package · Illustrative estimate</p></div></div>
  <div className="payment-line"><CalendarDays size={16}/><span>Event Date</span><strong>{formatDate(booking.date)}</strong></div>
  <div className="payment-line"><MapPin size={16}/><span>Venue</span><strong>{booking.venue}</strong></div>
  <div className="payment-total"><span>₹ &nbsp; Total Amount</span><strong>{inr(quote.total)}</strong></div></div>
