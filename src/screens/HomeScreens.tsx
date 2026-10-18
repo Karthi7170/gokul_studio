@@ -1,34 +1,55 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowRight, CalendarDays, Camera, CheckCircle2, ChevronRight, Clapperboard, Heart, Images, MessageCircle, ShieldCheck, Sparkles, UserRound } from 'lucide-react';
-import { Header, Logo, PrimaryButton, SectionHeading } from '../components/UI';
-import { SERVICES, IMAGE_URL, inr } from '../data/services';
-const benefits=[
- {icon:Sparkles,title:'Thoughtful Storytelling',detail:'Beautifully capture the moments that matter.'},
- {icon:Images,title:'Photo + Video Options',detail:'Coverage options for events of every size.'},
- {icon:ShieldCheck,title:'Clear Inclusions',detail:'See what is included before requesting a quote.'},
+import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {ArrowRight,CalendarDays,Camera,CheckCircle2,ChevronRight,Clapperboard,Heart,Images,MessageCircle,Search,ShieldCheck,Sparkles,Star,UserRound} from 'lucide-react';
+import {Header,Logo,PrimaryButton} from '../components/UI';
+import {SERVICES,THUMBNAIL_URL,inr} from '../data/services';
+import {useAuth} from '../context/AuthContext';
+const pillars=[
+ {icon:Heart,title:'Moments with meaning',detail:'Real emotions, beautifully preserved.'},
+ {icon:Camera,title:'Photo & film together',detail:'Creative coverage for every occasion.'},
+ {icon:ShieldCheck,title:'No surprises',detail:'See inclusions before requesting a quote.'}
 ];
+export function StudioNav({active}:{active:'home'|'packages'|'profile'}){
+ const nav=useNavigate();
+ return <nav className="studio-bottom-nav" aria-label="Main navigation">
+ <button className={active==='home'?'active':''} onClick={()=>nav('/home')}><span><Heart size={18}/></span>Home</button>
+ <button className={active==='packages'?'active':''} onClick={()=>nav('/book')}><span><Images size={19}/></span>Packages</button>
+ <button className={active==='profile'?'active':''} onClick={()=>nav('/profile')}><span><UserRound size={19}/></span>Account</button>
+ </nav>;
+}
 export function Home(){
- const nav=useNavigate();const [slide,setSlide]=useState(0);
- const titles=[['Book Your','Creative Moments'],['Make Every','Moment Matter'],['Your Story,','Our Passion']];
- return <div className="home-screen page-flow">
- <div className="home-top"><Logo compact/><div className="home-actions"><button className="icon-button" aria-label="Your profile" onClick={()=>nav('/profile')}><UserRound size={22} color="#333"/></button></div></div>
- <div className="hero-banner"><div className="hero-copy"><h1>{titles[slide][0]}<br/><span>{titles[slide][1]}</span></h1><p>Photography &nbsp;|&nbsp; Videography<br/>Weddings &nbsp;|&nbsp; Baby Shoots</p><div className="hero-dots">{titles.map((_,i)=><button key={i} className={i===slide?'active':''} onClick={()=>setSlide(i)} aria-label={`Banner ${i+1}`}/>)}</div></div><img src={IMAGE_URL('camera.jpg')} alt="Professional studio camera"/></div>
- <PrimaryButton onClick={()=>nav('/book')} className="hero-cta"><CalendarDays size={20}/> Explore Packages</PrimaryButton>
- <SectionHeading title="Our Services" action="All 6 Packages" onClick={()=>nav('/book')}/>
- <div className="home-package-grid">{SERVICES.slice(0,3).map(s=><button className="home-package-card" key={s.id} onClick={()=>nav('/book')}><img src={IMAGE_URL(s.image)} alt=""/><strong>{s.name}</strong><span>Explore <ArrowRight size={12}/></span></button>)}</div>
- <button className="browse-packages" onClick={()=>nav('/book')}>Browse all 6 packages <ChevronRight size={16}/></button>
- <SectionHeading title="Why Choose Gokul Creative Studio?"/>
- <div className="why-benefits">{benefits.map(({icon:Icon,title,detail})=><div className="why-benefit" key={title}><span className="why-benefit-icon"><Icon size={19}/></span><div><strong>{title}</strong><p>{detail}</p></div><CheckCircle2 size={15} className="why-check"/></div>)}</div>
- <p className="demo-watermark">Demo packages and estimates · Confirm final details with the studio</p>
+ const nav=useNavigate();const {profile,user}=useAuth();
+ const first=(profile?.full_name||String(user?.user_metadata?.full_name||'')).trim().split(/\s+/)[0]||'there';
+ return <div className="home-screen premium-home page-flow">
+ <div className="premium-topbar"><div className="premium-welcome"><span>WELCOME TO GOKUL STUDIO</span><h2>Hello, {first} <span className="hello-spark">✳</span></h2></div><button className="premium-profile" aria-label="Open your account" onClick={()=>nav('/profile')}><UserRound size={22}/></button></div>
+ <div className="editorial-hero">
+ <img src={THUMBNAIL_URL(SERVICES[0])} alt="Wedding photography inspiration" onError={e=>{e.currentTarget.src='/images/combo.jpg'}}/>
+ <div className="editorial-hero-shade"/>
+ <div className="editorial-hero-content"><div className="editorial-kicker"><span/> THE ART OF EVERY MOMENT</div>
+ <h1>Stories worth<br/><em>remembering.</em></h1>
+ <p>From your first hello to life's biggest celebrations — let's capture it beautifully.</p>
+ <button className="editorial-hero-button" onClick={()=>nav('/book')}>Explore our packages <ArrowRight size={17}/></button>
+ </div><span className="editorial-hero-index">01 / 06</span></div>
+ <div className="premium-promise"><div><Sparkles size={18}/><strong>Personalized</strong><small>For your moment</small></div><span/><div><Clapperboard size={18}/><strong>Photo + Film</strong><small>Complete coverage</small></div><span/><div><CheckCircle2 size={18}/><strong>Easy Booking</strong><small>Clear inclusions</small></div></div>
+ <div className="premium-section-head"><div><span className="section-kicker">EXPLORE WHAT WE DO</span><h3>Made for every <em>chapter.</em></h3></div><button onClick={()=>nav('/book')}>View all <ArrowRight size={15}/></button></div>
+ <div className="editorial-package-carousel">{SERVICES.slice(0,4).map((s,i)=><button key={s.id} onClick={()=>nav('/packages/'+s.id)} className="editorial-package"><div className="editorial-package-photo"><img src={THUMBNAIL_URL(s)} loading="lazy" alt={s.name} onError={e=>{e.currentTarget.src='/images/'+s.image}}/><span>{i===0?'BEST LOVED':s.tag.toUpperCase()}</span></div><div className="editorial-package-copy"><strong>{s.name}</strong><p>Explore details <ArrowRight size={14}/></p></div></button>)}</div>
+ <button className="premium-all-collection" onClick={()=>nav('/book')}><span><Images size={18}/></span><strong>Explore all 6 creative packages</strong><ChevronRight size={18}/></button>
+ <div className="premium-section-head moments-head"><div><span className="section-kicker">WHY GOKUL CREATIVE STUDIO</span><h3>More than just <em>pictures.</em></h3></div></div>
+ <div className="premium-value-list">{pillars.map(({icon:Icon,title,detail},i)=><div className="premium-value-card" key={title}><div className="premium-value-symbol"><Icon size={20}/></div><div><strong>{title}</strong><p>{detail}</p></div><span>{'0'+(i+1)}</span></div>)}</div>
+ <div className="premium-process"><span>YOUR JOURNEY, MADE SIMPLE</span><h3>Three steps to your story.</h3><div>{['Choose a package','Share event details','Receive your quotation'].map((x,i)=><div key={x}><span>{'0'+(i+1)}</span><p>{x}</p></div>)}</div><button onClick={()=>nav('/book')}>Start planning <ArrowRight size={15}/></button></div>
+ <p className="premium-disclaimer">Package photos are inspiration only. Estimates and inclusions are subject to studio confirmation.</p>
+ <StudioNav active="home"/>
  </div>;
 }
 export function BookService(){
- const nav=useNavigate();
- return <div className="inner-screen page-flow"><Header logo back="/home"/><div className="page-padding">
- <div className="screen-intro compact"><h2>Explore Our Packages</h2><p>Select a package to see every inclusion and request a quotation.</p></div>
- <div className="packages-count"><Camera size={16}/> 6 curated creative packages <span>View details <ChevronRight size={13}/></span></div>
- <div className="package-catalog">{SERVICES.map(s=><button className="package-catalog-card" key={s.id} onClick={()=>nav(`/packages/${s.id}`)}><img src={IMAGE_URL(s.image)} alt=""/><div className="package-catalog-info"><span className="package-kicker">{s.tag}</span><strong>{s.name}</strong><p>{s.detail}</p><span className="package-price">Sample from <b>{inr(s.from)}</b></span></div><span className="package-arrow"><ChevronRight size={19}/></span></button>)}</div>
- <div className="packages-note"><MessageCircle size={17}/> Package prices and inclusions are illustrative. Final quotations depend on your event, date, duration and location.</div>
- </div></div>;
+ const nav=useNavigate();const [query,setQuery]=useState('');
+ const filtered=SERVICES.filter(x=>(x.name+' '+x.detail+' '+x.event).toLowerCase().includes(query.trim().toLowerCase()));
+ return <div className="inner-screen premium-catalog page-flow"><Header title="Explore Packages" back="/home"/><div className="page-padding">
+ <div className="premium-catalog-heading"><span className="section-kicker">CREATIVE COLLECTIONS</span><h2>Find your perfect <em>package.</em></h2><p>Pick a moment. Discover your coverage. Plan your story.</p></div>
+ <label className="premium-search"><Search size={19}/><input aria-label="Search packages" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search wedding, baby, events..."/></label>
+ <div className="catalog-filter-count">{filtered.length} packages to explore <span>Tap to see all inclusions</span></div>
+ <div className="premium-catalog-grid">{filtered.map(s=><button className="premium-catalog-tile" key={s.id} onClick={()=>nav('/packages/'+s.id)}><img src={THUMBNAIL_URL(s)} loading="lazy" alt={s.name} onError={e=>{e.currentTarget.src='/images/'+s.image}}/><div className="premium-catalog-overlay"><span>{s.tag.toUpperCase()}</span><strong>{s.name}</strong><p>From {inr(s.from)} <ArrowRight size={17}/></p></div></button>)}</div>
+ {filtered.length===0&&<div className="premium-empty">No packages match your search. Try “wedding” or “baby”.</div>}
+ <div className="premium-catalog-note"><MessageCircle size={17}/> Prices are indicative only. Each package receives a personalized quotation.</div>
+ </div><StudioNav active="packages"/></div>;
 }
