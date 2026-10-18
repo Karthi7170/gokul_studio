@@ -14,14 +14,16 @@ A mobile-first React + Vite application for **Gokul Creative Studio**. Customers
 
 - Editorial mobile home page, curated image thumbnails, package filters and search.
 - Six packages: Wedding, Photography, Baby Shoot, Pre-Wedding, Cinematic Videography, and Events.
-- Full package details and inclusions, event enquiry and quote workflow.
+- Full package details and inclusions, followed by event type and **location-only** venue details (no date or time requested).
+- Venue can be entered manually, pinpointed using device GPS, or attached by pasting a Google Maps share link. Google Maps pin selection requires pasting the copied Maps link back into the app.
 - **Real Supabase email/password sign-in and sign-up**, optional email confirmation, password reset, persistent sessions and sign-out.
 - Accounts are not prepopulated. Sample customer names, passwords and payment confirmations have been removed.
 - Registered name and phone from each customer's profile; phone opt-in preferences and optional SMS OTP verification.
 - Customer requests stored in `public.gcs_booking_requests`, protected by owner-only Row Level Security.
 - PDF quotations and manual WhatsApp share addressed to the registered customer number.
 - Server endpoint `/api/notify` to deliver WhatsApp Business templates **only when** required approved Meta credentials, templates, and verified customer phone are configured.
-- Clear **Not Paid** status until a real verified payment provider is integrated.
+- Four tap-to-complete **dummy** payment choices (UPI, card, net banking, wallet) record `demo_only` on the user's quotation request; no card, banking or UPI information is collected. This is a demo booking, **not** a paid studio reservation.
+- A separate quotation-only option leaves the status `not_paid`.
 
 ## Installation
 
@@ -54,6 +56,12 @@ Enable email/password login and account email confirmation under Auth Providers 
 ### Database and security
 
 Migrations create `gcs_customer_profiles` and `gcs_booking_requests`, both protected by Row Level Security tied to `auth.uid()`. Every newly registered user starts with their own empty data. Existing demo data in legacy localStorage keys is cleared.
+
+## Location pin and demo payment notes
+
+No Google Maps API key is needed. To attach a pin for another location, open Google Maps, drop a pin, select Share → Copy link, then paste and apply the URL in Booking Details. Alternatively, use the device's GPS permission or enter a written address. The Maps link is included in the review and PDF when available. The event date/time fields are not requested or submitted.
+
+Choosing any of the four dummy methods saves the quotation request to Supabase and marks it `demo_only`. This deliberately does **not** represent genuine payment, a receipt, or a confirmed studio booking. For actual payments, integrate a verified gateway with server-side reconciliation and separate real payment statuses.
 
 ## Customer WhatsApp delivery
 
