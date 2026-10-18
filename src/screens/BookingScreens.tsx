@@ -10,8 +10,8 @@ function safeMapsLink(raw:string):string|null {
   const url=new URL(raw.trim());
   const host=url.hostname.toLowerCase();
   if(url.protocol!=='https:')return null;
-  if(host==='maps.app.goo.gl'||host==='maps.google.com'||host==='www.google.com'||host==='google.com'||host==='www.google.co.in'&&url.pathname.startsWith('/maps'))return url.href;
-  if((host==='www.google.com'||host==='google.com')&&url.pathname.startsWith('/maps'))return url.href;
+  if(host==='maps.app.goo.gl'||host==='maps.google.com')return url.href;
+  if(['www.google.com','google.com','www.google.co.in','google.co.in'].includes(host)&&url.pathname.startsWith('/maps'))return url.href;
   return null;
  }catch{return null;}
 }
