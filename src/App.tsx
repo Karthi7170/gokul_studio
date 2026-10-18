@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import type {ReactNode} from 'react';
-import {SignIn, SignUp, ForgotPassword} from './screens/AuthScreens';
+import {SignIn, SignUp, ForgotPassword,ResetPassword} from './screens/AuthScreens';
 import {Home, BookService} from './screens/HomeScreens';
 import {PackageDetails} from './screens/PackageDetails';
 import {Profile} from './screens/Profile';
@@ -11,7 +11,8 @@ function Private({children}:{children:ReactNode}){const {signedIn}=useAuth();ret
 function GuestOnly({children}:{children:ReactNode}){const {signedIn}=useAuth();return signedIn?<Navigate to="/home" replace/>:<>{children}</>;}
 const screens=['/sign-in','/sign-up','/home','/book','/packages/wedding','/booking-details','/schedule','/quotation','/payment','/confirmed','/whatsapp'];
 export default function App(){
- const location=useLocation();const {signedIn}=useAuth();
+ const location=useLocation();const {signedIn,loading}=useAuth();
+ if(loading)return <div className="desktop-stage"><div className="phone-shell"><div className="auth-loading"><div className="auth-loading-logo">G<span>●</span>KUL</div><p>Preparing your studio experience...</p><div className="loading-pulse"/></div></div></div>;
  return <div className="desktop-stage"><div className="phone-shell"><div className="top-notch" aria-hidden="true"/><div className="ios-status"><span>9:41</span><span className="status-right">▂▄▆　◕　▰</span></div>
  <main key={location.pathname} className="phone-content" aria-label="Gokul Creative Studio booking application">
  <Routes location={location}>
@@ -19,6 +20,7 @@ export default function App(){
  <Route path="/sign-in" element={<GuestOnly><SignIn/></GuestOnly>}/>
  <Route path="/sign-up" element={<GuestOnly><SignUp/></GuestOnly>}/>
  <Route path="/forgot-password" element={<GuestOnly><ForgotPassword/></GuestOnly>}/>
+ <Route path="/reset-password" element={<ResetPassword/>}/>
  <Route path="/home" element={<Private><Home/></Private>}/>
  <Route path="/book" element={<Private><BookService/></Private>}/>
  <Route path="/packages/:id" element={<Private><PackageDetails/></Private>}/>
