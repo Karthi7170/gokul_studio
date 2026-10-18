@@ -256,3 +256,18 @@ button{border:0;background:transparent;color:inherit}p,h1,h2,h3{margin:0}p{line-
 .preview-notice{display:flex;align-items:center;gap:10px;background:#eaf7f1;padding:13px;border-radius:12px;color:#12874f;margin:15px 0}
 .preview-notice strong{font-size:12px}.preview-notice p{font-size:10px;margin-top:3px;overflow-wrap:anywhere}
 .whatsapp-preview{background:#e6f3e8;white-space:pre-wrap;overflow-wrap:anywhere;color:#2f403a;border-radius:13px;padding:15px;font:11px/1.6 Inter,Arial,sans-serif}
+
+
+/* Secure booking, notification delivery and recovery refinements */
+.auth-loading{height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;background:radial-gradient(circle at 75% 20%,#5d1828,#160e16 55%);color:#fff;text-align:center;padding:22px}
+.auth-loading-logo{font-size:44px;font-weight:900;letter-spacing:-3px}.auth-loading-logo span{color:#ef5065}
+.auth-loading p{font-size:11px;color:#e4ced3;letter-spacing:.02em}
+.loading-pulse{height:2px;width:70px;background:linear-gradient(90deg,transparent,#ef5065,transparent);animation:pulse 1.7s ease-in-out infinite}@keyframes pulse{50%{opacity:.3;transform:scaleX(.5)}}
+.notify-customer{background:#aa2638!important;color:#fff!important;box-shadow:0 4px 11px #8d273333;margin:10px 0 7px!important;height:auto!important;min-height:44px!important;border-radius:11px!important;font-size:11px!important;gap:7px!important;padding:8px!important}
+.notify-customer:disabled{opacity:.5}
+.phone-verification{border:1px solid #ece4e2;border-radius:13px;padding:12px;margin:13px 0;background:#fff}
+.phone-verification-head{display:flex;align-items:flex-start;gap:9px}.phone-verification-head svg{color:#a82c39;flex:none}
+.phone-verification-head strong{display:block;font-size:12px}.phone-verification-head p{font-size:10px;color:#797070;line-height:1.45;margin-top:4px}
+.phone-verify-btn{background:#fff0f1;border:1px solid #f1d0d4;color:#9f2430;min-height:37px;width:100%;border-radius:9px;font-size:11px;font-weight:800;margin-top:12px}
+.phone-otp-row{display:flex;gap:8px;margin-top:10px}.phone-otp-row input{flex:1;width:0;height:39px;border:1px solid #e4d5d6;border-radius:8px;padding:0 10px;font-size:12px}.phone-otp-row button{background:#a9273a;color:white;font-size:11px;font-weight:800;padding:7px 15px;border-radius:8px}
+.phone-verification>p{font-size:10px;color:#717171;line-height:1.4;margin-top:9px}
