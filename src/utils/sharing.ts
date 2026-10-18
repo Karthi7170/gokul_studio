@@ -1,15 +1,16 @@
 import { type Booking } from '../context/BookingContext';
-import { SERVICES, formatDate, inr, TOTAL, to12h } from '../data/services';
+import { SERVICES, formatDate, inr, getQuote, to12h } from '../data/services';
 export function bookingMessage(b: Booking): string {
   const service = SERVICES.find(s=>s.id===b.serviceId)?.name || 'Photography';
+  const total = getQuote(b.serviceId).total;
   return `🎬 Gokul Creative Studio — Booking ${b.bookingId ? 'Confirmation' : 'Quotation'}\n\n`+
     `Booking ID: ${b.bookingId || 'Pending confirmation'}\n`+
     `Quotation No.: ${b.quotationNo}\n`+
     `Customer: ${b.fullName}\n`+
     `Event: ${b.eventType}\n`+
-    `Selected Service: ${service}\n`+
+    `Selected Package: ${service}\n`+
     `Date: ${formatDate(b.date)}\nTime: ${to12h(b.time)} IST\n`+
-    `Location: ${b.venue}\nTotal: ${inr(TOTAL)}\n`+
+    `Location: ${b.venue}\nIllustrative Estimate: ${inr(total)}\n`+
     `Payment Status: ${b.paymentStatus}\n\nThank you for choosing Gokul Creative Studio! ❤️`;
 }
 export const whatsappLink = (b: Booking) => `https://wa.me/?text=${encodeURIComponent(bookingMessage(b))}`;
