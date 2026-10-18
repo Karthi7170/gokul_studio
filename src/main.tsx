@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { BookingProvider } from './context/BookingContext';
 import App from './App';
 import './style.css';
+import './styles/ios-home.css';
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthProvider><BookingProvider><HashRouter><App /></HashRouter></BookingProvider></AuthProvider>
