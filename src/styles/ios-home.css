@@ -403,7 +403,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--ios-accent-ink)
 }
 @media (max-width: 430px) {
   .gcs-home-2026 .gcs-2026-welcome { flex-direction: column !important; align-items: stretch !important; }
-  .gcs-home-2026 .gcs-2026-book-shortcut { align-self: flex-start !important; margin-top: var(--ios-space-4); }
+  .gcs-home-2026 .gcs-2026-book-shortcut { align-self: flex-start !important; margin-top: 0 !important; }
 }
 @media (max-width: 374px) {
   .gcs-home-2026 .gcs-2026-top { padding-left: var(--ios-screen-gutter) !important; padding-right: var(--ios-screen-gutter) !important; }
