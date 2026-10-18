@@ -421,3 +421,141 @@ button{border:0;background:transparent;color:inherit}p,h1,h2,h3{margin:0}p{line-
 .booking-details-red .notes-box{border:1px solid #eadbdb}
 .booking-details-red .selected-service{margin-top:9px}
 .booking-details-red .booking-continue{border-radius:12px!important;min-height:47px!important}
+
+
+/* ============================================================
+   GOKUL ROSSO CORSA — Ferrari red (#FF2800) + pure white
+   Premium, accessible, mobile-first screens and checkout.
+   ============================================================ */
+:root{
+ --red:#FF2800!important;
+ --blush:#FFF3F0!important;
+ --green:#FF2800!important;
+ --gcs-wine:#FF2800!important;
+ --gcs-sand:#FFFFFF!important;
+ --gcs-ink:#18181B!important;
+ --gcs-red-outline:#FFD5CD;
+ --gcs-red-wash:#FFF4F1;
+}
+html,body,#root{background:#fff}
+.desktop-stage{background:radial-gradient(circle at 12% 16%,#ffe9e3 0%,transparent 34%),#fff8f6}
+.phone-content,.inner-screen,.home-screen,.gcs-home,.gcs-catalog,.premium-auth,.payment-screen,.confirmation-screen,.whatsapp-page{background:#fff!important;color:#18181b!important}
+.primary-button,.primary-button:not(.green-button),.primary-button.green-button{
+ background:#FF2800!important;color:#fff!important;box-shadow:0 6px 17px #FF28002C!important;
+}
+.primary-button:disabled{background:#e6aaa0!important;box-shadow:none!important}
+.outline-button{border:1.5px solid var(--gcs-red-outline);background:#fff;color:#e82709}
+.screen-header{background:#fff!important;border-bottom:1px solid #fff0ec}
+.screen-header .header-title,.package-detail-heading h2,.booking-form-intro h2,.checkout-heading h2,.confirm-heading h2{color:#18181b}
+.back-icon,.icon-button{color:#202024}
+.back-icon:active,.gcs-profile-action:active{background:#fff0ec}
+.brand-camera,.brand-camera::after{color:var(--red)!important;border-color:var(--red)!important}
+.gcs-home,.gcs-catalog{background:#fff!important}
+.gcs-header-camera,.auth-camera-mark{background:var(--red)!important;color:white!important}
+.gcs-greeting>span,.gcs-eyebrow,.gcs-collection-tag,.gcs-header-camera svg,.gcs-home-section-heading>button,.gcs-benefit-icon svg{color:var(--red)}
+.gcs-header-camera svg{color:white}
+.gcs-hero-premium{background:#e62514}
+.gcs-hero-overlay{background:linear-gradient(105deg,#CE240BEE 0%,#F33418C7 51%,#E3332866 100%),linear-gradient(0deg,#a61616a3,transparent 80%)!important}
+.gcs-hero-content>button{color:var(--red)!important;border:1px solid #fff;background:#fff!important}
+.gcs-hero-content h1 em,.gcs-hero-kicker{color:#fff!important}
+.gcs-featured-shade{background:linear-gradient(transparent,#a62c1dcf)!important}
+.gcs-featured-number{color:var(--red)!important}
+.gcs-view-packages{color:var(--red)!important;background:#fff!important;border-color:var(--gcs-red-outline)!important}
+.gcs-benefit,.gcs-collection-card{background:#fff!important;border-color:#ffebe6!important;box-shadow:0 4px 17px #6c170709}
+.gcs-benefit-icon{background:var(--gcs-red-wash)!important;color:var(--red)!important}
+.gcs-benefit-check{color:var(--red)!important}
+.gcs-mobile-nav{border-top:1px solid #ffdbd3!important;background:white!important}
+.gcs-mobile-nav>button.active{color:var(--red)!important}
+.gcs-filter-bar button.active{background:var(--red)!important;border-color:var(--red)!important}
+.gcs-filter-bar button:not(.active){background:#fff!important;color:#9e321e!important;border-color:#ffddd5!important}
+.gcs-search,.gcs-collection-image,.gcs-catalog-top,.gcs-catalog-intro{background:white!important}
+.premium-auth-banner{background:linear-gradient(100deg,#c92510d9,#F63318a1),url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=70') center 40%/cover!important}
+.premium-auth-card{border-color:#ffe4dc!important;box-shadow:0 8px 25px #9920100C}
+.premium-auth-heading .auth-eyebrow,.premium-auth-heading h2 em,.premium-auth-top b{color:var(--red)!important}
+.premium-auth .primary-button{background:var(--red)!important}
+.input-box:focus-within,.event-picker-field:focus-within,.select-container:focus-within{border-color:var(--red)!important;box-shadow:0 0 0 3px #ff280016!important}
+.auth-loading{background:radial-gradient(circle at 60% 18%,#ff6049,var(--red) 76%)!important}
+.package-estimate{background:var(--gcs-red-wash)!important;border:1px solid #ffd7cb!important}
+.package-estimate strong,.package-estimate svg{color:var(--red)!important}
+.package-includes li>span{background:#fff0ed!important;color:var(--red)!important;border:1px solid #ffede6}
+.package-personal-note{background:#fff7f5!important;border:1px solid #fff0ec;color:#292025}
+.package-personal-note>svg{color:var(--red)!important}
+.package-detail-heading small,.package-includes-title>div{color:var(--red)!important}
+.package-detail-hero>span{background:var(--red)!important;color:white!important}
+.package-details-ferrari .package-detail-body{padding-bottom:28px!important}
+.package-details-ferrari .package-estimate{margin:18px 0 22px}
+.package-details-ferrari .package-includes{margin-bottom:20px}
+.ferrari-package-cta{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important;align-items:stretch!important;margin-top:25px!important}
+.ferrari-package-cta>button{display:flex!important;align-items:center;justify-content:center;gap:7px;min-width:0;min-height:54px!important;padding:11px 9px!important;border-radius:16px!important;font-size:12px!important;font-weight:850!important;text-align:center!important;line-height:1.2!important;box-shadow:none!important}
+.ferrari-package-cta>button>svg{flex:none;width:17px;height:17px}
+.ferrari-package-cta>button>svg:last-child{display:none}
+.ferrari-package-cta .quote-button{color:var(--red)!important;border:1.5px solid var(--red)!important;background:#fff!important}
+.ferrari-package-cta .book-button{background:var(--red)!important;color:#fff!important;border:1.5px solid var(--red)!important;box-shadow:0 6px 15px #FF28002B!important}
+.ferrari-package-cta .quote-button:active{background:#fff3ef!important}
+.ferrari-package-cta .book-button:active{background:#d92300!important}
+.package-bottom-note{color:#898084!important}
+.booking-details-red .event-picker-field,.booking-details-red .select-container,.booking-details-red .notes-box{border-color:#f2dfda;background:#fff!important}
+.booking-details-red .selected-service{background:#fff6f3!important;border:1px solid #ffd9d2!important}
+.booking-details-red .event-picker-field>svg,.booking-details-red .select-container .red{color:var(--red)!important}
+.stepper .step.active{color:var(--red)!important}
+.stepper .step.active>span{background:var(--red)!important;border-color:var(--red)!important;color:white!important}
+.payment-screen{background:#fff!important}
+.payment-summary{border:1px solid #ffdfd7;background:#fff!important;box-shadow:0 6px 17px #a4220b0c!important}
+.payment-summary h3 svg,.payment-line svg,.payment-total strong{color:var(--red)!important}
+.payment-total{background:var(--gcs-red-wash)!important;color:var(--red)!important}
+.payment-demo-notice{background:#fff7f5!important;border-color:#ffe2dc!important}
+.payment-demo-notice svg{color:var(--red)!important}
+.demo-payment-method{border:1px solid #f9e2dc!important;background:white!important;border-radius:14px!important}
+.demo-payment-method:active:not(:disabled){background:#fff6f4!important}
+.demo-payment-icon{background:#fff0ec!important;color:var(--red)!important}
+.payment-method-heading>span{color:var(--red)!important}
+.demo-confirm-warning{background:#fff6f3!important;border:1px solid #ffd6ca!important;color:#9d321d!important}
+.success-circle{background:var(--red)!important;color:white!important;box-shadow:0 9px 28px #ff28002b!important}
+.booking-id-box{background:#fff5f2!important;border:1px solid #ffe0d8!important}
+.booking-id-box strong,.booking-id-box button{color:var(--red)!important}
+.confirm-share,.confirm-notify{background:#fff!important;color:var(--red)!important;border:1px solid #ffcebf!important}
+.confirm-preview{color:var(--red)!important}
+.profile-session,.profile-info,.preview-notice,.whatsapp-preview{background:#fff6f3!important;border-color:#ffdfd5!important}
+.phone-verification-head>svg,.phone-verify-btn{color:var(--red)!important}
+.phone-verification .phone-verify-btn,.profile-signout,.profile-packages{color:var(--red)!important;background:#fff8f6!important;border-color:#ffd5cb!important}
+.whatsapp-manual{background:var(--red)!important;color:white!important}
+.share-guidance{color:#9b301a}
+
+/* Dedicated quotation: no event form, payment or authentication prompts */
+.ferrari-quotation-screen{background:#fff!important}
+.ferrari-quote-page{padding-top:22px!important;padding-bottom:28px!important}
+.ferrari-quote-eyebrow{display:flex;align-items:center;gap:7px;color:var(--red);font-size:10px;font-weight:900;letter-spacing:.12em}
+.ferrari-quote-page>h2{font-size:27px;font-weight:950;letter-spacing:-1px;line-height:1.13;margin:13px 0 10px;color:#1d1b1d}
+.ferrari-quote-page>h2>span{color:var(--red)}
+.ferrari-quote-lead{font-size:12px;color:#777076;line-height:1.55;margin-bottom:18px}
+.ferrari-quote-feature{display:flex;align-items:center;gap:13px;border:1px solid #ffe4db;border-radius:16px;padding:10px;background:#fff;box-shadow:0 7px 17px #b52c1210}
+.ferrari-quote-feature>img{width:97px;height:92px;object-fit:cover;border-radius:11px;flex:none}
+.ferrari-quote-feature>div{min-width:0}
+.ferrari-quote-feature small{display:block;font-size:8px;letter-spacing:.09em;color:var(--red);font-weight:900;margin-bottom:7px}
+.ferrari-quote-feature strong{display:block;font-size:14px;color:#1d1b1d;font-weight:950;line-height:1.25}
+.ferrari-quote-feature p{color:#807980;font-size:10px;line-height:1.4;margin-top:5px}
+.ferrari-quote-pricing{display:flex;align-items:center;justify-content:space-between;border-radius:15px;background:var(--gcs-red-wash);border:1px solid #ffddd2;padding:16px;margin:13px 0 23px;color:var(--red)}
+.ferrari-quote-pricing small{display:block;font-size:11px;color:#806c6b;font-weight:650;margin-bottom:5px}
+.ferrari-quote-pricing strong{font-size:26px;letter-spacing:-.8px;font-weight:950}
+.ferrari-quote-section-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px;gap:10px}
+.ferrari-quote-section-heading h3{font-size:17px;font-weight:950;color:#1e1e21}
+.ferrari-quote-section-heading span{font-size:10px;color:#8b8080}
+.ferrari-quote-inclusions ul{list-style:none;margin:0;padding:0;display:grid;gap:13px}
+.ferrari-quote-inclusions li{display:flex;align-items:center;gap:10px;color:#272429;font-size:12px;line-height:1.45}
+.ferrari-quote-inclusions li>span{width:24px;height:24px;flex:none;display:grid;place-items:center;background:#fff1ec;color:var(--red);border-radius:50%}
+.ferrari-quote-notice{display:flex;gap:10px;align-items:flex-start;padding:13px;background:#fff8f6;border:1px solid #ffe8e0;border-radius:13px;color:#765b58;margin:23px 0 15px}
+.ferrari-quote-notice svg{color:var(--red);flex:none}
+.ferrari-quote-notice p{font-size:11px;line-height:1.5}
+.ferrari-download-button{display:flex;align-items:center;justify-content:center;gap:11px;width:100%;min-height:53px;background:var(--red);color:#fff;border-radius:14px;font-size:13px;font-weight:900;box-shadow:0 8px 17px #ff280026}
+.ferrari-download-button svg:last-child{width:16px}
+.ferrari-download-button:active{background:#dc2502}
+.ferrari-quote-back{display:flex;align-items:center;justify-content:center;gap:2px;width:100%;height:40px;color:var(--red);font-size:11px;font-weight:800;margin-top:6px}
+@media(max-width:374px){
+ .ferrari-package-cta>button{font-size:10.5px!important;gap:5px}
+ .ferrari-package-cta>button>svg{width:15px;height:15px}
+ .ferrari-quote-feature>img{width:83px}
+ .ferrari-quote-pricing strong{font-size:24px}
+}
+@media (prefers-reduced-motion:reduce){
+ .package-details-ferrari *, .ferrari-quotation-screen *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
