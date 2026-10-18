@@ -1,10 +1,10 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {ArrowRight,Camera,Check,CheckCircle2,ChevronRight,Copy,CreditCard,Download,FileText,Landmark,Mail,MapPin,MessageCircle,Phone,ShieldCheck,Smartphone,UserRound,Wallet,ExternalLink} from 'lucide-react';
+import {ArrowRight,CalendarDays,Camera,Check,ChevronRight,Clock3,Copy,CreditCard,Download,FileText,Landmark,Mail,MapPin,MessageCircle,Phone,ShieldCheck,Smartphone,UserRound,Wallet} from 'lucide-react';
 import {BackButton,DetailLine,Header,Logo,OutlineButton,PrimaryButton} from '../components/UI';
 import {useBooking,type Booking} from '../context/BookingContext';
 import {useAuth} from '../context/AuthContext';
-import {SERVICES,IMAGE_URL,THUMBNAIL_URL,inr,getQuote} from '../data/services';
+import {SERVICES,IMAGE_URL,THUMBNAIL_URL,inr,getQuote,formatDate,to12h} from '../data/services';
 import {downloadQuotation} from '../utils/quotationPdf';
 import {bookingMessage,openWhatsApp,shareDetails} from '../utils/sharing';
 import {completeDemoPayment} from '../lib/requests';
@@ -13,10 +13,6 @@ import {saveEnquiry,sendCustomerNotification} from '../utils/customerNotificatio
 function StudioThumbnail({booking}:{booking:Booking}){
  const selected=SERVICES.find(s=>s.id===booking.serviceId)||SERVICES[0];
  return <img src={THUMBNAIL_URL(selected)} alt={selected.name} onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=IMAGE_URL(selected.image)}}/>;
-}
-function MapsInfo({url}:{url:string}){
- if(!url)return null;
- return <a className="review-map-link" href={url} target="_blank" rel="noopener noreferrer"><MapPin size={15}/> Open the pinned venue on Google Maps <ExternalLink size={13}/></a>;
 }
 function generateRef(id:string){return 'GCS-RQ-'+id.slice(0,8).toUpperCase();}
 function refUpdate(id:string){return {requestId:id,bookingId:generateRef(id),quotationNo:'GCS-QT-'+id.slice(0,8).toUpperCase()};}
@@ -37,13 +33,15 @@ export function Quotation(){
  const share=()=>{try{openWhatsApp(booking);setMessage('WhatsApp opened. Tap Send there to share to your registered number.');}catch(e){setMessage(e instanceof Error?e.message:'Could not open WhatsApp.');}};
  return <div className="inner-screen page-flow"><Header title="Your Quotation" back="/booking-details"/><div className="page-padding quote-page">
   <div className="quote-brand"><Logo compact/><div className="quote-number"><strong>Package estimate</strong><b>GCS / {selected.id.toUpperCase()}</b><small>Personalized for you</small></div></div>
-  <div className="checkout-heading"><span>STEP 03 / 04</span><h2>Almost your perfect moment.</h2><p>Review the package and location before continuing.</p></div>
+  <div className="checkout-heading"><span>STEP 03 / 04</span><h2>Almost your perfect moment.</h2><p>Review your date, time and venue before continuing.</p></div>
   <section className="quote-section"><div className="quote-title"><span><UserRound size={17}/> Your Account</span><button onClick={()=>nav('/profile')}>Edit number</button></div>
    <p><UserRound size={14}/>{booking.fullName||'Complete your profile'}</p><p><Phone size={14}/>{booking.phone||'Add your mobile number'}</p><p><Mail size={14}/>{booking.email}</p>
   </section>
   <section className="quote-section"><div className="quote-title"><span><MapPin size={17}/> Your Event</span><button onClick={()=>nav('/booking-details')}>Edit</button></div>
-   <p><Camera size={14}/>{booking.eventType||'Event not selected'}</p><p><MapPin size={14}/>{booking.venue||'Venue not entered'}</p>
-   <MapsInfo url={booking.locationUrl}/>
+   <p><Camera size={14}/>{booking.eventType||'Event not selected'}</p>
+   <p><CalendarDays size={14}/>{booking.date?formatDate(booking.date):'Choose event date'}</p>
+   <p><Clock3 size={14}/>{booking.time?to12h(booking.time):'Choose event time'}</p>
+   <p><MapPin size={14}/>{booking.venue||'Venue not entered'}</p>
   </section>
   <section className="quote-section"><div className="quote-title"><span><Camera size={17}/> Package Inclusions</span><button onClick={()=>nav('/book')}>Change</button></div>
    <div className="quote-selected"><StudioThumbnail booking={booking}/><div><strong>{selected.name}</strong><p>{selected.detail}</p></div></div>
@@ -100,8 +98,9 @@ export function Payment(){
    <div className="checkout-heading"><span>STEP 04 / 04 · DEMO MODE</span><h2>Choose a payment method</h2><p>Tap an option to automatically create a <strong>demo booking</strong>. No payment is taken.</p></div>
    <div className="payment-summary"><h3><CreditCard size={19}/> Booking Summary</h3>
     <div className="payment-service"><StudioThumbnail booking={booking}/><div><strong>{selected.name}</strong><p>{booking.eventType}</p></div></div>
+    <div className="payment-line"><CalendarDays size={16}/><span>Event date</span><strong>{formatDate(booking.date)}</strong></div>
+    <div className="payment-line"><Clock3 size={16}/><span>Event time</span><strong>{to12h(booking.time)}</strong></div>
     <div className="payment-line"><MapPin size={16}/><span>Venue</span><strong>{booking.venue}</strong></div>
-    <MapsInfo url={booking.locationUrl}/>
     <div className="payment-total"><span>Illustrative Amount</span><strong>{inr(quote.total)}</strong></div>
    </div>
    <div className="payment-demo-notice"><ShieldCheck size={20}/><div><strong>Test payments only</strong><p>These options simulate booking confirmation. No UPI transfer, bank/card information, or actual payment is processed.</p></div></div>
@@ -135,12 +134,13 @@ export function Confirmed(){
    <div className="confirmation-details">
     <DetailLine icon={UserRound} label="Customer" value={booking.fullName}/>
     <DetailLine icon={Camera} label="Package" value={chosen.name}/>
+    <DetailLine icon={CalendarDays} label="Event Date" value={formatDate(booking.date)}/>
+    <DetailLine icon={Clock3} label="Event Time" value={to12h(booking.time)}/>
     <DetailLine icon={MapPin} label="Venue" value={booking.venue}/>
     <DetailLine icon={CreditCard} label="Example Amount" value={inr(quote.total)}/>
     {isDemo&&<DetailLine icon={Wallet} label="Test Method" value={booking.paymentMethod}/>}
     <DetailLine icon={ShieldCheck} label="Payment" value={isDemo?'Demo only — ₹0 collected':'Not paid'}/>
    </div>
-   <MapsInfo url={booking.locationUrl}/>
    <div className="demo-confirm-warning">{isDemo?'This is a simulation, not proof of payment or a studio-confirmed booking.':'Request saved. The studio must still approve your booking.'}</div>
    {profile?.whatsapp_opt_in&&user&&<button className="compact-quote-action compact-quote-notify confirm-notify" disabled={sending} onClick={()=>void sendToPhone()}><Phone size={16}/>{sending?'Sending…':'Send details to my number'}</button>}
    <button className="compact-quote-action compact-quote-whatsapp confirm-share" onClick={share}><MessageCircle size={16}/> Share to my WhatsApp</button>
