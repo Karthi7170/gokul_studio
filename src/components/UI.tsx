@@ -1,8 +1,8 @@
-import { type ReactNode, type ComponentType, type InputHTMLAttributes, useState } from 'react';
-import { ArrowLeft, ArrowRight, Bell, Camera, Check, ChevronRight, Eye, EyeOff, LockKeyhole, Mail, Phone, UserRound, CalendarDays } from 'lucide-react';
+import { type ReactNode, type InputHTMLAttributes, useState } from 'react';
+import { ArrowLeft, ArrowRight, Bell, Camera, Check, ChevronRight, Eye, EyeOff, LockKeyhole, Mail, Phone, UserRound, CalendarDays, type LucideIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-type IconComp = ComponentType<{size?:number; strokeWidth?:number; className?:string}>;
+type IconComp = LucideIcon;
 export function Logo({ compact=false }: { compact?:boolean }) {
   return <div className={`brand ${compact?'brand-small':''}`} aria-label="Gokul Creative Studio">
     <div className="brand-row"><span>G</span><span className="brand-camera"><Camera size={compact?23:32} fill="currentColor" strokeWidth={2.1} /></span><span>KUL</span></div>
