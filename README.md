@@ -1,6 +1,6 @@
 # Gokul Creative Studio — Customer Booking & Quotation
 
-A mobile-first React + Vite application for **Gokul Creative Studio**. Customers can register, select one of six event photo/video packages, view inclusions, request a quotation, and review unpaid payment estimates. Deployed to Vercel.
+A mobile-first React + Vite application for **Gokul Creative Studio**. Customers can register, select one of six event photo/video packages, download a standalone PDF package quotation, or create a demo event booking with payment-method options. Deployed to Vercel.
 
 ## Production
 
@@ -14,16 +14,16 @@ A mobile-first React + Vite application for **Gokul Creative Studio**. Customers
 
 - Editorial mobile home page, curated image thumbnails, package filters and search.
 - Six packages: Wedding, Photography, Baby Shoot, Pre-Wedding, Cinematic Videography, and Events.
-- Full package details and inclusions, followed by event type, event date (native calendar picker), event time (native clock picker), and a single manually entered venue.
-- Simplified location field with no Google Maps, GPS, or map-link controls. Date and time are required and must be chosen before requesting a quotation.
+- Each package shows **exactly two action buttons:** **Get a Quotation** and **Book Now**.\n- **Get a Quotation:** opens a package-only overview of all included features, starting estimated amount, and a one-click downloadable branded PDF. No event details or payment required.\n- **Book Now:** opens event type, date (native calendar), time (native clock), location/venue, and notes. Continues to payment-method options and then creates a **demo** confirmation reference after the simulated payment.
+- Simplified location field with no Google Maps, GPS, or map-link controls. Date and time are required only for Book Now, not for downloadable package quotations.
 - **Real Supabase email/password sign-in and sign-up**, optional email confirmation, password reset, persistent sessions and sign-out.
 - Accounts are not prepopulated. Sample customer names, passwords and payment confirmations have been removed.
 - Registered name and phone from each customer's profile; phone opt-in preferences and optional SMS OTP verification.
 - Customer requests stored in `public.gcs_booking_requests`, protected by owner-only Row Level Security.
-- PDF quotations and manual WhatsApp share addressed to the registered customer number.
+- A downloadable Ferrari-red-and-white PDF for every package without requesting customer information. Optional manual WhatsApp sharing remains available after a demo booking.
 - Server endpoint `/api/notify` to deliver WhatsApp Business templates **only when** required approved Meta credentials, templates, and verified customer phone are configured.
 - Four tap-to-complete **dummy** payment choices (UPI, card, net banking, wallet) record `demo_only` on the user's quotation request; no card, banking or UPI information is collected. This is a demo booking, **not** a paid studio reservation.
-- A separate quotation-only option leaves the status `not_paid`.
+- The UI is consistently styled in Ferrari Rosso Corsa red (`#FF2800`) and white, with white secondary actions and clear mobile-friendly spacing.
 
 ## Installation
 
@@ -59,9 +59,9 @@ Migrations create `gcs_customer_profiles` and `gcs_booking_requests`, both prote
 
 ## Date / time, location, and demo payment notes
 
-Choose a future event date using the device's native calendar input, then select the event time using the device's clock picker. Enter the event venue or address directly; there are no map links, GPS or Maps pin entry controls. Date and time are saved to the quotation request and shown in the quotation review, PDF, payment summary, demo confirmation and WhatsApp draft.
+Choose a future event date using the device's native calendar input, then select the event time using the device's clock picker. Enter the event venue or address directly; there are no map links, GPS or Maps pin entry controls. Date and time are saved to the demo booking request and shown in the payment summary, demo confirmation and WhatsApp draft. The separate package quotation PDF intentionally contains no event or personal data.
 
-The customer UI uses a consistent red-and-white theme with clear contrast and compact quotation actions.
+The customer UI uses Ferrari-red-and-white styling and two unambiguous package actions. A package quotation does not initiate booking or payment.
 
 Choosing any of the four dummy methods saves the quotation request to Supabase and marks it `demo_only`. This deliberately does **not** represent genuine payment, a receipt, or a confirmed studio booking. For actual payments, integrate a verified gateway with server-side reconciliation and separate real payment statuses.
 
@@ -87,4 +87,4 @@ Push to `main`; the connected Vercel Git integration deploys automatically. The 
 
 For iPhone access, open the Vercel URL in Safari → Share → **Add to Home Screen**.
 
-This is a quotation enquiry frontend with real account security; it is **not** a live payment checkout or a booking confirmation system.
+This is a package-quotation and demo event-booking frontend with Supabase authentication; it is **not** a live payment checkout or studio-approved booking confirmation system.
