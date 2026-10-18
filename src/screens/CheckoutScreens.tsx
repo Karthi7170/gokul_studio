@@ -58,6 +58,9 @@ export function Payment(){
  const [processing,setProcessing]=useState<Booking['paymentMethod']|null>(null);
  const [error,setError]=useState('');
  const selected=SERVICES.find(s=>s.id===booking.serviceId)||SERVICES[0],quote=getQuote(booking.serviceId);
+ const dateNow=new Date();
+ const today=[dateNow.getFullYear(),String(dateNow.getMonth()+1).padStart(2,'0'),String(dateNow.getDate()).padStart(2,'0')].join('-');
+ const detailsReady=Boolean(booking.eventType.trim()&&booking.venue.trim()&&/^\d{4}-\d{2}-\d{2}$/.test(booking.date)&&booking.date>=today&&/^([01]\d|2[0-3]):[0-5]\d$/.test(booking.time));
  const selectPayment=async(method:Booking['paymentMethod'])=>{
   if(processing)return;
   if(!user){setError('Please sign in first.');return;}
@@ -69,6 +72,7 @@ export function Payment(){
   }catch(e){setError(e instanceof Error?e.message:'Could not complete the demo. Please try again.');}
   finally{setProcessing(null);}
  };
+ if(!detailsReady)return <div className="inner-screen page-flow payment-screen"><Header title="Complete Your Booking" back="/booking-details"/><div className="page-padding ferrari-incomplete"><CalendarDays size={34}/><h2>Event details needed</h2><p>Please select a valid future date, time and venue before reviewing payment options.</p><PrimaryButton onClick={()=>nav('/booking-details')}>Add Event Details</PrimaryButton></div></div>;
  return <div className="inner-screen page-flow payment-screen demo-payment-screen">
   <Header title="Payment Options" back="/booking-details"/><div className="page-padding">
    <div className="checkout-heading"><span>STEP 03 / 03 · DEMO MODE</span><h2>Choose a payment method</h2><p>Tap an option to automatically create a <strong>demo booking</strong>. No payment is taken.</p></div>
