@@ -14,8 +14,8 @@ A mobile-first React + Vite application for **Gokul Creative Studio**. Customers
 
 - Editorial mobile home page, curated image thumbnails, package filters and search.
 - Six packages: Wedding, Photography, Baby Shoot, Pre-Wedding, Cinematic Videography, and Events.
-- Full package details and inclusions, followed by event type and **location-only** venue details (no date or time requested).
-- Venue can be entered manually, pinpointed using device GPS, or attached by pasting a Google Maps share link. Google Maps pin selection requires pasting the copied Maps link back into the app.
+- Full package details and inclusions, followed by event type, event date (native calendar picker), event time (native clock picker), and a single manually entered venue.
+- Simplified location field with no Google Maps, GPS, or map-link controls. Date and time are required and must be chosen before requesting a quotation.
 - **Real Supabase email/password sign-in and sign-up**, optional email confirmation, password reset, persistent sessions and sign-out.
 - Accounts are not prepopulated. Sample customer names, passwords and payment confirmations have been removed.
 - Registered name and phone from each customer's profile; phone opt-in preferences and optional SMS OTP verification.
@@ -57,9 +57,11 @@ Enable email/password login and account email confirmation under Auth Providers 
 
 Migrations create `gcs_customer_profiles` and `gcs_booking_requests`, both protected by Row Level Security tied to `auth.uid()`. Every newly registered user starts with their own empty data. Existing demo data in legacy localStorage keys is cleared.
 
-## Location pin and demo payment notes
+## Date / time, location, and demo payment notes
 
-No Google Maps API key is needed. To attach a pin for another location, open Google Maps, drop a pin, select Share → Copy link, then paste and apply the URL in Booking Details. Alternatively, use the device's GPS permission or enter a written address. The Maps link is included in the review and PDF when available. The event date/time fields are not requested or submitted.
+Choose a future event date using the device's native calendar input, then select the event time using the device's clock picker. Enter the event venue or address directly; there are no map links, GPS or Maps pin entry controls. Date and time are saved to the quotation request and shown in the quotation review, PDF, payment summary, demo confirmation and WhatsApp draft.
+
+The customer UI uses a consistent red-and-white theme with clear contrast and compact quotation actions.
 
 Choosing any of the four dummy methods saves the quotation request to Supabase and marks it `demo_only`. This deliberately does **not** represent genuine payment, a receipt, or a confirmed studio booking. For actual payments, integrate a verified gateway with server-side reconciliation and separate real payment statuses.
 
