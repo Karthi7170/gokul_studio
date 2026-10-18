@@ -78,8 +78,8 @@ export function Home(){
     <span><CalendarDays size={19}/></span><span><small>Have an event?</small><strong>Book a shoot</strong></span><ArrowRight size={17}/>
    </button>
   </section>
-  <section className="gcs-2026-hero" aria-label="Featured creative packages" onTouchStart={e=>{touchStartX.current=e.touches[0]?.clientX??null;}} onTouchEnd={onEnd}>
-   <StudioImage src={THUMBNAIL_URL(heroItems[heroIndex])} fallback={heroItems[heroIndex].image} alt={heroItems[heroIndex].name+' inspiration'} className="gcs-2026-hero-image"/>
+  <section className="gcs-2026-hero" aria-label="Featured creative packages" onTouchStart={e=>{touchStartX.current=e.touches[0]?.clientX??null;}} onTouchEnd={onEnd} onTouchCancel={()=>{touchStartX.current=null;}}>
+   <StudioImage key={heroItems[heroIndex].id} src={THUMBNAIL_URL(heroItems[heroIndex])} fallback={heroItems[heroIndex].image} alt={heroItems[heroIndex].name+' inspiration'} className="gcs-2026-hero-image"/>
    <div className="gcs-2026-hero-vignette"/>
    <div className="gcs-2026-hero-copy">
     <span className="gcs-2026-hero-eyebrow">MORE THAN PHOTOS</span>
@@ -88,7 +88,7 @@ export function Home(){
     <button type="button" onClick={()=>nav('/book')}>Explore packages <span><ArrowRight size={19}/></span></button>
    </div>
    <div className="gcs-2026-hero-pagination" aria-label="Choose featured slide">
-    {heroItems.map((item,i)=><button key={item.id} aria-label={'Show '+item.name} aria-current={heroIndex===i?'true':undefined} className={heroIndex===i?'active':''} onClick={()=>setHeroIndex(i)}/>)}
+    {heroItems.map((item,i)=><button key={item.id} aria-label={'Show '+item.name} aria-pressed={heroIndex===i} className={heroIndex===i?'active':''} onClick={()=>setHeroIndex(i)}/>)}
    </div>
    <span className="gcs-2026-hero-count">{String(heroIndex+1).padStart(2,'0')} / 04</span>
   </section>
