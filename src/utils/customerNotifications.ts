@@ -1,16 +1,9 @@
 import {requiredSupabase} from '../lib/supabase';
 import type {Booking} from '../context/BookingContext';
-import {getQuote} from '../data/services';
+import {submitQuoteRequest} from '../lib/requests';
 export async function saveEnquiry(booking:Booking,userId:string):Promise<string>{
  if(booking.requestId)return booking.requestId;
- if(!booking.date||!booking.eventType||!booking.venue||!booking.time)throw new Error('Fill in event details before getting your quotation.');
- const sb=requiredSupabase(),total=getQuote(booking.serviceId).total;
- const {data,error}=await sb.from('gcs_booking_requests').insert({
-  user_id:userId,package_id:booking.serviceId,event_type:booking.eventType,event_date:booking.date,
-  event_time:booking.time,venue:booking.venue,notes:booking.notes,estimated_amount:total,payment_status:'not_paid'
- }).select('id').single();
- if(error)throw error;
- return data.id as string;
+ return submitQuoteRequest(booking,userId);
 }
 export async function sendCustomerNotification(requestId:string,kind:'quotation'|'payment'){
  const sb=requiredSupabase();
