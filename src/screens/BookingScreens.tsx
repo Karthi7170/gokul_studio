@@ -19,10 +19,10 @@ export function BookingDetails(){
  const valid=Boolean(booking.eventType.trim()&&booking.venue.trim()&&booking.date>=today&&/^([01]\d|2[0-3]):[0-5]\d$/.test(booking.time));
 
  return <div className="inner-screen page-flow booking-details-red">
-  <Header title="Booking Details" back={'/packages/'+booking.serviceId}/>
+  <Header title="Book Your Event" back={'/packages/'+booking.serviceId}/>
   <div className="page-padding">
    <Stepper step={2}/>
-   <div className="booking-form-intro"><h2>Tell us about your event</h2><p>Choose your occasion, event date, time and venue.</p></div>
+   <div className="booking-form-intro"><h2>Let’s make it memorable.</h2><p>Choose the event, date, time and location to begin your booking.</p></div>
    <div className="field-group">
     <label className="field-label" htmlFor="event-type">Event Type <em>*</em></label>
     <div className="select-container"><Camera size={18} className="red"/><select id="event-type" value={booking.eventType} onChange={e=>update({eventType:e.target.value})}>
@@ -56,7 +56,7 @@ export function BookingDetails(){
     <div className="selected-heading"><strong>Selected Package</strong><button onClick={()=>nav('/book')}>Change</button></div>
     <div className="selected-body"><img src={THUMBNAIL_URL(selected)} alt={selected.name} onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=IMAGE_URL(selected.image)}}/><div><strong>{selected.name}</strong><p>{selected.detail}</p><span>From <b>{inr(selected.from)}</b></span></div></div>
    </div>
-   <PrimaryButton disabled={!valid} onClick={()=>nav('/quotation')} className="bottom-cta booking-continue">Continue to Quotation</PrimaryButton>
+   <PrimaryButton disabled={!valid} onClick={()=>nav('/payment')} className="bottom-cta booking-continue">Continue to Payment</PrimaryButton>
   </div>
  </div>;
 }
