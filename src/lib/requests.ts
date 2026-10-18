@@ -1,5 +1,5 @@
 import type {Booking} from '../context/BookingContext';
-import {getQuote} from '../data/services';
+import {getBookingEstimate} from '../data/services';
 import {requiredSupabase} from './supabase';
 
 export async function submitQuoteRequest(booking:Booking,userId:string):Promise<string>{
@@ -10,7 +10,7 @@ export async function submitQuoteRequest(booking:Booking,userId:string):Promise<
  const {data,error}=await api.from('gcs_booking_requests').insert({
   user_id:userId,package_id:booking.serviceId,event_type:booking.eventType,
   event_date:booking.date,event_time:booking.time,venue:booking.venue.trim(),
-  notes:booking.notes,estimated_amount:getQuote(booking.serviceId).total,
+  notes:booking.notes,add_ons:booking.addOns,estimated_amount:getBookingEstimate(booking.serviceId,booking.addOns).total,
   payment_status:'not_paid'
  }).select('id').single();
  if(error)throw error;
