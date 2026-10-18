@@ -3,12 +3,13 @@ import {getQuote} from '../data/services';
 import {requiredSupabase} from './supabase';
 
 export async function submitQuoteRequest(booking:Booking,userId:string):Promise<string>{
- if(!booking.eventType.trim()||!booking.venue.trim())throw new Error('Enter an event type and venue before continuing.');
+ const now=new Date();
+ const today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');
+ if(!booking.eventType.trim()||!booking.venue.trim()||!/^\d{4}-\d{2}-\d{2}$/.test(booking.date)||booking.date<today||!/^([01]\d|2[0-3]):[0-5]\d$/.test(booking.time))throw new Error('Choose a future event date, time and venue before continuing.');
  const api=requiredSupabase();
  const {data,error}=await api.from('gcs_booking_requests').insert({
   user_id:userId,package_id:booking.serviceId,event_type:booking.eventType,
-  event_date:null,event_time:null,venue:booking.venue.trim(),
-  location_url:booking.locationUrl||null,
+  event_date:booking.date,event_time:booking.time,venue:booking.venue.trim(),
   notes:booking.notes,estimated_amount:getQuote(booking.serviceId).total,
   payment_status:'not_paid'
  }).select('id').single();
