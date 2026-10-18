@@ -48,7 +48,7 @@ export function SocialButton({provider,onClick}:{provider:'Google'|'Apple';onCli
 export function AuthOr(){return <div className="or-divider"><span/>OR<span/></div>;}
 export function ScreenTitle({children,sub}: {children:ReactNode;sub?:string}) {return <div className="screen-intro"><h2>{children}</h2>{sub&&<p>{sub}</p>}</div>;}
 export function Stepper({step}:{step:1|2|3}){
- return <div className="stepper">{['Service','Details','Review'].map((item,i)=><div className={`step ${i+1<=step?'active':''}`} key={item}><span>{i+1<=step?(i+1===step?i+1:<Check size={12}/>):i+1}</span><small>{item}</small></div>)}</div>;
+ return <div className="stepper">{['Package','Event','Payment'].map((item,i)=><div className={`step ${i+1<=step?'active':''}`} key={item}><span>{i+1<=step?(i+1===step?i+1:<Check size={12}/>):i+1}</span><small>{item}</small></div>)}</div>;
 }
 export function DetailLine({icon:Icon,label,value}:{icon:IconComp;label:string;value:string}){
  return <div className="detail-line"><Icon size={16} className="red"/><span>{label}</span><strong>{value}</strong></div>;
