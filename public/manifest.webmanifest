@@ -2,15 +2,28 @@
   "name": "Gokul Creative Studio — Booking Demo",
   "short_name": "Gokul Studio",
   "description": "Photography and videography booking demo",
-  "id": "/gokul_studio/",
-  "start_url": "/gokul_studio/#/sign-in",
-  "scope": "/gokul_studio/",
+  "id": "./",
+  "start_url": "./#/sign-in",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#E8191C",
   "icons": [
-    {"src":"/gokul_studio/favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"},
-    {"src":"/gokul_studio/icon-192.png","sizes":"192x192","type":"image/png"},
-    {"src":"/gokul_studio/icon-512.png","sizes":"512x512","type":"image/png"}
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
   ]
 }
