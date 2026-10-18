@@ -16,7 +16,7 @@ export function Profile(){
  };
  const phoneVerified=Boolean(user?.phone_confirmed_at&&user?.phone===shownPhone);
  const sendVerification=async()=>{setVerifying(true);setVerifyMessage('');
-  try{if(!/^\\+[1-9]\\d{7,14}$/.test(shownPhone))throw Error('Enter a valid phone with country code.');
+  try{if(!/^\+[1-9]\d{7,14}$/.test(shownPhone))throw Error('Enter a valid phone with country code.');
    const {error}=await requiredSupabase().auth.updateUser({phone:shownPhone});
    if(error)throw error;setCodeSent(true);setVerifyMessage('A verification code was requested. Check your SMS inbox.');
   }catch(e){setVerifyMessage(e instanceof Error?e.message:'SMS verification is not available. The studio needs to configure an SMS provider.');}finally{setVerifying(false);}
@@ -36,7 +36,7 @@ export function Profile(){
  <PrimaryButton loading={busy} onClick={()=>void save()} disabled={!profile||busy}><Save size={17}/> Save Contact Details</PrimaryButton>
  <div className="phone-verification"><div className="phone-verification-head"><ShieldCheck size={18}/><div><strong>{phoneVerified?'Phone verified':'Verify your phone number'}</strong><p>{phoneVerified?'Eligible for messages after studio integration is configured.':'Phone verification is required before private quotations can be sent to this number.'}</p></div></div>
  {!phoneVerified&&<><button type="button" disabled={verifying} className="phone-verify-btn" onClick={()=>void sendVerification()}>{verifying?'Please wait...':'Send SMS verification code'}</button>
- {codeSent&&<div className="phone-otp-row"><input inputMode="numeric" aria-label="SMS verification code" placeholder="6-digit code" maxLength={6} value={otp} onChange={e=>setOtp(e.target.value.replace(/\\D/g,''))}/><button onClick={()=>void verifyNumber()} disabled={otp.length!==6||verifying}>Verify</button></div>}</>}
+ {codeSent&&<div className="phone-otp-row"><input inputMode="numeric" aria-label="SMS verification code" placeholder="6-digit code" maxLength={6} value={otp} onChange={e=>setOtp(e.target.value.replace(/\D/g,''))}/><button onClick={()=>void verifyNumber()} disabled={otp.length!==6||verifying}>Verify</button></div>}</>}
  {verifyMessage&&<p role="status">{verifyMessage}</p>}</div>
  <div className="profile-session"><ShieldCheck size={20}/><div><strong>Secure account</strong><p>Signed in with Supabase Auth. Your customer record is protected and private.</p></div></div>
  <div className="profile-session profile-info"><MessageCircle size={20}/><div><strong>WhatsApp updates</strong><p>Once the studio connects an approved sender, quotation and payment notifications can be delivered to your opted-in number. Until then, use the share buttons.</p></div></div>
