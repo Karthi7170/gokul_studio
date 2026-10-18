@@ -8,11 +8,16 @@ import {SERVICES,IMAGE_URL,THUMBNAIL_URL,formatDate,inr,getQuote,to12h} from '..
 import {downloadQuotation} from '../utils/quotationPdf';
 import {bookingMessage,openWhatsApp,shareDetails} from '../utils/sharing';
 import {submitQuoteRequest} from '../lib/requests';
+import {saveEnquiry,sendCustomerNotification} from '../utils/customerNotifications';
 function WhatsAppAction({onClick,children}:{onClick:()=>void;children:React.ReactNode}){return <button className="whatsapp-manual" onClick={onClick}><MessageCircle size={18}/>{children}<ArrowRight size={16}/></button>}
 export function Quotation(){
- const nav=useNavigate();const {booking}=useBooking();const {profile}=useAuth();
+ const nav=useNavigate();const {booking,update}=useBooking();const {profile,user}=useAuth();
  const selected=SERVICES.find(s=>s.id===booking.serviceId)||SERVICES[0];const quote=getQuote(booking.serviceId);
- const [message,setMessage]=useState('');
+ const [message,setMessage]=useState(''),[sending,setSending]=useState(false);
+ const sendToPhone=async()=>{if(!user){setMessage('Please sign in first.');return;}setSending(true);setMessage('');
+  try{const id=await saveEnquiry(booking,user.id);update({requestId:id,bookingId:'GCS-RQ-'+id.slice(0,8).toUpperCase(),quotationNo:'GCS-QT-'+id.slice(0,8).toUpperCase()});setMessage(await sendCustomerNotification(id,'quotation'));}
+  catch(e){setMessage(e instanceof Error?e.message:'Could not send the quotation. Download it instead.');}finally{setSending(false);}
+ };
  const share=()=>{try{openWhatsApp(booking);setMessage('WhatsApp opened with a prefilled message. Tap Send there to share it to your registered number.');}catch(e){setMessage(e instanceof Error?e.message:'Could not open WhatsApp.');}};
  return <div className="inner-screen page-flow"><Header title="Your Quotation" back="/schedule"/><div className="page-padding quote-page">
  <div className="quote-brand"><Logo compact/><div className="quote-number"><strong>Customer estimate</strong><b>GCS / {selected.id.toUpperCase()}</b><small>{formatDate(booking.date)}</small></div></div>
@@ -23,7 +28,8 @@ export function Quotation(){
  <ul className="quote-inclusions">{selected.included.map(feature=><li key={feature}><Check size={12}/>{feature}</li>)}</ul>
  <div className="quotation-table"><div className="quote-table-row"><span>{selected.name}</span><span>1</span><span>{inr(quote.total)}</span><span>{inr(quote.total)}</span></div><div className="quote-grand-total"><strong>Estimated Total</strong><strong>{inr(quote.total)}</strong></div></div></section>
  <p className="quote-disclaimer">Indicative pricing. The final quotation and delivery terms require studio approval.</p>
- <WhatsAppAction onClick={share}>Share quote to {booking.phone||'your WhatsApp'}</WhatsAppAction>
+ <PrimaryButton loading={sending} disabled={!profile?.whatsapp_opt_in||sending} onClick={()=>void sendToPhone()} className="notify-customer"><Phone size={17}/> Send quotation to my number</PrimaryButton>
+ <WhatsAppAction onClick={share}>Open WhatsApp to share manually</WhatsAppAction>
  {message&&<p className="share-guidance" role="status">{message}</p>}
  <OutlineButton onClick={()=>downloadQuotation(booking)} className="quote-download"><FileText size={17}/> Download Quotation PDF <Download size={16}/></OutlineButton>
  <PrimaryButton onClick={()=>nav('/payment')} className="bottom-cta"><ShieldCheck size={17}/> Review Payment Information</PrimaryButton>
@@ -32,8 +38,9 @@ export function Quotation(){
 }
 export function Payment(){
  const nav=useNavigate();const {booking,update}=useBooking();const {user}=useAuth();
- const [loading,setLoading]=useState(false),[error,setError]=useState('');
+ const [loading,setLoading]=useState(false),[error,setError]=useState(''),[sending,setSending]=useState(false),[delivery,setDelivery]=useState('');
  const selected=SERVICES.find(s=>s.id===booking.serviceId)||SERVICES[0];const quote=getQuote(booking.serviceId);
+ const sendPayment=async()=>{if(!user){setDelivery('Please sign in first.');return;}setSending(true);setDelivery('');try{const id=await saveEnquiry(booking,user.id);update({requestId:id,bookingId:'GCS-RQ-'+id.slice(0,8).toUpperCase()});setDelivery(await sendCustomerNotification(id,'payment'));}catch(e){setDelivery(e instanceof Error?e.message:'Could not send payment details.');}finally{setSending(false);}};
  const submit=async()=>{if(!user){setError('Please sign in first.');return;}if(booking.requestId){nav('/confirmed');return;}
   setLoading(true);setError('');
   try{const id=await submitQuoteRequest(booking,user.id);
@@ -50,6 +57,8 @@ export function Payment(){
  <div className="payment-total"><span>Estimated amount</span><strong>{inr(quote.total)}</strong></div></div>
  <div className="payment-pending-box"><ShieldCheck size={21}/><div><strong>Payment is not available online yet</strong><p>Submit your request below. The studio will confirm availability, the final amount, and verified payment instructions directly.</p></div></div>
  {error&&<p className="error-text" role="alert">{error}</p>}
+ <PrimaryButton loading={sending} disabled={sending} onClick={()=>void sendPayment()} className="notify-customer"><Phone size={17}/> Send payment information to my number</PrimaryButton>
+ {delivery&&<p role="status" className="share-guidance">{delivery}</p>}
  <PrimaryButton loading={loading} disabled={!booking.phone||!booking.email||loading} onClick={()=>void submit()} className="bottom-cta">Submit Quotation Request</PrimaryButton>
  <p className="demo-watermark">No payment is collected. Status remains NOT PAID.</p>
  </div></div>;
