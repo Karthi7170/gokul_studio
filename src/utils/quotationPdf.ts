@@ -1,6 +1,6 @@
 import { jsPDF } from 'jspdf';
 import { type Booking } from '../context/BookingContext';
-import { SERVICES, getQuote, inr } from '../data/services';
+import { SERVICES, getQuote, inr, formatDate, to12h } from '../data/services';
 export function downloadQuotation(booking: Booking) {
   const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
   const quote = getQuote(booking.serviceId);
@@ -14,10 +14,10 @@ export function downloadQuotation(booking: Booking) {
   pdf.text(`Customer: ${booking.fullName}`, 14, 71); pdf.text(`Email: ${booking.email}`, 14, 78);
   pdf.text(`Phone: ${booking.phone}`, 14, 85);
   pdf.text(`Event: ${booking.eventType}`, 110, 71);
-  pdf.text(`Package: ${SERVICES.find(s=>s.id===booking.serviceId)?.name || 'Selected package'}`, 110, 78);
+  pdf.text(`Event date: ${formatDate(booking.date)}`, 110, 78);
+  pdf.text(`Event time: ${to12h(booking.time)} IST`, 110, 85);
   const venueLines=pdf.splitTextToSize(`Venue: ${booking.venue}`, 176).slice(0,2);
   pdf.text(venueLines,14,94);
-  if(booking.locationUrl){pdf.setTextColor(red);pdf.setFontSize(8);pdf.text('Open Google Maps pin',110,88);pdf.link(110,84,55,6,{url:booking.locationUrl});pdf.setTextColor('#444444');pdf.setFontSize(10);}
   const s = SERVICES.find(x=>x.id===booking.serviceId);
   pdf.text(`Requested service: ${s?.name || 'Photography'}`, 14, 105);
   pdf.setFillColor('#FDEEEE'); pdf.rect(14, 111, 182, 10, 'F');
