@@ -342,3 +342,82 @@ button{border:0;background:transparent;color:inherit}p,h1,h2,h3{margin:0}p{line-
  .compact-quote-action{font-size:9.5px}
  .demo-payment-copy small{font-size:9px}
 }
+
+
+/* GCS 2026 red + white visual system */
+:root{
+ --red:#e32629;
+ --blush:#fff0f0;
+ --gcs-wine:#e32629;
+ --gcs-sand:#ffffff;
+ --gcs-ink:#191b20;
+}
+.desktop-stage{background:radial-gradient(circle at 8% 12%,#ffe4e4 0%,transparent 34%),#fff9f9}
+.phone-content,.inner-screen,.gcs-home,.gcs-catalog{background:#ffffff!important;color:#202024}
+.gcs-header-camera,.auth-camera-mark{background:var(--red)!important;color:#fff}
+.gcs-header-brand strong,.gcs-header-brand small,.gcs-home-section-heading h2{color:#222126}
+.gcs-profile-action{background:#fff5f5;border-color:#ffe0e0;color:#d7272c}
+.gcs-greeting>span,.gcs-eyebrow,.gcs-catalog-top small,.gcs-catalog-intro h1 em,.gcs-catalog-result span,.gcs-benefit-icon,.gcs-mobile-nav>button.active{color:var(--red)!important}
+.gcs-hero-premium{background:#d92830}
+.gcs-hero-overlay{background:linear-gradient(100deg,#bc1519e9 0%,#c5232bcc 46%,#9f1b2c44 100%),linear-gradient(0deg,#b31c2673,transparent 62%)!important}
+.gcs-hero-kicker,.gcs-hero-content h1 em{color:#ffffff!important}
+.gcs-hero-content>button{color:var(--red)!important;background:white!important}
+.gcs-hero-index{color:#fff}
+.gcs-featured-number{color:var(--red)}
+.gcs-featured-shade{background:linear-gradient(transparent,#8b1623d9)!important}
+.gcs-view-packages{border-color:#ffb7b7;color:var(--red);background:#fffafa}
+.gcs-benefit{border-color:#f5e6e7}
+.gcs-benefit-icon{background:#fff0f0}
+.gcs-mobile-nav{background:#fff!important;border-top-color:#fce0e0}
+.gcs-filter-bar button.active{background:var(--red)!important;border-color:var(--red)!important;color:#fff!important}
+.gcs-filter-bar button:not(.active){background:#fff!important;color:#a52c33!important;border-color:#ffe0e0!important}
+.gcs-catalog-top,.gcs-catalog-intro,.gcs-catalog-list{background:#fff}
+.gcs-collection-card{border-color:#f3dada}
+.gcs-collection-tag{color:var(--red)}
+.gcs-catalog-result span{color:var(--red)}
+.gcs-search:focus-within,.input-box:focus-within,.event-picker-field:focus-within{border-color:var(--red)!important;box-shadow:0 0 0 3px #e3262912}
+.premium-auth{background:#fff!important}
+.premium-auth-top b,.premium-auth-heading h2 em,.premium-auth-heading .auth-eyebrow,.auth-footer button,.forgot-link{color:var(--red)!important}
+.premium-auth-banner{background:linear-gradient(100deg,#c61921dc,#ed323b9a),url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=70') center 40%/cover!important}
+.premium-auth-banner b{color:white}
+.premium-auth-card{border-color:#f5dfe0;box-shadow:0 10px 24px #cc252512}
+.premium-auth .primary-button,.primary-button:not(.green-button){background:var(--red)!important;color:white!important;box-shadow:0 4px 12px #e3262924!important}
+.primary-button.green-button{background:var(--red)!important;color:white!important;box-shadow:0 4px 12px #e3262924!important}
+.auth-loading{background:radial-gradient(circle at 60% 18%,#f75151,#be171e 75%)!important}
+.auth-loading-logo span{color:#fff}
+.package-estimate,.selected-service,.payment-total{background:#fff2f2!important;border-color:#ffd9d9!important;color:var(--red)}
+.package-includes-title>div,.package-includes-title svg,.package-price b,.package-kicker{color:var(--red)!important}
+.package-call,.package-get-quote{border-color:var(--red);color:var(--red)}
+.package-detail-hero>span{background:#d6222bdc;border-color:#ffffffb0}
+.profile-session,.profile-info,.payment-demo-notice,.preview-notice,.whatsapp-preview{background:#fff4f4!important;color:#97212a!important;border-color:#f2d2d2!important}
+.profile-session strong,.payment-demo-notice strong{color:#86242a!important}
+.profile-session p,.payment-demo-notice p{color:#796366!important}
+.phone-verification{border-color:#f2dddd!important}
+.phone-verify-btn{background:#fff1f1!important;color:var(--red)!important}
+.profile-signout,.profile-packages,.request-without-payment{color:var(--red)!important;border-color:#f2c9c9!important;background:#fff7f7!important}
+.demo-payment-icon{color:var(--red)!important;background:#fff0f0!important}
+.demo-payment-method{border-color:#f4e4e4}
+.demo-payment-method:active:not(:disabled){background:#fff1f1}
+.payment-method-heading>span,.notify-customer,.compact-quote-notify{color:var(--red)}
+.notify-customer{background:#fff0f0!important;color:var(--red)!important;border:1px solid #f2bcbc!important;box-shadow:none!important}
+.compact-quote-notify,.compact-quote-pdf,.compact-quote-whatsapp{border:1px solid #f3c9c9!important;background:white!important;color:var(--red)!important}
+.compact-quote-review{background:var(--red)!important;border-color:var(--red)!important;color:white!important}
+.whatsapp-manual,.contact-modal-whatsapp{background:var(--red)!important;color:white!important}
+.demo-confirm-warning{background:#fff5f5;color:#ab3030;border-color:#f2d5d5}
+
+/* Clean three-field booking: iOS-native date calendar and time wheel, one venue input */
+.booking-details-red .booking-form-intro{margin:12px 0 19px}
+.booking-details-red .field-group{margin-bottom:16px}
+.booking-details-red .field-label{font-size:12px;font-weight:850}
+.booking-details-red .field-label em{color:var(--red)}
+.booking-details-red .select-container{border:1px solid #eadbdb;border-radius:12px;background:#fff}
+.event-picker-field{width:100%;min-height:50px;display:flex;align-items:center;gap:13px;border:1px solid #eadbdb;border-radius:12px;background:#fff;padding:0 14px}
+.event-picker-field>svg{flex:none;color:var(--red)}
+.event-picker-field input{min-width:0;width:100%;height:49px;min-height:45px;border:0;background:transparent!important;color:#2b2929!important;font-size:13px;font-weight:550;outline:none;appearance:auto;-webkit-appearance:auto;color-scheme:light;cursor:pointer}
+.event-picker-field input::placeholder{color:#aba4a4;font-weight:400}
+.event-location-field input{cursor:text}
+.event-picker-field input::-webkit-calendar-picker-indicator{opacity:1;cursor:pointer}
+.picker-validation{color:#bd242c;font-size:10px;margin-top:6px}
+.booking-details-red .notes-box{border:1px solid #eadbdb}
+.booking-details-red .selected-service{margin-top:9px}
+.booking-details-red .booking-continue{border-radius:12px!important;min-height:47px!important}
