@@ -3,13 +3,13 @@ import {type ServiceId} from '../data/services';
 import {useAuth} from './AuthContext';
 export type Booking={
  fullName:string;email:string;phone:string;serviceId:ServiceId;eventType:string;
- date:string;time:string;venue:string;notes:string;
+ date:string;time:string;venue:string;locationUrl:string;notes:string;
  paymentMethod:'UPI'|'Credit / Debit Card'|'Net Banking'|'Wallets';
- paymentStatus:'Pending'|'Confirmed';bookingId:string;quotationNo:string;
+ paymentStatus:'Pending'|'Confirmed'|'Demo Only';bookingId:string;quotationNo:string;
  requestId:string;
 };
 export const initialBooking:Booking={
- fullName:'',email:'',phone:'',serviceId:'wedding',eventType:'',date:'',time:'',venue:'',notes:'',
+ fullName:'',email:'',phone:'',serviceId:'wedding',eventType:'',date:'',time:'',venue:'',locationUrl:'',notes:'',
  paymentMethod:'UPI',paymentStatus:'Pending',bookingId:'',quotationNo:'',requestId:''
 };
 type BookingStore={booking:Booking;update:(p:Partial<Booking>)=>void;confirm:()=>string;reset:()=>void};
@@ -33,7 +33,7 @@ export function BookingProvider({children}:{children:ReactNode}){
   phone:profile?.phone||String(user?.user_metadata?.phone||''),
   email:user?.email||''};
  const update=(p:Partial<Booking>)=>setEntry(prev=>{
-   const changed=['serviceId','date','time','venue','eventType','notes'].some(k=>k in p);
+   const changed=['serviceId','date','time','venue','locationUrl','eventType','notes'].some(k=>k in p);
    return {owner:id,booking:{...(prev.owner===id?prev.booking:initialBooking),...(changed?{bookingId:'',requestId:'',paymentStatus:'Pending' as const}:{}),...p}};
  });
  const confirm=()=>{const code=booking.bookingId||('GCS-'+new Date().getFullYear()+'-'+String(Date.now()).slice(-6));update({bookingId:code,paymentStatus:'Pending'});return code;};
