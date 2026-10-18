@@ -5,10 +5,10 @@ import {BackButton,DetailLine,Header,Logo,OutlineButton,PrimaryButton} from '../
 import {useBooking,type Booking} from '../context/BookingContext';
 import {useAuth} from '../context/AuthContext';
 import {SERVICES,IMAGE_URL,THUMBNAIL_URL,inr,getQuote,formatDate,to12h} from '../data/services';
-import {downloadQuotation} from '../utils/quotationPdf';
+import {downloadPackageQuotation} from '../utils/quotationPdf';
 import {bookingMessage,openWhatsApp,shareDetails} from '../utils/sharing';
 import {completeDemoPayment} from '../lib/requests';
-import {saveEnquiry,sendCustomerNotification} from '../utils/customerNotifications';
+import {sendCustomerNotification} from '../utils/customerNotifications';
 
 function StudioThumbnail({booking}:{booking:Booking}){
  const selected=SERVICES.find(s=>s.id===booking.serviceId)||SERVICES[0];
@@ -18,46 +18,32 @@ function generateRef(id:string){return 'GCS-RQ-'+id.slice(0,8).toUpperCase();}
 function refUpdate(id:string){return {requestId:id,bookingId:generateRef(id),quotationNo:'GCS-QT-'+id.slice(0,8).toUpperCase()};}
 
 export function Quotation(){
- const nav=useNavigate();const {booking,update}=useBooking();const {profile,user}=useAuth();
- const selected=SERVICES.find(s=>s.id===booking.serviceId)||SERVICES[0],quote=getQuote(booking.serviceId);
- const [message,setMessage]=useState(''),[sending,setSending]=useState(false);
- const sendToPhone=async()=>{
-  if(!user){setMessage('Please sign in first.');return;}
-  setSending(true);setMessage('');
-  try{
-   const id=await saveEnquiry(booking,user.id);update(refUpdate(id));
-   setMessage(await sendCustomerNotification(id,'quotation'));
-  }catch(e){setMessage(e instanceof Error?e.message:'WhatsApp sending is not ready. Download your quotation or share it manually.');}
-  finally{setSending(false);}
- };
- const share=()=>{try{openWhatsApp(booking);setMessage('WhatsApp opened. Tap Send there to share to your registered number.');}catch(e){setMessage(e instanceof Error?e.message:'Could not open WhatsApp.');}};
- return <div className="inner-screen page-flow"><Header title="Your Quotation" back="/booking-details"/><div className="page-padding quote-page">
-  <div className="quote-brand"><Logo compact/><div className="quote-number"><strong>Package estimate</strong><b>GCS / {selected.id.toUpperCase()}</b><small>Personalized for you</small></div></div>
-  <div className="checkout-heading"><span>STEP 03 / 04</span><h2>Almost your perfect moment.</h2><p>Review your date, time and venue before continuing.</p></div>
-  <section className="quote-section"><div className="quote-title"><span><UserRound size={17}/> Your Account</span><button onClick={()=>nav('/profile')}>Edit number</button></div>
-   <p><UserRound size={14}/>{booking.fullName||'Complete your profile'}</p><p><Phone size={14}/>{booking.phone||'Add your mobile number'}</p><p><Mail size={14}/>{booking.email}</p>
-  </section>
-  <section className="quote-section"><div className="quote-title"><span><MapPin size={17}/> Your Event</span><button onClick={()=>nav('/booking-details')}>Edit</button></div>
-   <p><Camera size={14}/>{booking.eventType||'Event not selected'}</p>
-   <p><CalendarDays size={14}/>{booking.date?formatDate(booking.date):'Choose event date'}</p>
-   <p><Clock3 size={14}/>{booking.time?to12h(booking.time):'Choose event time'}</p>
-   <p><MapPin size={14}/>{booking.venue||'Venue not entered'}</p>
-  </section>
-  <section className="quote-section"><div className="quote-title"><span><Camera size={17}/> Package Inclusions</span><button onClick={()=>nav('/book')}>Change</button></div>
-   <div className="quote-selected"><StudioThumbnail booking={booking}/><div><strong>{selected.name}</strong><p>{selected.detail}</p></div></div>
-   <ul className="quote-inclusions">{selected.included.map(feature=><li key={feature}><Check size={12}/>{feature}</li>)}</ul>
-   <div className="quotation-table"><div className="quote-table-row"><span>{selected.name}</span><span>1</span><span>{inr(quote.total)}</span><span>{inr(quote.total)}</span></div><div className="quote-grand-total"><strong>Estimated Total</strong><strong>{inr(quote.total)}</strong></div></div>
-  </section>
-  <p className="quote-disclaimer">Illustrative pricing. Final scope and price require studio approval.</p>
-  <div className="compact-quote-actions">
-   <button className="compact-quote-action compact-quote-notify" onClick={()=>void sendToPhone()} disabled={!profile?.whatsapp_opt_in||sending}><Phone size={16}/><span>{sending?'Preparing…':'Send to my number'}</span></button>
-   <button className="compact-quote-action compact-quote-whatsapp" onClick={share}><MessageCircle size={16}/><span>Share WhatsApp</span></button>
-   <button className="compact-quote-action compact-quote-pdf" onClick={()=>downloadQuotation(booking)}><FileText size={16}/><span>Download PDF</span><Download size={15}/></button>
-   <button className="compact-quote-action compact-quote-review" onClick={()=>nav('/payment')}><CreditCard size={16}/><span>Review Payment Options</span><ArrowRight size={16}/></button>
+ const nav=useNavigate();
+ const {booking}=useBooking();
+ const selected=SERVICES.find(s=>s.id===booking.serviceId)||SERVICES[0];
+ const quote=getQuote(selected.id);
+ return <div className="inner-screen page-flow ferrari-quotation-screen">
+  <Header title="Get a Quotation" back={'/packages/'+selected.id}/>
+  <div className="page-padding ferrari-quote-page">
+   <div className="ferrari-quote-eyebrow"><FileText size={15}/> PACKAGE ESTIMATE</div>
+   <h2>Know your package.<br/><span>Plan your moment.</span></h2>
+   <p className="ferrari-quote-lead">Explore all the package details and download your quotation PDF. No event details or payment needed.</p>
+   <section className="ferrari-quote-feature">
+    <StudioThumbnail booking={booking}/>
+    <div><small>GOKUL CREATIVE STUDIO</small><strong>{selected.name}</strong><p>{selected.detail}</p></div>
+   </section>
+   <section className="ferrari-quote-pricing" aria-label="Package price">
+    <div><small>Starting estimate</small><strong>{inr(quote.total)}</strong></div><ShieldCheck size={27}/>
+   </section>
+   <section className="ferrari-quote-inclusions">
+    <div className="ferrari-quote-section-heading"><h3>Everything included</h3><span>{selected.included.length} features</span></div>
+    <ul>{selected.included.map(feature=><li key={feature}><span><Check size={16}/></span><p>{feature}</p></li>)}</ul>
+   </section>
+   <div className="ferrari-quote-notice"><ShieldCheck size={19}/><p>Quotation is an illustrative package estimate. Final pricing, scope and availability are confirmed by the studio before any booking.</p></div>
+   <button type="button" className="ferrari-download-button" onClick={()=>downloadPackageQuotation(selected.id)}><Download size={19}/> Download Quotation PDF <ArrowRight size={18}/></button>
+   <button type="button" className="ferrari-quote-back" onClick={()=>nav('/packages/'+selected.id)}>Back to package <ChevronRight size={16}/></button>
   </div>
-  {message&&<p className="share-guidance" role="status">{message}</p>}
-  <p className="checkout-consent-note">{profile?.whatsapp_opt_in?'Automatic WhatsApp delivery requires verified phone and active studio integration.':'To receive studio WhatsApp updates, enable consent in My Account.'}</p>
- </div></div>;
+ </div>;
 }
 
 const PAYMENT_METHODS=[
@@ -70,10 +56,10 @@ const PAYMENT_METHODS=[
 export function Payment(){
  const nav=useNavigate();const {booking,update}=useBooking();const {user}=useAuth();
  const [processing,setProcessing]=useState<Booking['paymentMethod']|null>(null);
- const [error,setError]=useState(''),[requesting,setRequesting]=useState(false);
+ const [error,setError]=useState('');
  const selected=SERVICES.find(s=>s.id===booking.serviceId)||SERVICES[0],quote=getQuote(booking.serviceId);
  const selectPayment=async(method:Booking['paymentMethod'])=>{
-  if(processing||requesting)return;
+  if(processing)return;
   if(!user){setError('Please sign in first.');return;}
   setProcessing(method);setError('');
   try{
@@ -83,19 +69,9 @@ export function Payment(){
   }catch(e){setError(e instanceof Error?e.message:'Could not complete the demo. Please try again.');}
   finally{setProcessing(null);}
  };
- const requestQuote=async()=>{
-  if(!user){setError('Please sign in first.');return;}
-  setRequesting(true);setError('');
-  try{
-   const id=await saveEnquiry(booking,user.id);
-   update({...refUpdate(id),paymentStatus:'Pending'});
-   nav('/confirmed',{replace:true});
-  }catch(e){setError(e instanceof Error?e.message:'Could not save quotation request.');}
-  finally{setRequesting(false);}
- };
  return <div className="inner-screen page-flow payment-screen demo-payment-screen">
-  <Header title="Payment Options" back="/quotation"/><div className="page-padding">
-   <div className="checkout-heading"><span>STEP 04 / 04 · DEMO MODE</span><h2>Choose a payment method</h2><p>Tap an option to automatically create a <strong>demo booking</strong>. No payment is taken.</p></div>
+  <Header title="Payment Options" back="/booking-details"/><div className="page-padding">
+   <div className="checkout-heading"><span>STEP 03 / 03 · DEMO MODE</span><h2>Choose a payment method</h2><p>Tap an option to automatically create a <strong>demo booking</strong>. No payment is taken.</p></div>
    <div className="payment-summary"><h3><CreditCard size={19}/> Booking Summary</h3>
     <div className="payment-service"><StudioThumbnail booking={booking}/><div><strong>{selected.name}</strong><p>{booking.eventType}</p></div></div>
     <div className="payment-line"><CalendarDays size={16}/><span>Event date</span><strong>{formatDate(booking.date)}</strong></div>
@@ -105,13 +81,13 @@ export function Payment(){
    </div>
    <div className="payment-demo-notice"><ShieldCheck size={20}/><div><strong>Test payments only</strong><p>These options simulate booking confirmation. No UPI transfer, bank/card information, or actual payment is processed.</p></div></div>
    <div className="payment-methods"><div className="payment-method-heading"><h3>Choose a demo method</h3><span>Tap to confirm <ArrowRight size={14}/></span></div>
-    {PAYMENT_METHODS.map(({name,icon:Icon,detail})=><button type="button" key={name} className="demo-payment-method" disabled={Boolean(processing)||requesting} onClick={()=>void selectPayment(name)}>
+    {PAYMENT_METHODS.map(({name,icon:Icon,detail})=><button type="button" key={name} className="demo-payment-method" disabled={Boolean(processing)} onClick={()=>void selectPayment(name)}>
      <span className="demo-payment-icon"><Icon size={19}/></span><span className="demo-payment-copy"><strong>{name}</strong><small>{detail}</small></span>
      {processing===name?<span className="demo-loading"/>:<ChevronRight size={18}/>}
     </button>)}
    </div>
    {error&&<p role="alert" className="error-text">{error}</p>}
-   <button className="request-without-payment" disabled={requesting||Boolean(processing)} onClick={()=>void requestQuote()}>{requesting?'Saving request…':'Request quotation without demo payment'} <ArrowRight size={15}/></button>
+   
    <p className="demo-watermark">A demo booking is NOT a real paid or confirmed studio reservation.</p>
   </div>
  </div>;
