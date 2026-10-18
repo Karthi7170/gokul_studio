@@ -1,83 +1,80 @@
-# Gokul Creative Studio — iPhone Booking Demo
+# Gokul Creative Studio — Customer Booking & Quotation
 
-An 11-screen mobile-first photography and videography booking frontend, based on the supplied GCS iOS User Manual Book.
+A mobile-first React + Vite application for **Gokul Creative Studio**. Customers can register, select one of six event photo/video packages, view inclusions, request a quotation, and review unpaid payment estimates. Deployed to Vercel.
 
-## Pages
+## Production
 
-1. Welcome / Sign In
-2. Create Account
-3. Forgot Password
-4. Home Dashboard
-5. Book a Service
-6. Booking Details
-7. Schedule & Calendar
-8. Quotation Details
-9. Payment Details
-10. Booking Confirmed
-11. WhatsApp Confirmation
+- Customer app: https://gokul-studio-five.vercel.app
+- Source: https://github.com/Karthi7170/gokul_studio
+- Framework: React 18, TypeScript, Vite, Tailwind CSS
+- Authentication/database: Supabase (GCS project)
+- Payments: **NOT enabled**. No funds are collected. Amounts are illustrative, and quotations require studio approval.
 
-## Run locally
+## Features
 
-Requires **Node.js 20.19+ or 22+**.
+- Editorial mobile home page, curated image thumbnails, package filters and search.
+- Six packages: Wedding, Photography, Baby Shoot, Pre-Wedding, Cinematic Videography, and Events.
+- Full package details and inclusions, event enquiry and quote workflow.
+- **Real Supabase email/password sign-in and sign-up**, optional email confirmation, password reset, persistent sessions and sign-out.
+- Accounts are not prepopulated. Sample customer names, passwords and payment confirmations have been removed.
+- Registered name and phone from each customer's profile; phone opt-in preferences and optional SMS OTP verification.
+- Customer requests stored in `public.gcs_booking_requests`, protected by owner-only Row Level Security.
+- PDF quotations and manual WhatsApp share addressed to the registered customer number.
+- Server endpoint `/api/notify` to deliver WhatsApp Business templates **only when** required approved Meta credentials, templates, and verified customer phone are configured.
+- Clear **Not Paid** status until a real verified payment provider is integrated.
+
+## Installation
+
+Install Node.js 20.19+ or newer.
 
 ```sh
 npm install
 npm run dev
+npm run build
 ```
 
-Open the shown Vite URL in a browser. To test the app, log in with any email and non-empty password, or use the social sign-in demo buttons. A sample customer and event are pre-populated. This frontend **does not communicate with authentication, payment, SMS, or booking servers**.
-
-## Build
+### Browser environment variables
 
 ```sh
-npm run build
-npm run preview
+VITE_SUPABASE_URL=https://YOUR_PROJECT_ID.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=YOUR_BROWSER_PUBLISHABLE_KEY
 ```
 
-Vite is configured with `base: '/gokul_studio/'`. `HashRouter` is used because GitHub Pages has no SPA rewrite routing.
+Configure them in **Vercel → Gokul Studio → Settings → Environment Variables** for production, preview and development. They are safe for browser use only because Supabase RLS protects private data. **Never expose a Supabase service-role or secret API key in a VITE_ variable.**
 
-## GitHub Pages deploy
+### Supabase Auth URL configuration
 
-1. Commit the project to the `main` branch of `Karthi7170/gokul_studio`.
-2. Go to **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-3. Open **Actions → Deploy GitHub Pages** to monitor the workflow or start it manually.
-4. When deployed, the expected address is **https://karthi7170.github.io/gokul_studio/** (check Actions/Pages before sharing it as live).
+Go to **Supabase → GCS → Authentication → URL Configuration**. Set the Site URL to `https://gokul-studio-five.vercel.app` and add these allowed redirect URLs:
 
-The workflow runs `npm install --no-audit --no-fund` and builds the `dist` Pages artifact. When installing locally, commit the generated `package-lock.json` to adopt reproducible installs later.
+- `https://gokul-studio-five.vercel.app/**`
+- `http://localhost:5173/**` (for local testing)
 
-## Reference design
+Enable email/password login and account email confirmation under Auth Providers as appropriate. Add an SMTP provider for reliable production emails. SMS phone verification requires configuring a supported SMS provider in Supabase Auth.
 
-- Full supplied reference: `docs/GCS_iOS_User_Manual_Book.pdf`
-- Rendered images of **all 12 pages**, including cover: `reference/screen-01.png` through `reference/screen-12.png`
-- Source PDF render: `pdftoppm -png -r 120 docs/GCS_iOS_User_Manual_Book.pdf reference/screen`
-- Photos in `public/images` are crops from the user-supplied reference for closer visual parity.
+### Database and security
 
-## Data model and mock behavior
+Migrations create `gcs_customer_profiles` and `gcs_booking_requests`, both protected by Row Level Security tied to `auth.uid()`. Every newly registered user starts with their own empty data. Existing demo data in legacy localStorage keys is cleared.
 
-`BookingContext` holds the customer, service, event type, date, time, venue, notes, payment choice, booking ID and status, and persists to `localStorage` (key `gcs-demo-booking-v1`). No remote database is used.
+## Customer WhatsApp delivery
 
-The PDF mock shows a ₹10,000 amount on its confirmation page. This demo intentionally fixes the **illustrative package quotation** to ₹28,000 minus ₹2,000 discount = **₹26,000** on quotation, payment, confirmation, and WhatsApp. The selected service remains visible as a separate field even when the sample quote includes the same three fixed bundle line items.
+Two different flows are provided:
 
-The quote PDF is created **locally** with jsPDF. WhatsApp links use `https://wa.me/?text=...` with prefilled details; no studio phone number is hardcoded. Payment is simulated with a 900ms UI delay and no real transaction. Social sign-in and password recovery are demonstration-only.
+1. **Manual share:** Opens WhatsApp with the registered phone number and a prefilled quote. The user must tap Send; this is not an automatic message.
+2. **Business notifications:** `/api/notify` authenticates the user, checks ownership, opt-in, phone verification and request ID, then uses the official Meta WhatsApp Business API to request a template message. This endpoint does **not** send anything until the studio sets `META_WHATSAPP_TOKEN`, `META_PHONE_NUMBER_ID`, `GCS_QUOTATION_TEMPLATE`, and `GCS_PAYMENT_TEMPLATE` in **Vercel server-side environment variables**, and Meta approves the templates. The phone number also requires SMS verification; the studio must configure its SMS provider.
 
-### Project structure
+Do not put Meta tokens in GitHub, React code, or `VITE_` variables. Meta only accepts approved templates for business-initiated chats. WhatsApp API acceptance does not guarantee delivery. Before enabling a production sender, add provider rate limits, monitoring, retries, and message logs.
 
-```
-src/
-  components/UI.tsx
-  context/BookingContext.tsx
-  data/services.ts
-  screens/AuthScreens.tsx
-  screens/HomeScreens.tsx
-  screens/BookingScreens.tsx
-  screens/CheckoutScreens.tsx
-  utils/quotationPdf.ts
-  utils/sharing.ts
-  App.tsx
-  main.tsx
-  style.css
-```
+## Pricing, media and references
 
-## Home Screen on iPhone
+Package prices and inclusions are **sample values** until approved by the studio. New thumbnails use independent photographs from Unsplash; existing local reference crops remain as fallbacks.
 
-After publishing, open the GitHub Pages URL in Safari → Share → **Add to Home Screen**. iOS metadata, safe-area padding, manifest and icons are configured. Native push notifications, background sync, and payment processing are not part of this demo.
+- Original design manual: `docs/GCS_iOS_User_Manual_Book.pdf`
+- Original page renders: `reference/screen-01.png` to `reference/screen-12.png`
+
+## Deployment
+
+Push to `main`; the connected Vercel Git integration deploys automatically. The app uses a root Vite base URL on Vercel, and preserves `/gokul_studio/` for GitHub Pages.
+
+For iPhone access, open the Vercel URL in Safari → Share → **Add to Home Screen**.
+
+This is a quotation enquiry frontend with real account security; it is **not** a live payment checkout or a booking confirmation system.
