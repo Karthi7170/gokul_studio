@@ -1,0 +1,420 @@
+/**
+ * GOKUL iPhone UI tokens — reusable throughout the React app.
+ * Apple's system fonts are used locally by iOS; no font files are bundled.
+ */
+:root {
+  --ios-font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+  --ios-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+  --ios-accent: #E8431F;
+  --ios-accent-ink: #C93616; /* 5.2:1 contrast on white */
+  --ios-cta: #C93616; /* readable white CTA labels */
+  --ios-peach: #FFC49B;
+  --ios-background: #FFFCF9;
+  --ios-surface: #FFFFFF;
+  --ios-ink: #1C1B1F;
+  --ios-secondary: #59575B;
+  --ios-hero-dark: #1B1412;
+  --ios-border: #F1E7E2;
+  --ios-soft: #FFF3EC;
+  --ios-type-large-title: 34px;
+  --ios-leading-large-title: 41px;
+  --ios-type-title1: 28px;
+  --ios-leading-title1: 34px;
+  --ios-type-title2: 22px;
+  --ios-leading-title2: 28px;
+  --ios-type-headline: 17px;
+  --ios-leading-headline: 22px;
+  --ios-type-body: 17px;
+  --ios-leading-body: 22px;
+  --ios-type-subhead: 15px;
+  --ios-leading-subhead: 20px;
+  --ios-type-footnote: 13px;
+  --ios-leading-footnote: 18px;
+  --ios-type-caption: 12px;
+  --ios-leading-caption: 16px;
+  --ios-font-regular: 400;
+  --ios-font-semibold: 600;
+  --ios-font-bold: 700;
+  --ios-space-1: 4px;
+  --ios-space-2: 8px;
+  --ios-space-3: 12px;
+  --ios-space-4: 16px;
+  --ios-space-6: 24px;
+  --ios-space-8: 32px;
+  --ios-screen-gutter: 20px;
+  --ios-radius-sm: 12px;
+  --ios-radius-card: 20px;
+  --ios-radius-hero: 28px;
+  --ios-shadow: 0 4px 16px rgba(0,0,0,.06);
+  --ios-motion: 250ms ease-out;
+  --ios-safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Ensure every screen inherits the iPhone's native SF Pro without external assets. */
+html, body, #root, .phone-shell,
+button, input, textarea, select, .phone-content {
+  font-family: var(--ios-font-text) !important;
+  font-synthesis: none;
+}
+h1,h2,h3,h4,h5,h6 {
+  font-family: var(--ios-font-display) !important;
+  letter-spacing: normal !important;
+}
+button, input, textarea, select { -webkit-tap-highlight-color: transparent; }
+button { touch-action: manipulation; }
+button:focus-visible, a:focus-visible { outline: 3px solid var(--ios-accent-ink); outline-offset: 2px; }
+
+/* Navigation is an overlay, not a hard stop in the document scroll area. */
+.phone-content.with-studio-tabs {
+  bottom: 0 !important;
+  padding-bottom: calc(120px + var(--ios-safe-bottom)) !important;
+  scroll-padding-bottom: calc(120px + var(--ios-safe-bottom));
+  -webkit-overflow-scrolling: touch;
+}
+.studio-ios-tabs {
+  left: var(--ios-space-4) !important;
+  right: var(--ios-space-4) !important;
+  bottom: calc(var(--ios-space-4) + var(--ios-safe-bottom)) !important;
+  height: auto !important;
+  min-height: 88px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.97) !important;
+  box-shadow: var(--ios-shadow) !important;
+  border: 1px solid var(--ios-border) !important;
+  padding: var(--ios-space-3) !important;
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+.studio-ios-tabs > button {
+  min-width: 44px !important;
+  min-height: 56px !important;
+  height: auto !important;
+  gap: var(--ios-space-2) !important;
+  font-family: var(--ios-font-text) !important;
+  font-size: var(--ios-type-caption) !important;
+  line-height: var(--ios-leading-caption) !important;
+  font-weight: var(--ios-font-regular) !important;
+  transition: transform var(--ios-motion), color var(--ios-motion);
+}
+.studio-ios-tabs > button.active { font-weight: var(--ios-font-semibold) !important; color: var(--ios-accent-ink) !important; }
+.studio-ios-tabs > button > svg { width: 24px; height: 24px; stroke-width: 1.75px; }
+.studio-ios-tabs > button.active > svg { stroke-width: 2px; }
+.studio-ios-tabs > button i { bottom: -7px !important; background: var(--ios-accent-ink) !important; }
+.studio-ios-tabs > button:not(:disabled):active { transform: scale(.97); }
+
+/* Home: same content hierarchy, iOS-readable type and generous whitespace. */
+.gcs-home-2026 {
+  background: var(--ios-background) !important;
+  color: var(--ios-ink) !important;
+  padding-bottom: var(--ios-space-6) !important;
+  font-family: var(--ios-font-text) !important;
+}
+.gcs-home-2026 *, .gcs-home-2026 *::before, .gcs-home-2026 *::after { box-sizing: border-box; }
+.gcs-home-2026 button:not(:disabled) {
+  transition: transform var(--ios-motion), background-color var(--ios-motion), color var(--ios-motion), box-shadow var(--ios-motion);
+}
+.gcs-home-2026 button:not(:disabled):active { transform: scale(.97); }
+.gcs-home-2026 .gcs-2026-top {
+  margin: 0 !important;
+  padding: var(--ios-space-4) var(--ios-screen-gutter) 0 !important;
+  min-height: 64px !important;
+  background: var(--ios-background) !important;
+  gap: var(--ios-space-3) !important;
+}
+.gcs-home-2026 .gcs-header-brand { gap: var(--ios-space-2) !important; }
+.gcs-home-2026 .gcs-header-camera {
+  width: 44px !important; height: 44px !important; border-radius: var(--ios-radius-sm) !important;
+  background: var(--ios-accent) !important;
+  box-shadow: var(--ios-shadow) !important;
+}
+.gcs-home-2026 .gcs-header-camera svg { width: 24px; height: 24px; stroke-width: 1.75px !important; }
+.gcs-home-2026 .gcs-header-brand strong {
+  font-family: var(--ios-font-text) !important;
+  font-weight: var(--ios-font-bold) !important;
+  font-size: var(--ios-type-headline) !important;
+  line-height: var(--ios-leading-headline) !important;
+  letter-spacing: normal !important;
+  color: var(--ios-ink) !important;
+}
+.gcs-home-2026 .gcs-header-brand small {
+  font-size: 10px !important;
+  line-height: 14px !important;
+  font-weight: var(--ios-font-semibold) !important;
+  letter-spacing: .5px !important;
+  color: var(--ios-ink) !important;
+  margin-top: 0 !important;
+}
+.gcs-2026-actions { gap: var(--ios-space-2) !important; }
+.gcs-home-2026 .gcs-round-action, .gcs-home-2026 .gcs-user-avatar {
+  flex: 0 0 44px !important;
+  height: 44px !important;
+  width: 44px !important;
+  box-shadow: none !important;
+  border-radius: 999px !important;
+}
+.gcs-home-2026 .gcs-round-action { background: #F5F3F2 !important; color: var(--ios-ink) !important; }
+.gcs-home-2026 .gcs-round-action.active { background: var(--ios-soft) !important; color: var(--ios-accent-ink) !important; }
+.gcs-home-2026 .gcs-round-action svg { width: 24px; height: 24px; stroke-width: 1.75px; }
+.gcs-home-2026 .gcs-user-avatar {
+  background: #F7E0D4 !important; border: 1px solid #F0C5AE !important; color: #70341F !important;
+}
+.gcs-home-2026 .gcs-user-avatar > span { font-family: var(--ios-font-display) !important; font-size: 17px !important; font-weight: var(--ios-font-semibold) !important; }
+.gcs-home-2026 .gcs-home-search-panel, .gcs-home-2026 .gcs-activity-panel {
+  margin: var(--ios-space-3) var(--ios-screen-gutter) 0 !important;
+  padding: var(--ios-space-3) !important;
+  border-radius: var(--ios-radius-sm) !important;
+  box-shadow: var(--ios-shadow) !important;
+  gap: var(--ios-space-2) !important;
+}
+.gcs-home-2026 .gcs-home-search-panel input { min-height: 44px; font-size: var(--ios-type-subhead) !important; line-height: var(--ios-leading-subhead) !important; }
+.gcs-home-2026 .gcs-home-search-panel button,
+.gcs-home-2026 .gcs-activity-panel button { min-height: 44px; font-size: var(--ios-type-footnote) !important; font-weight: var(--ios-font-semibold) !important; }
+.gcs-home-2026 .gcs-activity-panel strong { font-size: var(--ios-type-headline) !important; font-weight: var(--ios-font-semibold) !important; }
+.gcs-home-2026 .gcs-activity-panel p { color: var(--ios-secondary) !important; font-size: var(--ios-type-footnote) !important; line-height: var(--ios-leading-footnote) !important; }
+.gcs-home-2026 .gcs-2026-welcome {
+  display: flex !important; justify-content: space-between !important; align-items: center !important;
+  margin: var(--ios-space-6) 0 0 !important;
+  padding: 0 var(--ios-screen-gutter) !important;
+  gap: var(--ios-space-4) !important;
+  min-height: 0 !important;
+}
+.gcs-home-2026 .gcs-2026-greeting { min-width: 0; flex: 1 1 auto; }
+.gcs-home-2026 .gcs-2026-salutation {
+  font-family: var(--ios-font-text) !important;
+  display: block; font-size: var(--ios-type-caption) !important; line-height: var(--ios-leading-caption) !important;
+  font-weight: var(--ios-font-semibold) !important; letter-spacing: .5px !important;
+  color: var(--ios-secondary) !important;
+}
+.gcs-home-2026 .gcs-2026-greeting h1 {
+  margin: var(--ios-space-2) 0 !important;
+  font-family: var(--ios-font-display) !important;
+  font-size: var(--ios-type-large-title) !important; line-height: var(--ios-leading-large-title) !important;
+  font-weight: var(--ios-font-bold) !important; letter-spacing: normal !important;
+  color: var(--ios-ink) !important; overflow-wrap: anywhere;
+}
+.gcs-home-2026 .gcs-2026-greeting h1 svg { width: 24px; height: 24px; color: var(--ios-accent); stroke-width: 1.75px; }
+.gcs-home-2026 .gcs-2026-greeting p {
+  font-size: var(--ios-type-subhead) !important; line-height: var(--ios-leading-subhead) !important;
+  font-weight: var(--ios-font-regular) !important; color: var(--ios-secondary) !important;
+}
+.gcs-home-2026 .gcs-2026-book-shortcut {
+  min-height: 72px !important; min-width: 156px !important;
+  padding: var(--ios-space-3) !important; gap: var(--ios-space-2) !important;
+  background: var(--ios-surface) !important; color: var(--ios-accent-ink) !important;
+  border: 1px solid var(--ios-border) !important; border-radius: 999px !important;
+  box-shadow: var(--ios-shadow) !important; flex: none;
+}
+.gcs-home-2026 .gcs-2026-book-shortcut > span:first-child {
+  min-width: 44px; min-height: 44px; background: var(--ios-soft) !important; color: var(--ios-accent-ink) !important;
+}
+.gcs-home-2026 .gcs-2026-book-shortcut > span:first-child svg { width: 24px; height: 24px; stroke-width: 1.75px; }
+.gcs-home-2026 .gcs-2026-book-shortcut small {
+  font-size: var(--ios-type-caption) !important; line-height: var(--ios-leading-caption) !important;
+  font-weight: var(--ios-font-regular) !important; color: var(--ios-secondary) !important;
+}
+.gcs-home-2026 .gcs-2026-book-shortcut strong {
+  font-size: var(--ios-type-footnote) !important; line-height: var(--ios-leading-footnote) !important;
+  font-weight: var(--ios-font-semibold) !important; color: var(--ios-accent-ink) !important;
+}
+.gcs-home-2026 .gcs-2026-book-shortcut > svg { width: 20px !important; height: 20px !important; stroke-width: 1.75px; }
+.gcs-home-2026 .gcs-2026-hero {
+  height: 356px !important;
+  margin: var(--ios-space-6) var(--ios-screen-gutter) !important;
+  border-radius: var(--ios-radius-hero) !important;
+  box-shadow: var(--ios-shadow) !important;
+  background: var(--ios-hero-dark) !important;
+}
+.gcs-home-2026 .gcs-2026-hero-image {
+  width: 100%; height: 100%; object-fit: cover; object-position: center center;
+  animation: ios-hero-settle 250ms cubic-bezier(.22,1.25,.36,1) both;
+}
+@keyframes ios-hero-settle { from { opacity: .78; transform: scale(1.018); } to { opacity: 1; transform: scale(1); } }
+.gcs-home-2026 .gcs-2026-hero-vignette {
+  background: linear-gradient(90deg,rgba(12,9,8,.91) 0%,rgba(12,9,8,.74) 55%,rgba(12,9,8,.25) 100%),
+              linear-gradient(0deg,rgba(12,9,8,.64),transparent 56%) !important;
+}
+.gcs-home-2026 .gcs-2026-hero-copy {
+  left: var(--ios-space-6) !important; top: var(--ios-space-6) !important; bottom: auto !important;
+  right: var(--ios-space-6) !important; color: white;
+}
+.gcs-home-2026 .gcs-2026-hero-eyebrow {
+  font-size: var(--ios-type-caption) !important; line-height: var(--ios-leading-caption) !important;
+  font-weight: var(--ios-font-semibold) !important; letter-spacing: .5px !important; color: #FFFFFF !important;
+}
+.gcs-home-2026 .gcs-2026-hero-copy h2 {
+  margin: var(--ios-space-3) 0 !important;
+  font-family: var(--ios-font-display) !important;
+  font-size: var(--ios-type-large-title) !important; line-height: var(--ios-leading-large-title) !important;
+  letter-spacing: normal !important; font-weight: var(--ios-font-bold) !important; color: #FFFFFF !important;
+  text-shadow: none !important;
+}
+.gcs-home-2026 .gcs-2026-hero-copy h2 em {
+  font-family: var(--ios-font-display) !important; font-style: italic !important;
+  font-weight: var(--ios-font-semibold) !important; color: var(--ios-peach) !important;
+}
+.gcs-home-2026 .gcs-2026-hero-copy p {
+  font-size: var(--ios-type-subhead) !important; line-height: var(--ios-leading-subhead) !important;
+  color: #FFFFFF !important; font-weight: var(--ios-font-regular) !important; margin: 0 !important;
+}
+.gcs-home-2026 .gcs-2026-hero-copy > button {
+  margin-top: 20px !important; min-height: 48px !important;
+  padding: var(--ios-space-2) var(--ios-space-2) var(--ios-space-2) var(--ios-space-4) !important;
+  gap: var(--ios-space-3) !important; border-radius: 999px !important;
+  background: var(--ios-cta) !important; color: #FFF !important;
+  font-size: var(--ios-type-subhead) !important; line-height: var(--ios-leading-subhead) !important;
+  font-weight: var(--ios-font-semibold) !important; box-shadow: none !important;
+}
+.gcs-home-2026 .gcs-2026-hero-copy > button > span {
+  display: grid; place-items: center; width: 36px; height: 36px;
+  background: rgba(0,0,0,.12) !important; border-radius: 50%;
+}
+.gcs-home-2026 .gcs-2026-hero-copy > button svg { width: 24px; height: 24px; stroke-width: 1.75px; }
+.gcs-home-2026 .gcs-2026-hero-pagination {
+  right: 76px !important; bottom: var(--ios-space-2) !important;
+  display: flex; gap: 0 !important; z-index: 4;
+}
+.gcs-home-2026 .gcs-2026-hero-pagination > button {
+  height: 44px !important; width: 44px !important;
+  display: grid; place-items: center; background: transparent !important;
+  box-shadow: none !important; border-radius: 50%;
+}
+.gcs-home-2026 .gcs-2026-hero-pagination > button::after {
+  content: ''; display: block; width: 8px; height: 8px; background: #FFFFFFA8;
+  border-radius: 50%; transition: transform var(--ios-motion), background-color var(--ios-motion);
+}
+.gcs-home-2026 .gcs-2026-hero-pagination > button.active::after {
+  background: var(--ios-accent) !important; transform: scale(1.25);
+}
+.gcs-home-2026 .gcs-2026-hero-count {
+  right: var(--ios-space-6) !important; bottom: var(--ios-space-6) !important;
+  font-size: var(--ios-type-caption) !important; line-height: var(--ios-leading-caption) !important;
+  font-weight: var(--ios-font-semibold) !important; letter-spacing: normal !important; color: #FFFFFF !important;
+}
+.gcs-home-2026 .gcs-2026-categories {
+  display: flex !important; flex-wrap: nowrap !important; justify-content: flex-start;
+  overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity; scrollbar-width: none;
+  gap: var(--ios-space-4) !important;
+  margin: 0 !important;
+  padding: 0 var(--ios-screen-gutter) var(--ios-space-2) !important;
+  overscroll-behavior-inline: contain;
+}
+.gcs-home-2026 .gcs-2026-categories::-webkit-scrollbar { display: none; }
+.gcs-home-2026 .gcs-2026-categories > button {
+  flex: 0 0 78px; width: 78px !important; min-width: 78px !important;
+  display: flex; flex-direction: column; align-items: center;
+  min-height: 120px; gap: var(--ios-space-2) !important;
+  scroll-snap-align: start; color: var(--ios-ink) !important;
+  font-weight: var(--ios-font-regular) !important;
+}
+.gcs-home-2026 .gcs-2026-category-icon {
+  width: 64px !important; height: 64px !important; min-width: 64px !important;
+  border-radius: 50% !important; background: #F7F3F1 !important;
+  border: 1px solid var(--ios-border) !important; color: var(--ios-ink) !important;
+}
+.gcs-home-2026 .gcs-2026-category-icon svg { width: 24px; height: 24px; stroke-width: 1.75px; }
+.gcs-home-2026 .gcs-2026-categories > button.active .gcs-2026-category-icon { background: var(--ios-soft) !important; color: var(--ios-accent-ink) !important; }
+.gcs-home-2026 .gcs-2026-category-label {
+  max-width: 78px !important; min-height: 36px !important; max-height: 36px;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  overflow: hidden; text-overflow: ellipsis; text-align: center;
+  font-size: var(--ios-type-caption) !important; line-height: var(--ios-leading-caption) !important;
+  font-weight: var(--ios-font-regular) !important; color: var(--ios-ink) !important;
+}
+.gcs-home-2026 .gcs-2026-categories > button.active .gcs-2026-category-label { color: var(--ios-accent-ink) !important; font-weight: var(--ios-font-semibold) !important; }
+.gcs-home-2026 .gcs-2026-category-indicator { bottom: -1px !important; background: transparent !important; }
+.gcs-home-2026 .gcs-2026-categories > button.active .gcs-2026-category-indicator { background: var(--ios-accent-ink) !important; }
+.gcs-home-2026 .gcs-2026-popular { padding: 0 var(--ios-screen-gutter) !important; margin-top: var(--ios-space-8) !important; }
+.gcs-home-2026 .gcs-2026-section-head {
+  padding: 0 !important; margin-bottom: var(--ios-space-4) !important;
+  align-items: flex-end !important; gap: var(--ios-space-3) !important;
+}
+.gcs-home-2026 .gcs-2026-section-head > div > span {
+  font-size: var(--ios-type-caption) !important; line-height: var(--ios-leading-caption) !important;
+  letter-spacing: .5px !important; font-weight: var(--ios-font-semibold) !important;
+  color: var(--ios-accent-ink) !important;
+}
+.gcs-home-2026 .gcs-2026-section-head h2 {
+  font-family: var(--ios-font-display) !important;
+  font-size: var(--ios-type-title1) !important; line-height: var(--ios-leading-title1) !important;
+  font-weight: var(--ios-font-bold) !important; letter-spacing: normal !important;
+  color: var(--ios-ink) !important; margin-top: var(--ios-space-2) !important;
+}
+.gcs-home-2026 .gcs-2026-section-head > button {
+  min-height: 44px; display: flex; align-items: center;
+  font-size: var(--ios-type-footnote) !important; line-height: var(--ios-leading-footnote) !important;
+  font-weight: var(--ios-font-semibold) !important; color: var(--ios-accent-ink) !important;
+  gap: var(--ios-space-2) !important;
+}
+.gcs-home-2026 .gcs-2026-section-head > button svg { width: 24px; height: 24px; stroke-width: 1.75px; }
+.gcs-home-2026 .gcs-2026-popular-track { grid-template-columns: repeat(3,minmax(0,1fr)); gap: var(--ios-space-3) !important; }
+.gcs-home-2026 .gcs-2026-package {
+  border-radius: var(--ios-radius-card) !important; border: 1px solid var(--ios-border) !important;
+  box-shadow: var(--ios-shadow) !important; background: var(--ios-surface) !important;
+  overflow: hidden;
+}
+.gcs-home-2026 .gcs-2026-package > img { height: 108px !important; width: 100%; object-fit: cover; }
+.gcs-home-2026 .gcs-2026-package-info {
+  min-height: 190px !important; gap: var(--ios-space-2) !important;
+  padding: var(--ios-space-3) !important;
+}
+.gcs-home-2026 .gcs-2026-package-info > strong {
+  font-family: var(--ios-font-text) !important; font-size: var(--ios-type-subhead) !important;
+  line-height: var(--ios-leading-subhead) !important; font-weight: var(--ios-font-semibold) !important;
+  letter-spacing: normal !important; min-height: 40px !important;
+  color: var(--ios-ink) !important;
+}
+.gcs-home-2026 .gcs-2026-package-info > small {
+  font-size: var(--ios-type-caption) !important; line-height: var(--ios-leading-caption) !important;
+  font-weight: var(--ios-font-regular) !important; color: var(--ios-secondary) !important;
+}
+.gcs-home-2026 .gcs-2026-package-info > b {
+  font-size: var(--ios-type-footnote) !important; line-height: var(--ios-leading-footnote) !important;
+  font-weight: var(--ios-font-semibold) !important; color: var(--ios-ink) !important; padding-right: 0 !important;
+}
+.gcs-home-2026 .gcs-2026-package-arrow {
+  right: var(--ios-space-2) !important; bottom: var(--ios-space-2) !important;
+  height: 32px !important; width: 32px !important; color: var(--ios-accent-ink) !important;
+  background: var(--ios-soft) !important; border-radius: 50%;
+  pointer-events: none;
+}
+.gcs-home-2026 .gcs-2026-package-arrow svg { height: 20px; width: 20px; stroke-width: 1.75px; }
+.gcs-home-2026 .gcs-2026-story {
+  margin: var(--ios-space-6) var(--ios-screen-gutter) 0 !important;
+  height: 176px !important; border-radius: var(--ios-radius-card) !important;
+  box-shadow: var(--ios-shadow) !important;
+}
+.gcs-home-2026 .gcs-2026-story-copy { top: var(--ios-space-4) !important; left: var(--ios-space-4) !important; }
+.gcs-home-2026 .gcs-2026-story-copy > span { font-size: var(--ios-type-caption) !important; line-height: var(--ios-leading-caption) !important; letter-spacing: .5px !important; font-weight: var(--ios-font-semibold) !important; color: #FFF !important; }
+.gcs-home-2026 .gcs-2026-story-copy h2 {
+  font-family: var(--ios-font-display) !important; font-size: var(--ios-type-title2) !important;
+  line-height: var(--ios-leading-title2) !important; font-weight: var(--ios-font-semibold) !important; letter-spacing: normal !important;
+}
+.gcs-home-2026 .gcs-2026-story-copy h2 em { font-family: var(--ios-font-display) !important; font-weight: var(--ios-font-semibold) !important; color: var(--ios-peach) !important; }
+.gcs-home-2026 .gcs-2026-story-copy p { font-size: var(--ios-type-footnote) !important; line-height: var(--ios-leading-footnote) !important; color: #FFF !important; }
+.gcs-home-2026 .gcs-2026-story > button { min-width: 80px; min-height: 44px; border-radius: 999px !important; font-size: var(--ios-type-footnote) !important; font-weight: var(--ios-font-semibold) !important; background: var(--ios-cta) !important; box-shadow: none !important; }
+.gcs-home-2026 .gcs-2026-disclaimer { color: var(--ios-secondary) !important; font-size: var(--ios-type-caption) !important; line-height: var(--ios-leading-caption) !important; padding: var(--ios-space-4) var(--ios-screen-gutter) !important; }
+
+/* Respect reduced motion while retaining slider buttons for accessibility. */
+@media (prefers-reduced-motion: reduce) {
+  .gcs-home-2026 *, .studio-ios-tabs > button {
+    animation: none !important; transition: none !important; scroll-behavior: auto !important;
+  }
+}
+@media (max-width: 430px) {
+  .gcs-home-2026 .gcs-2026-welcome { flex-direction: column !important; align-items: stretch !important; }
+  .gcs-home-2026 .gcs-2026-book-shortcut { align-self: flex-start !important; margin-top: var(--ios-space-4); }
+}
+@media (max-width: 374px) {
+  .gcs-home-2026 .gcs-2026-top { padding-left: var(--ios-screen-gutter) !important; padding-right: var(--ios-screen-gutter) !important; }
+  .gcs-home-2026 .gcs-2026-actions { gap: var(--ios-space-1) !important; }
+  .gcs-home-2026 .gcs-header-brand { gap: var(--ios-space-1) !important; }
+  .gcs-home-2026 .gcs-header-brand strong { font-size: 15px !important; }
+  .gcs-home-2026 .gcs-header-brand small { font-size: 9px !important; }
+  .gcs-home-2026 .gcs-2026-hero { height: 372px !important; }
+  .gcs-home-2026 .gcs-2026-hero-copy h2 { font-size: 31px !important; line-height: 38px !important; }
+  .gcs-home-2026 .gcs-2026-hero-pagination { right: 69px !important; }
+  .gcs-home-2026 .gcs-2026-hero-pagination > button { width: 38px !important; height: 44px !important; }
+  .gcs-home-2026 .gcs-2026-package-info { padding: var(--ios-space-2) !important; }
+  .gcs-home-2026 .gcs-2026-package-info > strong { font-size: 13px !important; line-height: 18px !important; }
+}
