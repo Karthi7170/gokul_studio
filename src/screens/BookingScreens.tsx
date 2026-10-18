@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CalendarDays, ChevronLeft, ChevronRight, Clock3, MapPin, MessageSquareText, Camera, Bell } from 'lucide-react';
 import { Header, PrimaryButton, ScreenTitle, SectionHeading, StatusBadge, Stepper } from '../components/UI';
 import { useBooking } from '../context/BookingContext';
-import { SERVICES, IMAGE_URL, formatDate, to12h, inr } from '../data/services';
+import { SERVICES, IMAGE_URL, THUMBNAIL_URL, formatDate, to12h, inr } from '../data/services';
 export function BookingDetails(){
  const nav=useNavigate();const {booking,update}=useBooking();const [dateMode,setDateMode]=useState(false);
  const selected=SERVICES.find(s=>s.id===booking.serviceId)!;
@@ -15,7 +15,7 @@ export function BookingDetails(){
  <div className="field-group"><label className="field-label" htmlFor="event-time">Event Time <em>*</em></label><div className="input-icon-row"><Clock3 size={16} className="red"/><input id="event-time" type="time" value={booking.time} onChange={e=>update({time:e.target.value})}/><ChevronRight size={17}/></div></div>
  <div className="field-group"><label className="field-label" htmlFor="venue">Location / Venue <em>*</em></label><div className="input-icon-row"><MapPin size={16} className="red"/><input id="venue" placeholder="Enter event location" value={booking.venue} onChange={e=>update({venue:e.target.value})}/><ChevronRight size={17}/></div></div>
  <div className="field-group"><label className="field-label" htmlFor="additional-notes">Additional Notes</label><div className="notes-box"><MessageSquareText size={16}/><textarea id="additional-notes" placeholder="Any special requirements? (Optional)" value={booking.notes} maxLength={300} onChange={e=>update({notes:e.target.value})}/><small>{booking.notes.length}/300</small></div></div>
- <div className="selected-service"><div className="selected-heading"><strong>Selected Service</strong><button onClick={()=>nav('/book')}>Change</button></div><div className="selected-body"><img src={IMAGE_URL(selected.image)} alt=""/><div><strong>{selected.name}</strong><p>{selected.detail}</p><span>From <b>{inr(selected.from)}</b></span></div></div></div>
+ <div className="selected-service"><div className="selected-heading"><strong>Selected Service</strong><button onClick={()=>nav('/book')}>Change</button></div><div className="selected-body"><img src={THUMBNAIL_URL(selected)} alt=""/><div><strong>{selected.name}</strong><p>{selected.detail}</p><span>From <b>{inr(selected.from)}</b></span></div></div></div>
  <PrimaryButton disabled={!valid} onClick={()=>nav('/schedule')} className="bottom-cta">Continue</PrimaryButton>
  </div></div>;
 }
