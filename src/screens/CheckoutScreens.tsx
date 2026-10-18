@@ -4,7 +4,7 @@ import {ArrowRight,CalendarDays,Camera,Check,ChevronRight,Clock3,Copy,CreditCard
 import {BackButton,DetailLine,Header,Logo,OutlineButton,PrimaryButton} from '../components/UI';
 import {useBooking,type Booking} from '../context/BookingContext';
 import {useAuth} from '../context/AuthContext';
-import {SERVICES,IMAGE_URL,THUMBNAIL_URL,inr,getQuote,formatDate,to12h} from '../data/services';
+import {SERVICES,IMAGE_URL,THUMBNAIL_URL,inr,getQuote,getBookingEstimate,ADD_ONS,formatDate,to12h} from '../data/services';
 import {downloadPackageQuotation} from '../utils/quotationPdf';
 import {bookingMessage,openWhatsApp,shareDetails} from '../utils/sharing';
 import {completeDemoPayment} from '../lib/requests';
@@ -57,7 +57,7 @@ export function Payment(){
  const nav=useNavigate();const {booking,update}=useBooking();const {user}=useAuth();
  const [processing,setProcessing]=useState<Booking['paymentMethod']|null>(null);
  const [error,setError]=useState('');
- const selected=SERVICES.find(s=>s.id===booking.serviceId)||SERVICES[0],quote=getQuote(booking.serviceId);
+ const selected=SERVICES.find(s=>s.id===booking.serviceId)||SERVICES[0],quote=getBookingEstimate(booking.serviceId,booking.addOns);
  const dateNow=new Date();
  const today=[dateNow.getFullYear(),String(dateNow.getMonth()+1).padStart(2,'0'),String(dateNow.getDate()).padStart(2,'0')].join('-');
  const detailsReady=Boolean(booking.eventType.trim()&&booking.venue.trim()&&/^\d{4}-\d{2}-\d{2}$/.test(booking.date)&&booking.date>=today&&/^([01]\d|2[0-3]):[0-5]\d$/.test(booking.time));
@@ -81,7 +81,7 @@ export function Payment(){
     <div className="payment-line"><CalendarDays size={16}/><span>Event date</span><strong>{formatDate(booking.date)}</strong></div>
     <div className="payment-line"><Clock3 size={16}/><span>Event time</span><strong>{to12h(booking.time)}</strong></div>
     <div className="payment-line"><MapPin size={16}/><span>Venue</span><strong>{booking.venue}</strong></div>
-    <div className="payment-total"><span>Illustrative Amount</span><strong>{inr(quote.total)}</strong></div>
+    <div className="demo-payment-addons">{quote.addOns.map(a=><div key={a.id}><span>{a.name}</span><strong>+{inr(a.price)}</strong></div>)}</div><div className="payment-total"><span>Illustrative Total</span><strong>{inr(quote.total)}</strong></div>
    </div>
    <div className="payment-demo-notice"><ShieldCheck size={20}/><div><strong>Test payments only</strong><p>These options simulate booking confirmation. No UPI transfer, bank/card information, or actual payment is processed.</p></div></div>
    <div className="payment-methods"><div className="payment-method-heading"><h3>Choose a demo method</h3><span>Tap to confirm <ArrowRight size={14}/></span></div>
@@ -101,7 +101,7 @@ export function Confirmed(){
  const nav=useNavigate();const {booking}=useBooking();const {profile,user}=useAuth();
  const [message,setMessage]=useState(''),[sending,setSending]=useState(false);
  const chosen=SERVICES.find(s=>s.id===booking.serviceId)||SERVICES[0];
- const quote=getQuote(booking.serviceId);
+ const quote=getBookingEstimate(booking.serviceId,booking.addOns);
  const isDemo=booking.paymentStatus==='Demo Only';
  const share=()=>{try{openWhatsApp(booking);setMessage('WhatsApp opened; press Send there to share your details.');}catch(e){setMessage(e instanceof Error?e.message:'WhatsApp unavailable.');}};
  const sendToPhone=async()=>{if(!booking.requestId)return;setSending(true);try{setMessage(await sendCustomerNotification(booking.requestId,isDemo?'payment':'quotation'));}catch(e){setMessage(e instanceof Error?e.message:'Notification unavailable. Use manual share.');}finally{setSending(false);}};
@@ -125,7 +125,7 @@ export function Confirmed(){
    {profile?.whatsapp_opt_in&&user&&<button className="compact-quote-action compact-quote-notify confirm-notify" disabled={sending} onClick={()=>void sendToPhone()}><Phone size={16}/>{sending?'Sending…':'Send details to my number'}</button>}
    <button className="compact-quote-action compact-quote-whatsapp confirm-share" onClick={share}><MessageCircle size={16}/> Share to my WhatsApp</button>
    {message&&<p className="share-guidance" role="status">{message}</p>}
-   <OutlineButton onClick={()=>nav('/home')} className="confirm-view">Back to Home <ArrowRight size={17}/></OutlineButton>
+   <OutlineButton onClick={()=>nav('/bookings')} className="confirm-view">View My Bookings <ArrowRight size={17}/></OutlineButton><button className="confirm-preview" onClick={()=>nav('/home')}>Return Home <ChevronRight size={15}/></button>
    <button className="confirm-preview" onClick={()=>nav('/whatsapp')}>Preview message <ChevronRight size={15}/></button>
   </div>
  </div>;
