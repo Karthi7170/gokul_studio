@@ -25,7 +25,12 @@ export const initialBooking: Booking = {
 type BookingStore = { booking: Booking; update: (p: Partial<Booking>) => void; confirm: () => string; reset: () => void };
 const Context = createContext<BookingStore | null>(null);
 function load(): Booking {
-  try { const value = localStorage.getItem('gcs-demo-booking-v1'); return value ? { ...initialBooking, ...JSON.parse(value) } as Booking : initialBooking; }
+  try { const value = localStorage.getItem('gcs-demo-booking-v1'); if (!value) return initialBooking;
+    const saved = JSON.parse(value) as Partial<Booking>;
+    const legacy: Record<string, ServiceId> = {combo:'wedding',editing:'videography',album:'wedding'};
+    const valid: ServiceId[] = ['wedding','photography','baby','prewedding','videography','events'];
+    const serviceId = saved.serviceId && valid.includes(saved.serviceId) ? saved.serviceId : (legacy[String(saved.serviceId)] || initialBooking.serviceId);
+    return {...initialBooking,...saved,serviceId}; }
   catch { return initialBooking; }
 }
 export function BookingProvider({ children }: { children: ReactNode }) {
