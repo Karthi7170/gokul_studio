@@ -32,7 +32,7 @@ export function downloadQuotation(booking: Booking) {
   s?.included.forEach((feature,i)=>pdf.text(`- ${feature}`,18,149+i*4.4));
   pdf.setFontSize(10); pdf.setFont('helvetica','bold'); pdf.text(`Subtotal: INR ${quote.subtotal.toLocaleString('en-IN')}`, 130, 180);
   pdf.text(`Discount: INR ${quote.discount.toLocaleString('en-IN')}`, 130, 189);
-  pdf.setTextColor(red); pdf.setFontSize(16); pdf.text(`quote.total: INR ${quote.total.toLocaleString('en-IN')}`, 112, 204);
+  pdf.setTextColor(red); pdf.setFontSize(16); pdf.text(`TOTAL: INR ${quote.total.toLocaleString('en-IN')}`, 112, 204);
   pdf.setTextColor('#666666'); pdf.setFont('helvetica','normal'); pdf.setFontSize(9);
   pdf.text(`Total amount: ${inr(quote.total).replace('₹','INR ')}`,14,220);
   pdf.text('Demo quotation. Final deliverables and pricing are subject to studio confirmation.',14,228);
