@@ -1,7 +1,6 @@
-import {useMemo,useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {ArrowRight,Camera,CheckCircle2,ChevronRight,Heart,Images,Menu,MessageCircle,Search,ShieldCheck,Sparkles,UserRound,Video,Clock3,ImagePlus,Gift,Film,LayoutGrid} from 'lucide-react';
-import {Logo} from '../components/UI';
+import {useEffect,useMemo,useRef,useState,type TouchEvent} from 'react';
+import {useNavigate,useSearchParams} from 'react-router-dom';
+import {ArrowRight,Baby,Bell,Building2,CalendarDays,Camera,CheckCircle2,ChevronRight,Clapperboard,Grid2X2,Heart,HeartHandshake,Images,MessageCircle,Search,ShieldCheck,Sparkles,UserRound,Video} from 'lucide-react';
 import {useAuth} from '../context/AuthContext';
 import {SERVICES,THUMBNAIL_URL,IMAGE_URL,inr,type ServiceId} from '../data/services';
 const benefits=[
@@ -12,32 +11,124 @@ const benefits=[
 const filters=[{id:'all',label:'All packages'},{id:'wedding',label:'Weddings'},{id:'family',label:'Family'},{id:'creative',label:'Photo & Film'}] as const;
 type Filter=typeof filters[number]['id'];
 const groups:Record<ServiceId,Filter>={wedding:'wedding',photography:'creative',baby:'family',prewedding:'wedding',videography:'creative',events:'family'};
-function StudioImage({src,fallback,alt}:{src:string;fallback:string;alt:string}){return <img src={src} alt={alt} loading="lazy" onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=IMAGE_URL(fallback)}}/>}
-
+function StudioImage({src,fallback,alt,className}:{src:string;fallback:string;alt:string;className?:string}){
+ return <img src={src} alt={alt} className={className} loading="lazy" onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=IMAGE_URL(fallback)}}/>;
+}
+const categoryItems=[
+ {id:'wedding',label:'Wedding',icon:Camera},
+ {id:'prewedding',label:'Pre-Wedding',icon:HeartHandshake},
+ {id:'videography',label:'Cinematic Videos',icon:Clapperboard},
+ {id:'baby',label:'Baby & Family',icon:Baby},
+ {id:'events',label:'Events',icon:Building2},
+ {id:'all',label:'All Services',icon:Grid2X2}
+] as const;
+const featured=[
+ {id:'wedding',title:'Wedding Collection',description:'Complete photo & film coverage for your day.'},
+ {id:'prewedding',title:'Pre-Wedding Stories',description:'Cinematic couple photos, made for you.'},
+ {id:'baby',title:'Baby & Family',description:'Beautiful memories for every milestone.'}
+] as const;
 export function Home(){
- const nav=useNavigate();const {profile,user}=useAuth();const [menuOpen,setMenuOpen]=useState(false),[heroIndex,setHeroIndex]=useState(0);
+ const nav=useNavigate();
+ const {profile,user}=useAuth();
+ const [searchOpen,setSearchOpen]=useState(false);
+ const [activityOpen,setActivityOpen]=useState(false);
+ const [query,setQuery]=useState('');
+ const [heroIndex,setHeroIndex]=useState(0);
+ const touchStartX=useRef<number|null>(null);
  const heroItems=[SERVICES[0],SERVICES[3],SERVICES[2],SERVICES[5]];
- const firstName=(profile?.full_name||String(user?.user_metadata?.full_name||'')).split(' ')[0];
- return <div className="home-screen page-flow gcs-home">
- <header className="gcs-home-header"><div className="gcs-header-brand"><span className="gcs-header-camera"><Camera size={20}/></span><div><strong>GOKUL</strong><small>CREATIVE STUDIO</small></div></div><div className="gcs-top-actions"><button className="gcs-profile-action" onClick={()=>nav('/profile')} aria-label="Open my account"><UserRound size={20}/></button><button className="gcs-menu-action" aria-label="Open studio navigation" aria-expanded={menuOpen} onClick={()=>setMenuOpen(v=>!v)}><Menu size={22}/></button></div></header>
- {menuOpen&&<div className="gcs-quick-menu" role="navigation" aria-label="Quick navigation"><button onClick={()=>nav('/book')}>Explore Packages <ChevronRight size={15}/></button><button onClick={()=>nav('/bookings')}>My Bookings <ChevronRight size={15}/></button><button onClick={()=>nav('/profile')}>Account Settings <ChevronRight size={15}/></button></div>}
- <div className="gcs-greeting"><h2>Welcome, <em>{firstName||'there'}</em> <Sparkles size={17}/></h2><p>Your next beautiful chapter starts here.</p></div>
- <section className="gcs-hero-premium"><StudioImage src={THUMBNAIL_URL(heroItems[heroIndex])} fallback={heroItems[heroIndex].image} alt={heroItems[heroIndex].name+' inspiration'}/><div className="gcs-hero-overlay"/><div className="gcs-hero-content"><span className="gcs-hero-kicker">CREATED FOR LIFE'S BIG MOMENTS</span><h1>Every moment<br/>deserves a <em>story.</em></h1><p>From joyful beginnings to once-in-a-lifetime celebrations.</p><button onClick={()=>nav('/packages/'+heroItems[heroIndex].id)}>Explore packages <ArrowRight size={17}/></button></div><div className="gcs-hero-pages">{heroItems.map((p,i)=><button key={p.id} className={heroIndex===i?'active':''} aria-label={'Show '+p.name} onClick={()=>setHeroIndex(i)}/>)}</div><span className="gcs-hero-index">{String(heroIndex+1).padStart(2,'0')} / 04</span></section>
- <div className="gcs-home-section-heading"><div><span className="gcs-eyebrow">CURATED EXPERIENCES</span><h2>Our packages</h2></div><button onClick={()=>nav('/book')}>View all <ArrowRight size={15}/></button></div>
- <div className="gcs-featured-scroll">{SERVICES.slice(0,2).map((s,i)=><button className="gcs-featured-card" onClick={()=>nav('/packages/'+s.id)} key={s.id}><StudioImage src={THUMBNAIL_URL(s)} fallback={s.image} alt={s.name}/><span className="gcs-featured-shade"/><span className="gcs-featured-number">{String(i+1).padStart(2,'0')}</span><div><strong>{s.name}</strong><span>From {inr(s.from)} <ChevronRight size={14}/></span></div></button>)}</div>
- <button className="gcs-view-packages" onClick={()=>nav('/book')}>Explore all 6 packages <ArrowRight size={16}/></button>
- <div className="gcs-home-section-heading gcs-why-heading"><div><span className="gcs-eyebrow">THE GOKUL DIFFERENCE</span><h2>Why choose us?</h2></div></div>
- <div className="gcs-benefit-list">{benefits.map(({icon:Icon,title,desc},i)=><div className="gcs-benefit" key={title}><span className="gcs-benefit-icon"><Icon size={19}/></span><div><small>0{i+1}</small><strong>{title}</strong><p>{desc}</p></div><CheckCircle2 className="gcs-benefit-check" size={15}/></div>)}</div>
- <div className="gcs-bottom-note"><MessageCircle size={16}/> Package prices are starting estimates. Final details confirmed by the studio.</div>
- 
+ const displayName=(profile?.full_name||String(user?.user_metadata?.full_name||'')).trim().split(/\s+/)[0];
+ const hour=new Date().getHours();
+ const salutation=hour<12?'GOOD MORNING':hour<17?'GOOD AFTERNOON':'GOOD EVENING';
+ useEffect(()=>{
+  if(typeof window==='undefined'||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const timer=window.setInterval(()=>setHeroIndex(i=>(i+1)%heroItems.length),6500);
+  return ()=>window.clearInterval(timer);
+ },[]);
+ const openCategory=(id:string)=>nav(id==='all'?'/book':'/book?service='+encodeURIComponent(id));
+ const submitSearch=()=>nav(query.trim()?'/book?search='+encodeURIComponent(query.trim()):'/book');
+ const onEnd=(e:TouchEvent<HTMLElement>)=>{
+  if(touchStartX.current===null)return;
+  const dx=e.changedTouches[0]?.clientX-touchStartX.current;
+  touchStartX.current=null;
+  if(Math.abs(dx)>45)setHeroIndex(i=>(i+(dx<0?1:heroItems.length-1))%heroItems.length);
+ };
+ return <div className="home-screen page-flow gcs-home gcs-home-2026">
+  <header className="gcs-2026-top">
+   <div className="gcs-header-brand"><span className="gcs-header-camera"><Camera size={21}/></span><div><strong>GOKUL</strong><small>CREATIVE STUDIO</small></div></div>
+   <div className="gcs-2026-actions">
+    <button type="button" className={searchOpen?'gcs-round-action active':'gcs-round-action'} aria-label="Search packages" aria-expanded={searchOpen} onClick={()=>{setSearchOpen(v=>!v);setActivityOpen(false);}}><Search size={21}/></button>
+    <button type="button" className={activityOpen?'gcs-round-action active':'gcs-round-action'} aria-label="Booking activity" aria-expanded={activityOpen} onClick={()=>{setActivityOpen(v=>!v);setSearchOpen(false);}}><Bell size={21}/></button>
+    <button type="button" className="gcs-user-avatar" aria-label="My account" onClick={()=>nav('/profile')}>{displayName?<span>{displayName.charAt(0).toUpperCase()}</span>:<UserRound size={20}/>}</button>
+   </div>
+  </header>
+  {searchOpen&&<form className="gcs-home-search-panel" role="search" onSubmit={e=>{e.preventDefault();submitSearch();}}>
+   <Search size={17}/><input autoFocus type="search" aria-label="Search photo and film packages" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search wedding, baby, films..." maxLength={75}/><button type="submit">Search <ArrowRight size={15}/></button>
+  </form>}
+  {activityOpen&&<div className="gcs-activity-panel" role="status">
+   <strong>Booking activity</strong><p>Review your latest saved requests and their current status in My Bookings.</p>
+   <button type="button" onClick={()=>nav('/bookings')}>Open My Bookings <ArrowRight size={15}/></button>
+  </div>}
+  <section className="gcs-2026-welcome">
+   <div className="gcs-2026-greeting">
+    <span className="gcs-2026-salutation">{salutation},</span>
+    <h1>{displayName||'Welcome'} <Sparkles size={20}/></h1>
+    <p>Let's capture your next beautiful chapter.</p>
+   </div>
+   <button type="button" className="gcs-2026-book-shortcut" onClick={()=>nav('/book')}>
+    <span><CalendarDays size={19}/></span><span><small>Have an event?</small><strong>Book a shoot</strong></span><ArrowRight size={17}/>
+   </button>
+  </section>
+  <section className="gcs-2026-hero" aria-label="Featured creative packages" onTouchStart={e=>{touchStartX.current=e.touches[0]?.clientX??null;}} onTouchEnd={onEnd}>
+   <StudioImage src={THUMBNAIL_URL(heroItems[heroIndex])} fallback={heroItems[heroIndex].image} alt={heroItems[heroIndex].name+' inspiration'} className="gcs-2026-hero-image"/>
+   <div className="gcs-2026-hero-vignette"/>
+   <div className="gcs-2026-hero-copy">
+    <span className="gcs-2026-hero-eyebrow">MORE THAN PHOTOS</span>
+    <h2>Stories for<br/>a <em>lifetime</em></h2>
+    <p>Candid moments. Timeless films.<br/>For your biggest milestones.</p>
+    <button type="button" onClick={()=>nav('/book')}>Explore packages <span><ArrowRight size={19}/></span></button>
+   </div>
+   <div className="gcs-2026-hero-pagination" aria-label="Choose featured slide">
+    {heroItems.map((item,i)=><button key={item.id} aria-label={'Show '+item.name} aria-current={heroIndex===i?'true':undefined} className={heroIndex===i?'active':''} onClick={()=>setHeroIndex(i)}/>)}
+   </div>
+   <span className="gcs-2026-hero-count">{String(heroIndex+1).padStart(2,'0')} / 04</span>
+  </section>
+  <nav className="gcs-2026-categories" aria-label="Browse services">
+   {categoryItems.map(({id,label,icon:Icon},i)=><button type="button" className={i===0?'active':''} key={id} onClick={()=>openCategory(id)}>
+    <span className="gcs-2026-category-icon"><Icon size={23} strokeWidth={1.8}/></span><span className="gcs-2026-category-label">{label}</span><span className="gcs-2026-category-indicator"/>
+   </button>)}
+  </nav>
+  <section className="gcs-2026-popular">
+   <div className="gcs-2026-section-head">
+    <div><span>CURATED FOR YOU</span><h2>Popular packages</h2></div>
+    <button type="button" onClick={()=>nav('/book')}>View all <ArrowRight size={18}/></button>
+   </div>
+   <div className="gcs-2026-popular-track">
+    {featured.map(({id,title,description})=>{
+     const svc=SERVICES.find(s=>s.id===id)!;
+     return <button type="button" className="gcs-2026-package" key={id} onClick={()=>nav('/packages/'+id)}>
+      <StudioImage src={THUMBNAIL_URL(svc)} fallback={svc.image} alt={title}/>
+      <span className="gcs-2026-package-info"><strong>{title}</strong><small>{description}</small><b>From {inr(svc.from)}</b><span className="gcs-2026-package-arrow"><ArrowRight size={18}/></span></span>
+     </button>;
+    })}
+   </div>
+  </section>
+  <section className="gcs-2026-story" aria-label="About our creative process">
+   <StudioImage src={THUMBNAIL_URL(SERVICES[0])} fallback={SERVICES[0].image} alt="Wedding photography inspiration"/>
+   <div className="gcs-2026-story-shade"/>
+   <div className="gcs-2026-story-copy"><span>MADE FOR REAL MOMENTS</span><h2>Your story,<br/><em>beautifully remembered.</em></h2><p>Plan your special day with a package that fits.</p></div>
+   <button type="button" onClick={()=>nav('/book')}>Explore <ArrowRight size={17}/></button>
+  </section>
+  <div className="gcs-2026-disclaimer"><ShieldCheck size={14}/><span>Package prices are illustrative starting estimates, subject to studio confirmation.</span></div>
  </div>;
 }
 export function BookService(){
- const nav=useNavigate();const [filter,setFilter]=useState<Filter>('all'),[search,setSearch]=useState('');
- const packages=useMemo(()=>SERVICES.filter(s=>(filter==='all'||groups[s.id]===filter)&&(`${s.name} ${s.detail}`.toLowerCase().includes(search.toLowerCase().trim()))),[filter,search]);
+ const nav=useNavigate();const [params,setParams]=useSearchParams();const [filter,setFilter]=useState<Filter>('all'),[search,setSearch]=useState(params.get('search')||'');
+ const serviceId=params.get('service');const focusedService=SERVICES.some(s=>s.id===serviceId)?serviceId:null;
+ const packages=useMemo(()=>SERVICES.filter(s=>(!focusedService||s.id===focusedService)&&(filter==='all'||groups[s.id]===filter)&&(`${s.name} ${s.detail}`.toLowerCase().includes(search.toLowerCase().trim()))),[filter,search,focusedService]);
  return <div className="inner-screen page-flow gcs-catalog">
  <header className="gcs-catalog-top"><button aria-label="Back to home" onClick={()=>nav('/home')}><ChevronRight size={21} className="gcs-rotated"/></button><div><small>DISCOVER WHAT WE DO</small><strong>Find your perfect package</strong></div><button onClick={()=>nav('/profile')} aria-label="My profile"><UserRound size={19}/></button></header>
  <div className="gcs-catalog-intro"><span className="gcs-eyebrow">CAPTURE • CREATE • CHERISH</span><h1>Moments are<br/><em>worth keeping.</em></h1><p>Explore our curated photo and film packages, designed around your story.</p></div>
+ {focusedService&&<div className="gcs-category-selection">Browsing {SERVICES.find(s=>s.id===focusedService)?.name}<button type="button" onClick={()=>setParams({})}>Clear category ×</button></div>}
  <div className="gcs-search"><Search size={18}/><input aria-label="Search packages" type="search" placeholder="Search wedding, baby, video..." value={search} onChange={e=>setSearch(e.target.value)}/></div>
  <div className="gcs-filter-bar" aria-label="Filter packages">{filters.map(x=><button key={x.id} className={filter===x.id?'active':''} onClick={()=>setFilter(x.id)}>{x.label}</button>)}</div>
  <div className="gcs-catalog-result">{packages.length} package{packages.length===1?'':'s'} available <span>Choose to explore <ArrowRight size={12}/></span></div>
