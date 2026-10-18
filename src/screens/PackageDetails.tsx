@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {useNavigate,useParams} from 'react-router-dom';
 import {ArrowRight, BadgeCheck, Check, CheckCircle2, ChevronRight, FileText, MessageCircle, Phone, Sparkles, X} from 'lucide-react';
 import {Header, PrimaryButton} from '../components/UI';
-import {SERVICES,IMAGE_URL,inr,STUDIO_PHONE} from '../data/services';
+import {SERVICES,IMAGE_URL,THUMBNAIL_URL,inr,STUDIO_PHONE} from '../data/services';
 import {useBooking} from '../context/BookingContext';
 export function PackageDetails(){
  const nav=useNavigate();const {id}=useParams();const {update}=useBooking();
@@ -12,7 +12,7 @@ export function PackageDetails(){
  const enquire=()=>{if(STUDIO_PHONE){window.location.href=`tel:${STUDIO_PHONE}`;}else{setShowContact(true);}};
  const whatsappLink=`https://wa.me/?text=${encodeURIComponent(`Hello Gokul Creative Studio! I would like to enquire about the ${pkg.name} package. Please share your contact details, availability and final quotation.`)}`;
  return <div className="inner-screen page-flow"><Header title="Package Details" back="/book"/><div className="package-detail">
- <div className="package-detail-hero"><img src={IMAGE_URL(pkg.image)} alt={pkg.name}/><span>{pkg.tag}</span></div>
+ <div className="package-detail-hero"><img src={THUMBNAIL_URL(pkg)} alt={pkg.name}/><span>{pkg.tag}</span></div>
  <div className="page-padding package-detail-body">
  <div className="package-detail-heading"><div><small>GOKUL CREATIVE STUDIO</small><h2>{pkg.name}</h2><p>{pkg.detail}</p></div></div>
  <div className="package-estimate"><div><span>Illustrative starting estimate</span><strong>{inr(pkg.from)}</strong></div><BadgeCheck size={28}/></div>
