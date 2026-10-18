@@ -559,3 +559,238 @@ html,body,#root{background:#fff}
 @media (prefers-reduced-motion:reduce){
  .package-details-ferrari *, .ferrari-quotation-screen *{animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
+
+
+/* =============================================================
+   GCS iPhone 2026 — reference-inspired design system
+   Native mobile bottom tabs, editorial photography and checkout
+   ============================================================= */
+.phone-content.with-studio-tabs{bottom:99px}
+.studio-ios-tabs{
+ position:absolute;bottom:19px;left:8px;right:8px;height:76px;z-index:45;
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:center;
+ border:1px solid #fff1ec;border-radius:25px;
+ background:rgba(255,255,255,.98);box-shadow:0 -3px 25px #1c030312,0 5px 14px #3000000a;
+ padding:6px 4px;
+}
+.studio-ios-tabs>button{height:63px;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#656167;font-size:10px;position:relative;font-weight:600;line-height:1.1}
+.studio-ios-tabs>button.active{color:#FF2800!important;font-weight:850}
+.studio-ios-tabs>button.active svg{fill:#ff28001a}
+.studio-ios-tabs>button>i{display:block;position:absolute;bottom:0;width:5px;height:5px;background:#ff2800;border-radius:50%}
+.gcs-home-header{padding:16px 17px 7px!important;min-height:62px}
+.gcs-top-actions{display:flex;align-items:center;gap:6px}
+.gcs-menu-action{border-radius:50%;width:37px;height:37px;display:grid;place-items:center;background:#fff;color:#242024}
+.gcs-menu-action:active{background:#fff1ed}
+.gcs-quick-menu{position:absolute;right:17px;top:65px;z-index:55;background:white;border-radius:14px;border:1px solid #f4d7d0;box-shadow:0 10px 30px #20110d26;width:197px;padding:6px}
+.gcs-quick-menu>button{width:100%;display:flex;align-items:center;justify-content:space-between;text-align:left;font-size:11px;font-weight:800;padding:13px 9px;border-radius:10px;color:#32272a}
+.gcs-quick-menu>button:active{background:#fff3ed;color:#ff2800}
+.gcs-home{position:relative}
+.gcs-greeting{padding:11px 19px 19px!important}
+.gcs-greeting h2{font-family:Georgia,'Times New Roman',serif;font-size:24px;letter-spacing:-.8px;font-weight:750;line-height:1.12;color:#1c1b20}
+.gcs-greeting h2 em{font-family:Inter,Roboto,Arial,sans-serif;font-weight:850;font-style:normal;color:#ff2800;overflow-wrap:anywhere}
+.gcs-greeting h2 svg{display:inline-block;vertical-align:middle;color:#ff2800}
+.gcs-greeting>p{font-size:12px;color:#807a7c;margin-top:9px}
+.gcs-hero-premium{height:300px!important;margin:0 15px!important;border-radius:22px!important;overflow:hidden}
+.gcs-hero-premium>img{object-position:center center;filter:saturate(1.12)}
+.gcs-hero-content{top:auto!important;bottom:40px!important;left:23px!important;right:14px!important}
+.gcs-hero-kicker{font-size:9px!important;line-height:1.35;max-width:230px;display:block;letter-spacing:.17em}
+.gcs-hero-content h1{font-family:Georgia,'Times New Roman',serif;font-size:32px!important;font-weight:800!important;line-height:1.09!important;letter-spacing:-1.35px!important;margin:13px 0 12px!important}
+.gcs-hero-content h1 em{color:#ff734a!important;font-weight:500}
+.gcs-hero-content p{font-size:11.5px!important;color:#fff4f0!important;line-height:1.5!important;max-width:250px}
+.gcs-hero-content>button{margin-top:16px!important;border-radius:28px!important;background:#ff2800!important;color:white!important;font-size:11.5px!important;font-weight:850;min-height:43px;padding:0 15px!important;box-shadow:0 7px 16px #c8201460}
+.gcs-hero-pages{position:absolute;bottom:14px;right:75px;z-index:4;display:flex;gap:6px}
+.gcs-hero-pages>button{width:7px;height:7px;border-radius:50%;background:#fff9;box-shadow:0 0 3px #0003;padding:0}
+.gcs-hero-pages>button.active{background:#FF2800;width:9px;height:9px}
+.gcs-hero-index{bottom:12px!important;right:15px!important;color:white!important;font-size:10px!important}
+.gcs-home-section-heading{padding:25px 19px 12px!important}
+.gcs-home-section-heading h2{font-family:Georgia,'Times New Roman',serif;font-size:27px!important;line-height:1.12;font-weight:800!important;letter-spacing:-.7px}
+.gcs-home-section-heading>button{color:#FF2800!important;font-size:11px;font-weight:900}
+.gcs-featured-scroll{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px!important;padding:0 15px!important;overflow:visible!important;scroll-snap-type:none!important}
+.gcs-featured-card{position:relative;display:flex!important;flex-direction:column!important;align-items:stretch!important;flex:initial!important;width:auto!important;height:auto!important;min-height:234px;background:white!important;box-shadow:0 6px 18px #5c150f12!important;border:1px solid #ffede6;border-radius:17px!important;overflow:hidden}
+.gcs-featured-card>img{height:153px!important;width:100%!important;object-fit:cover!important;flex:none}
+.gcs-featured-shade{display:none!important}
+.gcs-featured-number{top:10px!important;left:10px!important;color:#eb290b!important;background:#fffcfa!important}
+.gcs-featured-card>div{position:static!important;background:white!important;color:#1b191d!important;padding:11px!important;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.gcs-featured-card>div>strong{font-family:Georgia,'Times New Roman',serif;font-weight:850!important;line-height:1.15;font-size:17px!important;letter-spacing:-.35px}
+.gcs-featured-card>div>span{font-size:11px!important;margin-top:9px!important;color:#898187!important}
+.gcs-featured-card>div>span svg{color:#ff2800!important}
+.gcs-view-packages{min-height:40px!important;margin:14px 15px 3px!important;width:calc(100% - 30px)!important;border-radius:12px!important}
+.gcs-why-heading{padding-top:25px!important}
+.gcs-benefit-list{gap:9px;padding:0 15px 13px}
+.gcs-benefit{padding:12px!important;border-radius:13px!important}
+.gcs-benefit>div>strong{font-size:12px}
+.gcs-bottom-note{margin:12px 15px 23px}
+
+/* Package detail: signature editorial layout, no invented ratings or studio gallery claims */
+.iphone-package-detail .iphone-detail-header{display:flex;align-items:center;justify-content:space-between;min-height:65px;padding:8px 16px 7px;background:#fff}
+.iphone-detail-header>button{width:39px;height:39px;border-radius:50%;display:grid;place-items:center;background:#fff5f2;color:#ff2800;border:1px solid #ffede6}
+.iphone-detail-header>button:first-child svg{transform:rotate(180deg)}
+.iphone-detail-header .iphone-favorite.active{background:#ffede7}
+.iphone-detail-brand{text-align:center;line-height:1}
+.iphone-detail-brand strong{display:block;font-weight:950;letter-spacing:.17em;font-size:17px;color:#1b1b20}
+.iphone-detail-brand small{display:block;letter-spacing:.28em;font-size:7.5px;margin-top:5px;font-weight:800}
+.iphone-detail-photo{height:244px;position:relative;overflow:hidden;margin:0 14px;border-radius:21px;background:#fff2ee}
+.iphone-detail-photo>img{width:100%;height:100%;object-fit:cover}
+.iphone-detail-photo:after{content:'';position:absolute;pointer-events:none;inset:60% 0 0;background:linear-gradient(transparent,#0006)}
+.iphone-detail-photo>span{position:absolute;right:12px;bottom:11px;color:#fff;font-size:10px;font-weight:800;z-index:2}
+.iphone-detail-photo-dots{position:absolute;bottom:13px;right:74px;display:flex;gap:6px;z-index:2}
+.iphone-detail-photo-dots button{width:7px;height:7px;border-radius:50%;background:#ffffffa8;padding:0}
+.iphone-detail-photo-dots button.active{background:#ff2800;width:9px;height:9px}
+.iphone-detail-content{padding:18px 16px 25px}
+.reference-kicker{color:#ff2800;letter-spacing:.13em;font-size:9px;font-weight:950}
+.iphone-detail-title h1{font-family:Georgia,'Times New Roman',serif;font-size:26px;line-height:1.12;letter-spacing:-.8px;font-weight:800;margin-top:6px;color:#151518}
+.iphone-detail-title p{font-size:12px;line-height:1.48;color:#777174;margin-top:9px}
+.iphone-detail-price{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:15px 0}
+.iphone-detail-price small{display:block;color:#91878a;font-size:10.5px;margin-bottom:4px}
+.iphone-detail-price strong{display:block;color:#ff2800;font-size:24px;line-height:1.1;font-weight:950;letter-spacing:-.7px}
+.iphone-detail-price>span{display:flex;align-items:center;gap:5px;color:#a44b33;background:#fff4f1;padding:9px;border-radius:11px;font-size:9px;font-weight:850}
+.iphone-detail-highlights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:17px 0}
+.iphone-detail-highlights>div{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:5px;border:1px solid #ffebea;border-radius:14px;min-width:0;min-height:96px;padding:11px 6px;background:white;box-shadow:0 2px 11px #e82f0b0a}
+.iphone-detail-highlights svg{color:#ff2800}
+.iphone-detail-highlights strong{font-size:10px;line-height:1.15}
+.iphone-detail-highlights span{font-size:9px;color:#999098;line-height:1.25}
+.iphone-detail-section{border:1px solid #ffede9;border-radius:18px;background:#fff;padding:15px 13px;box-shadow:0 4px 13px #6c190c0a}
+.iphone-section-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 14px}
+.iphone-section-header h2{font-family:Georgia,'Times New Roman',serif;font-size:22px;letter-spacing:-.6px;font-weight:800;color:#16151a}
+.iphone-section-header button{display:flex;align-items:center;gap:5px;color:#ff2800;font-size:10px;font-weight:850}
+.iphone-section-header>span{font-size:9px;color:#a0989d}
+.iphone-inclusions-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 9px}
+.iphone-inclusions-grid>div{display:flex;align-items:flex-start;gap:6px;min-width:0}
+.iphone-inclusions-grid>div>span{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#fff2ef;color:#ff2800;flex:none}
+.iphone-inclusions-grid p{font-size:10.5px;line-height:1.42;font-weight:700;overflow-wrap:anywhere}
+.iphone-gallery-section{margin:21px 0 0}
+.iphone-gallery-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.iphone-gallery-strip>button{overflow:hidden;border-radius:10px;aspect-ratio:1.25;background:#fff3f0}
+.iphone-gallery-strip img{width:100%;height:100%;object-fit:cover}
+.iphone-gallery-section>p{font-size:9px;color:#aaa0a4;margin-top:9px;line-height:1.5}
+.iphone-detail-note{display:flex;align-items:flex-start;gap:8px;color:#695e61;background:#fff7f5;padding:12px;border-radius:12px;margin:18px 0 8px}
+.iphone-detail-note svg{color:#ff2800;flex:none}
+.iphone-detail-note p{font-size:10px;line-height:1.45}
+.iphone-double-cta{margin:17px 0 2px!important}
+.iphone-double-cta button{min-height:49px!important}
+
+/* Booking session single-screen layout with optional extras */
+.iphone-booking-screen{background:#fff!important}
+.iphone-booking-screen .screen-header .header-title{font-family:Georgia,'Times New Roman',serif;font-size:23px}
+.iphone-book-form{padding:13px 14px 25px}
+.iphone-book-panel{background:#fff;border:1px solid #ffefeb;border-radius:19px;padding:15px 13px;margin-bottom:12px;box-shadow:0 5px 17px #58110a0b}
+.iphone-book-heading{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:13px}
+.iphone-book-heading h2{font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:850;line-height:1.15;letter-spacing:-.5px;color:#16151b}
+.iphone-book-heading h2>span{color:#ff2800}
+.iphone-book-heading h2>small{font-family:Inter,Arial,sans-serif;color:#91888a;font-size:12px;font-weight:500}
+.iphone-book-heading>button{display:flex;align-items:center;gap:5px;color:#ff2800;font-size:10px;font-weight:850;white-space:nowrap}
+.iphone-book-package{width:100%;border:1px solid #f5eceb;border-radius:13px;background:#fff;display:flex;align-items:center;gap:10px;padding:6px;text-align:left}
+.iphone-book-package>img{width:106px;height:95px;object-fit:cover;border-radius:10px;flex:none}
+.iphone-book-package>span{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.iphone-book-package strong{font-family:Georgia,'Times New Roman',serif;font-weight:800;font-size:16px;line-height:1.15}
+.iphone-book-package small{font-size:10px;color:#8a7e80;line-height:1.36}
+.iphone-book-package b{font-size:15px;color:#ff2800}
+.iphone-book-package>svg{color:#ff2800;flex:none}
+.iphone-book-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.iphone-book-field{min-width:0;display:flex;flex-direction:column;background:#f8f8f9;border:1px solid #f5f1f1;border-radius:12px;padding:11px 9px 8px;min-height:77px}
+.iphone-book-field>span{display:block;font-size:10px;color:#787278;font-weight:800;padding-left:1px;margin-bottom:6px}
+.iphone-book-field>div{display:flex;align-items:center;gap:6px;min-width:0}
+.iphone-book-field svg{color:#ff2800;flex:none}
+.iphone-book-field input,.iphone-book-field select{font-size:12px;color:#222024!important;min-width:0;width:100%;height:29px;padding:0;border:0;outline:0;background:transparent!important;color-scheme:light;appearance:auto;-webkit-appearance:auto}
+.iphone-book-field input[type="date"],.iphone-book-field input[type="time"]{font-size:11px}
+.iphone-book-field input::placeholder{font-size:10px;color:#a9a1a4}
+.iphone-book-field:focus-within{border-color:#ff9f8a;box-shadow:0 0 0 2px #ff28001a}
+.iphone-notes{display:block;margin-top:11px}
+.iphone-notes>span{display:block;font-size:10px;color:#787278;font-weight:800;margin-bottom:7px}
+.iphone-notes textarea{width:100%;border:1px solid #f3ebeb;background:#fbfafa;resize:vertical;outline:0;border-radius:11px;padding:10px;min-height:65px;max-height:110px;font-size:11px}
+.iphone-contact-field{display:flex;align-items:center;text-align:left;gap:10px;border-radius:12px;background:#f8f8f9;min-height:55px;padding:10px 12px;width:100%}
+.iphone-contact-field>svg:first-child{color:#ff2800;flex:none}
+.iphone-contact-field>svg:last-child{color:#ff2800;flex:none}
+.iphone-contact-field>span{flex:1;min-width:0}
+.iphone-contact-field small{font-size:10px;color:#877f83;display:block;margin-bottom:3px}
+.iphone-contact-field strong{font-size:12px;display:block;overflow-wrap:anywhere}
+.iphone-book-help{font-size:9.5px;color:#8c8186;line-height:1.4;margin-top:8px}
+.iphone-addons-lead{font-size:10px;color:#8c8284;margin:-5px 0 10px}
+.iphone-addons-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.iphone-addon{display:flex;align-items:center;gap:7px;min-width:0;min-height:72px;background:#fff;border:1px solid #ece8e8;border-radius:12px;padding:10px 7px;cursor:pointer;position:relative}
+.iphone-addon.active{border-color:#ff9b87;background:#fff5f2}
+.iphone-addon>svg{flex:none;color:#ff2800}
+.iphone-addon>span{min-width:0;flex:1}
+.iphone-addon strong{font-size:10px;line-height:1.2;display:block;font-weight:850}
+.iphone-addon small{display:block;font-size:9px;color:#847779;margin-top:5px}
+.iphone-addon>input{position:absolute;opacity:0;width:1px;height:1px;right:19px}
+.iphone-addon>i{display:block;width:28px;height:18px;border-radius:15px;background:#ddd9da;flex:none;position:relative}
+.iphone-addon>i::after{content:'';position:absolute;left:2px;top:2px;height:14px;width:14px;border-radius:50%;background:#fff;transition:transform .15s}
+.iphone-addon.active>i{background:#ff2800}
+.iphone-addon.active>i::after{transform:translateX(10px)}
+.iphone-addon:focus-within{outline:2px solid #ff2800;outline-offset:2px}
+.iphone-summary-row{display:flex;align-items:start;justify-content:space-between;gap:9px;margin:8px 0;font-size:11.5px;color:#5b5155}
+.iphone-summary-row strong{color:#2e292d;white-space:nowrap}
+.iphone-summary-rule{height:1px;background:#eee2e0;margin:13px 0 11px}
+.iphone-summary-tax{font-size:9.5px;color:#9b8d90;line-height:1.4;padding:3px 0 12px}
+.iphone-summary-total{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:-1px -6px -5px;padding:13px 10px;background:#fff0ec;border-radius:11px;font-size:13px}
+.iphone-summary-total strong:last-child{font-size:19px;color:#ff2800}
+.iphone-book-submit{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:53px;border-radius:15px;background:linear-gradient(100deg,#FF5018,#FF2800);color:#fff;font-size:13px;font-weight:900;box-shadow:0 8px 19px #ff280029}
+.iphone-book-submit:disabled{opacity:.47;box-shadow:none}
+.iphone-book-disclaimer{display:flex;align-items:center;justify-content:center;gap:5px;text-align:center;color:#938889;font-size:9px;line-height:1.35;margin:12px 0 5px}
+.demo-payment-addons>div{display:flex;justify-content:space-between;gap:8px;font-size:10px;padding:5px 3px;color:#62595b}
+.demo-payment-addons strong{color:#343039}
+
+/* My Bookings: actual user data, never fictional confirmations */
+.my-bookings-page{padding:0 0 27px;background:#fff!important}
+.my-bookings-top{padding:14px 18px 8px;display:flex;align-items:center;justify-content:space-between}
+.my-bookings-heading{padding:13px 19px 10px}
+.my-bookings-heading h1{font-family:Georgia,'Times New Roman',serif;color:#161519;font-size:34px;letter-spacing:-1.2px;font-weight:850;margin:6px 0 8px}
+.my-bookings-heading p{color:#8b8284;font-size:12px}
+.my-bookings-controls{display:flex;justify-content:space-between;align-items:center;padding:11px 18px;font-size:10px;color:#80797d;font-weight:800}
+.my-bookings-controls>button{display:flex;gap:5px;align-items:center;color:#ff2800;font-size:10px;font-weight:800}
+.my-bookings-state,.my-bookings-error,.my-bookings-empty{margin:16px;padding:20px 16px;border-radius:18px;border:1px solid #ffebe6;background:#fff9f7;color:#7e6970;text-align:center;font-size:12px;line-height:1.5}
+.my-bookings-error>button{color:#ff2800;display:block;font-weight:850;margin:14px auto 0}
+.my-bookings-empty>div{display:grid;place-items:center;background:#fff0eb;color:#ff2800;width:65px;height:65px;border-radius:50%;margin:3px auto 16px}
+.my-bookings-empty h2{font-family:Georgia,'Times New Roman',serif;font-size:23px;color:#252126;font-weight:800}
+.my-bookings-empty p{font-size:11px;margin:8px auto 18px;max-width:250px}
+.my-bookings-empty>button{background:#ff2800;color:white;border-radius:12px;min-height:43px;padding:0 15px;display:flex;gap:8px;align-items:center;justify-content:center;margin:auto;font-size:12px;font-weight:900}
+.my-bookings-next{position:relative;margin:8px 15px 24px;padding:20px 16px 15px;border-radius:20px;background:linear-gradient(115deg,#fff7f3,#ffe8df);border:1px solid #ffdfd3;overflow:hidden}
+.my-bookings-next::before{content:'';position:absolute;width:135px;height:135px;border-radius:50%;background:#ff28000b;right:-36px;top:-33px;pointer-events:none}
+.my-bookings-next h2{font-family:Georgia,'Times New Roman',serif;font-size:26px;font-weight:800;line-height:1.16;margin:11px 0;color:#201d21;position:relative}
+.my-bookings-next-meta{display:flex;gap:9px;flex-wrap:wrap;margin:9px 0}
+.my-bookings-next-meta>span,.my-bookings-next>p{display:flex;align-items:center;gap:6px;font-size:10.5px;color:#625a60}
+.my-bookings-next-meta svg,.my-bookings-next>p svg{color:#ff2800}
+.my-bookings-next-status{display:flex;align-items:center;gap:7px;background:white;color:#a33f2b;border-radius:11px;padding:11px 10px;font-size:10px;font-weight:800;margin-top:13px;line-height:1.35}
+.my-bookings-all{padding:0 15px}
+.my-bookings-list-heading{display:flex;justify-content:space-between;align-items:center;padding:0 3px 10px}
+.my-bookings-list-heading h2{font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:800}
+.my-bookings-list-heading>span{font-size:10px;color:#999}
+.my-booking-card{border:1px solid #f4e6e2;border-radius:16px;background:#fff;box-shadow:0 4px 12px #641c0c09;margin:7px 0}
+.my-booking-card-top{display:flex;align-items:center;gap:9px;width:100%;padding:8px;text-align:left}
+.my-booking-card-top>img{width:80px;height:76px;border-radius:10px;object-fit:cover;flex:none}
+.my-booking-main{flex:1;min-width:0}
+.my-booking-main>strong{font-family:Georgia,'Times New Roman',serif;color:#1d1b1d;display:block;font-size:14px;line-height:1.2}
+.my-booking-main>small{display:block;font-size:9.5px;color:#8d8688;margin:5px 0}
+.my-booking-main>span{display:flex;align-items:center;gap:4px;font-size:9px;color:#9c9396;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.my-booking-main>span svg{flex:none}
+.my-booking-tail{display:flex;align-items:end;flex-direction:column;justify-content:space-between;gap:14px;flex:none}
+.my-booking-tail b{display:block;font-size:9px;padding:5px 8px;background:#fff2e8;color:#955019;border-radius:20px;white-space:nowrap;font-weight:800}
+.my-booking-tail b.demo{background:#fff0eb;color:#c9351a}
+.my-booking-tail>svg{color:#ff2800}
+.my-booking-tail>svg.rotated{transform:rotate(90deg)}
+.my-booking-expanded{padding:7px 13px 15px;border-top:1px solid #f1e8e7}
+.my-booking-expanded>div{display:flex;justify-content:space-between;gap:10px;padding:5px 0;font-size:10.5px;line-height:1.4}
+.my-booking-expanded>div>span{color:#867d81}
+.my-booking-expanded>div strong{max-width:62%;overflow-wrap:anywhere;text-align:right;font-weight:800}
+.my-booking-expanded>p{display:flex;gap:6px;align-items:flex-start;color:#a45f4b;background:#fff7f3;padding:9px;border-radius:9px;font-size:9px;line-height:1.4;margin-top:8px}
+.my-booking-expanded>p svg{flex:none}
+.my-bookings-help{margin:20px 16px;display:flex;gap:9px;align-items:flex-start;background:#fff8f6;border-radius:13px;color:#806e72;padding:12px}
+.my-bookings-help svg{color:#ff2800;flex:none}
+.my-bookings-help p{font-size:10px;line-height:1.4}
+.mini-loading-spinner{height:21px;width:21px;border:2px solid #ffccc0;border-top-color:#ff2800;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 8px}
+@media(max-width:374px){
+ .iphone-book-package>img{width:88px}
+ .iphone-addon{padding:8px 5px;gap:5px}
+ .iphone-addon>i{width:26px}
+ .iphone-addon strong{font-size:9px}
+ .iphone-book-heading h2{font-size:20px}
+ .iphone-detail-highlights>div{padding:9px 4px}
+ .iphone-detail-highlights strong{font-size:9px}
+ .my-booking-tail b{font-size:8px;padding:5px}
+}
+@media(max-width:700px){
+ .phone-content.with-studio-tabs{bottom:calc(83px + env(safe-area-inset-bottom,0px))}
+ .studio-ios-tabs{left:10px;right:10px;bottom:calc(4px + env(safe-area-inset-bottom,0px));height:72px;border-radius:25px;padding:5px 4px}
+ .studio-ios-tabs>button{height:60px}
+}
