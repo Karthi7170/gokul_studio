@@ -37,3 +37,18 @@ export const to12h=(slot:string)=>{
  const [h,m]=slot.split(':').map(Number);
  return `${String(h%12||12).padStart(2,'0')}:${String(m).padStart(2,'0')} ${h>=12?'PM':'AM'}`;
 };
+
+
+/** Optional demo add-ons. Pricing and availability need studio confirmation. */
+export const ADD_ONS=[
+ {id:'drone',name:'Drone Coverage',price:15000,description:'Aerial video highlights'},
+ {id:'stream',name:'Live Streaming',price:10000,description:'Remote event viewing'},
+ {id:'album',name:'Extra Album',price:8000,description:'One additional designed album'},
+ {id:'makeup',name:'Makeup Shoot',price:12000,description:'Dedicated preparation portraits'}
+] as const;
+export type AddOnId=typeof ADD_ONS[number]['id'];
+export function getBookingEstimate(id:ServiceId,selected:readonly string[]=[]){
+ const base=getQuote(id).total;
+ const chosen=ADD_ONS.filter(a=>selected.includes(a.id));
+ return {base,addOns:chosen,extras:chosen.reduce((sum,a)=>sum+a.price,0),subtotal:base+chosen.reduce((sum,a)=>sum+a.price,0),total:base+chosen.reduce((sum,a)=>sum+a.price,0)};
+}
