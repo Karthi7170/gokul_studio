@@ -40,15 +40,17 @@ export function MyBookings(){
  useEffect(()=>{
   if(!user?.id){setItems([]);setLoading(false);return;}
   let alive=true;setLoading(true);setError('');
-  requiredSupabase().from('gcs_booking_requests')
-   .select('id,package_id,event_type,event_date,event_time,venue,estimated_amount,payment_status,payment_method,add_ons,created_at,notes')
-   .eq('user_id',user.id).order('created_at',{ascending:false}).limit(80)
-   .then(({data,error:dbError})=>{
+  void (async()=>{
+   try{
+    const {data,error:dbError}=await requiredSupabase().from('gcs_booking_requests')
+     .select('id,package_id,event_type,event_date,event_time,venue,estimated_amount,payment_status,payment_method,add_ons,created_at,notes')
+     .eq('user_id',user.id).order('created_at',{ascending:false}).limit(80);
     if(!alive)return;
     if(dbError){setError('Unable to load your bookings. Please try again.');setItems([]);}
     else setItems((data||[]) as BookingRow[]);
-    setLoading(false);
-   }).catch(()=>{if(alive){setError('Could not connect to your bookings.');setLoading(false);}});
+   }catch{if(alive){setError('Could not connect to your bookings.');setItems([]);}}
+   finally{if(alive)setLoading(false);}
+  })();
   return ()=>{alive=false;};
  },[user?.id,refresh]);
  const now=new Date().toISOString().slice(0,10);
