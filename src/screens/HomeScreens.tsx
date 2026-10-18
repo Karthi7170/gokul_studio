@@ -1,55 +1,46 @@
-import {useState} from 'react';
+import {useMemo,useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {ArrowRight,CalendarDays,Camera,CheckCircle2,ChevronRight,Clapperboard,Heart,Images,MessageCircle,Search,ShieldCheck,Sparkles,Star,UserRound} from 'lucide-react';
-import {Header,Logo,PrimaryButton} from '../components/UI';
-import {SERVICES,THUMBNAIL_URL,inr} from '../data/services';
+import {ArrowRight,Camera,CheckCircle2,ChevronRight,Heart,Images,Menu,MessageCircle,Search,ShieldCheck,Sparkles,UserRound,Video,Clock3,ImagePlus,Gift,Film,LayoutGrid} from 'lucide-react';
+import {Logo} from '../components/UI';
 import {useAuth} from '../context/AuthContext';
-const pillars=[
- {icon:Heart,title:'Moments with meaning',detail:'Real emotions, beautifully preserved.'},
- {icon:Camera,title:'Photo & film together',detail:'Creative coverage for every occasion.'},
- {icon:ShieldCheck,title:'No surprises',detail:'See inclusions before requesting a quote.'}
+import {SERVICES,THUMBNAIL_URL,IMAGE_URL,inr,type ServiceId} from '../data/services';
+const benefits=[
+ {icon:Heart,title:'Moments, beautifully told',desc:'Personalized coverage with attention to the emotions behind the event.'},
+ {icon:Images,title:'Every detail, one studio',desc:'Explore photo, cinematic film and celebration packages in one place.'},
+ {icon:ShieldCheck,title:'Clear, upfront inclusions',desc:'See what comes with each package before requesting a quote.'}
 ];
-export function StudioNav({active}:{active:'home'|'packages'|'profile'}){
- const nav=useNavigate();
- return <nav className="studio-bottom-nav" aria-label="Main navigation">
- <button className={active==='home'?'active':''} onClick={()=>nav('/home')}><span><Heart size={18}/></span>Home</button>
- <button className={active==='packages'?'active':''} onClick={()=>nav('/book')}><span><Images size={19}/></span>Packages</button>
- <button className={active==='profile'?'active':''} onClick={()=>nav('/profile')}><span><UserRound size={19}/></span>Account</button>
- </nav>;
-}
+const filters=[{id:'all',label:'All packages'},{id:'wedding',label:'Weddings'},{id:'family',label:'Family'},{id:'creative',label:'Photo & Film'}] as const;
+type Filter=typeof filters[number]['id'];
+const groups:Record<ServiceId,Filter>={wedding:'wedding',photography:'creative',baby:'family',prewedding:'wedding',videography:'creative',events:'family'};
+function StudioImage({src,fallback,alt}:{src:string;fallback:string;alt:string}){return <img src={src} alt={alt} loading="lazy" onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=IMAGE_URL(fallback)}}/>}
+function StudioNav({active}:{active:'home'|'packages'}){const nav=useNavigate();return <nav className="gcs-mobile-nav" aria-label="Main navigation"><button className={active==='home'?'active':''} onClick={()=>nav('/home')}><Heart size={17}/>Home</button><button className={active==='packages'?'active':''} onClick={()=>nav('/book')}><LayoutGrid size={17}/>Packages</button><button onClick={()=>nav('/profile')}><UserRound size={17}/>Account</button></nav>}
 export function Home(){
- const nav=useNavigate();const {profile,user}=useAuth();
- const first=(profile?.full_name||String(user?.user_metadata?.full_name||'')).trim().split(/\s+/)[0]||'there';
- return <div className="home-screen premium-home page-flow">
- <div className="premium-topbar"><div className="premium-welcome"><span>WELCOME TO GOKUL STUDIO</span><h2>Hello, {first} <span className="hello-spark">✳</span></h2></div><button className="premium-profile" aria-label="Open your account" onClick={()=>nav('/profile')}><UserRound size={22}/></button></div>
- <div className="editorial-hero">
- <img src={THUMBNAIL_URL(SERVICES[0])} alt="Wedding photography inspiration" onError={e=>{e.currentTarget.src='/images/combo.jpg'}}/>
- <div className="editorial-hero-shade"/>
- <div className="editorial-hero-content"><div className="editorial-kicker"><span/> THE ART OF EVERY MOMENT</div>
- <h1>Stories worth<br/><em>remembering.</em></h1>
- <p>From your first hello to life's biggest celebrations — let's capture it beautifully.</p>
- <button className="editorial-hero-button" onClick={()=>nav('/book')}>Explore our packages <ArrowRight size={17}/></button>
- </div><span className="editorial-hero-index">01 / 06</span></div>
- <div className="premium-promise"><div><Sparkles size={18}/><strong>Personalized</strong><small>For your moment</small></div><span/><div><Clapperboard size={18}/><strong>Photo + Film</strong><small>Complete coverage</small></div><span/><div><CheckCircle2 size={18}/><strong>Easy Booking</strong><small>Clear inclusions</small></div></div>
- <div className="premium-section-head"><div><span className="section-kicker">EXPLORE WHAT WE DO</span><h3>Made for every <em>chapter.</em></h3></div><button onClick={()=>nav('/book')}>View all <ArrowRight size={15}/></button></div>
- <div className="editorial-package-carousel">{SERVICES.slice(0,4).map((s,i)=><button key={s.id} onClick={()=>nav('/packages/'+s.id)} className="editorial-package"><div className="editorial-package-photo"><img src={THUMBNAIL_URL(s)} loading="lazy" alt={s.name} onError={e=>{e.currentTarget.src='/images/'+s.image}}/><span>{i===0?'BEST LOVED':s.tag.toUpperCase()}</span></div><div className="editorial-package-copy"><strong>{s.name}</strong><p>Explore details <ArrowRight size={14}/></p></div></button>)}</div>
- <button className="premium-all-collection" onClick={()=>nav('/book')}><span><Images size={18}/></span><strong>Explore all 6 creative packages</strong><ChevronRight size={18}/></button>
- <div className="premium-section-head moments-head"><div><span className="section-kicker">WHY GOKUL CREATIVE STUDIO</span><h3>More than just <em>pictures.</em></h3></div></div>
- <div className="premium-value-list">{pillars.map(({icon:Icon,title,detail},i)=><div className="premium-value-card" key={title}><div className="premium-value-symbol"><Icon size={20}/></div><div><strong>{title}</strong><p>{detail}</p></div><span>{'0'+(i+1)}</span></div>)}</div>
- <div className="premium-process"><span>YOUR JOURNEY, MADE SIMPLE</span><h3>Three steps to your story.</h3><div>{['Choose a package','Share event details','Receive your quotation'].map((x,i)=><div key={x}><span>{'0'+(i+1)}</span><p>{x}</p></div>)}</div><button onClick={()=>nav('/book')}>Start planning <ArrowRight size={15}/></button></div>
- <p className="premium-disclaimer">Package photos are inspiration only. Estimates and inclusions are subject to studio confirmation.</p>
+ const nav=useNavigate();const {profile,user}=useAuth();const firstName=(profile?.full_name||String(user?.user_metadata?.full_name||'')).split(' ')[0];
+ return <div className="home-screen page-flow gcs-home">
+ <header className="gcs-home-header"><div className="gcs-header-brand"><span className="gcs-header-camera"><Camera size={20}/></span><div><strong>GOKUL</strong><small>CREATIVE STUDIO</small></div></div><button className="gcs-profile-action" onClick={()=>nav('/profile')} aria-label="Open my account"><UserRound size={20}/></button></header>
+ <div className="gcs-greeting"><span>WELCOME{firstName?', '+firstName.toUpperCase():''} <Sparkles size={14}/></span><p>Your next beautiful chapter starts here.</p></div>
+ <section className="gcs-hero-premium"><StudioImage src={THUMBNAIL_URL(SERVICES[0])} fallback={SERVICES[0].image} alt="Wedding photography inspiration"/><div className="gcs-hero-overlay"/><div className="gcs-hero-content"><span className="gcs-hero-kicker">CREATED FOR LIFE'S BIG MOMENTS</span><h1>Every moment<br/>deserves a <em>story.</em></h1><p>From joyful beginnings to once-in-a-lifetime celebrations.</p><button onClick={()=>nav('/book')}>Explore packages <ArrowRight size={17}/></button></div><span className="gcs-hero-index">01 / 06</span></section>
+ <div className="gcs-home-section-heading"><div><span className="gcs-eyebrow">CURATED EXPERIENCES</span><h2>Our packages</h2></div><button onClick={()=>nav('/book')}>View all <ArrowRight size={15}/></button></div>
+ <div className="gcs-featured-scroll">{SERVICES.slice(0,4).map((s,i)=><button className="gcs-featured-card" onClick={()=>nav('/packages/'+s.id)} key={s.id}><StudioImage src={THUMBNAIL_URL(s)} fallback={s.image} alt={s.name}/><span className="gcs-featured-shade"/><span className="gcs-featured-number">{String(i+1).padStart(2,'0')}</span><div><strong>{s.name}</strong><span>From {inr(s.from)} <ChevronRight size={14}/></span></div></button>)}</div>
+ <button className="gcs-view-packages" onClick={()=>nav('/book')}>Explore all 6 packages <ArrowRight size={16}/></button>
+ <div className="gcs-home-section-heading gcs-why-heading"><div><span className="gcs-eyebrow">THE GOKUL DIFFERENCE</span><h2>Why choose us?</h2></div></div>
+ <div className="gcs-benefit-list">{benefits.map(({icon:Icon,title,desc},i)=><div className="gcs-benefit" key={title}><span className="gcs-benefit-icon"><Icon size={19}/></span><div><small>0{i+1}</small><strong>{title}</strong><p>{desc}</p></div><CheckCircle2 className="gcs-benefit-check" size={15}/></div>)}</div>
+ <div className="gcs-bottom-note"><MessageCircle size={16}/> Package prices are starting estimates. Final details confirmed by the studio.</div>
  <StudioNav active="home"/>
  </div>;
 }
 export function BookService(){
- const nav=useNavigate();const [query,setQuery]=useState('');
- const filtered=SERVICES.filter(x=>(x.name+' '+x.detail+' '+x.event).toLowerCase().includes(query.trim().toLowerCase()));
- return <div className="inner-screen premium-catalog page-flow"><Header title="Explore Packages" back="/home"/><div className="page-padding">
- <div className="premium-catalog-heading"><span className="section-kicker">CREATIVE COLLECTIONS</span><h2>Find your perfect <em>package.</em></h2><p>Pick a moment. Discover your coverage. Plan your story.</p></div>
- <label className="premium-search"><Search size={19}/><input aria-label="Search packages" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search wedding, baby, events..."/></label>
- <div className="catalog-filter-count">{filtered.length} packages to explore <span>Tap to see all inclusions</span></div>
- <div className="premium-catalog-grid">{filtered.map(s=><button className="premium-catalog-tile" key={s.id} onClick={()=>nav('/packages/'+s.id)}><img src={THUMBNAIL_URL(s)} loading="lazy" alt={s.name} onError={e=>{e.currentTarget.src='/images/'+s.image}}/><div className="premium-catalog-overlay"><span>{s.tag.toUpperCase()}</span><strong>{s.name}</strong><p>From {inr(s.from)} <ArrowRight size={17}/></p></div></button>)}</div>
- {filtered.length===0&&<div className="premium-empty">No packages match your search. Try “wedding” or “baby”.</div>}
- <div className="premium-catalog-note"><MessageCircle size={17}/> Prices are indicative only. Each package receives a personalized quotation.</div>
- </div><StudioNav active="packages"/></div>;
+ const nav=useNavigate();const [filter,setFilter]=useState<Filter>('all'),[search,setSearch]=useState('');
+ const packages=useMemo(()=>SERVICES.filter(s=>(filter==='all'||groups[s.id]===filter)&&(`${s.name} ${s.detail}`.toLowerCase().includes(search.toLowerCase().trim()))),[filter,search]);
+ return <div className="inner-screen page-flow gcs-catalog">
+ <header className="gcs-catalog-top"><button aria-label="Back to home" onClick={()=>nav('/home')}><ChevronRight size={21} className="gcs-rotated"/></button><div><small>DISCOVER WHAT WE DO</small><strong>Find your perfect package</strong></div><button onClick={()=>nav('/profile')} aria-label="My profile"><UserRound size={19}/></button></header>
+ <div className="gcs-catalog-intro"><span className="gcs-eyebrow">CAPTURE • CREATE • CHERISH</span><h1>Moments are<br/><em>worth keeping.</em></h1><p>Explore our curated photo and film packages, designed around your story.</p></div>
+ <div className="gcs-search"><Search size={18}/><input aria-label="Search packages" type="search" placeholder="Search wedding, baby, video..." value={search} onChange={e=>setSearch(e.target.value)}/></div>
+ <div className="gcs-filter-bar" aria-label="Filter packages">{filters.map(x=><button key={x.id} className={filter===x.id?'active':''} onClick={()=>setFilter(x.id)}>{x.label}</button>)}</div>
+ <div className="gcs-catalog-result">{packages.length} package{packages.length===1?'':'s'} available <span>Choose to explore <ArrowRight size={12}/></span></div>
+ <div className="gcs-catalog-list">{packages.map(s=><button className="gcs-collection-card" onClick={()=>nav('/packages/'+s.id)} key={s.id}><div className="gcs-collection-image"><StudioImage src={THUMBNAIL_URL(s)} fallback={s.image} alt={s.name}/><span className="gcs-collection-tag">{s.tag}</span></div><div className="gcs-collection-info"><div><strong>{s.name}</strong><p>{s.detail}</p></div><span><b>From {inr(s.from)}</b><span>View inclusions <ArrowRight size={15}/></span></span></div></button>)}</div>
+ {packages.length===0&&<div className="gcs-empty"><Search size={25}/><h3>No matches</h3><p>Try another search or package category.</p><button onClick={()=>{setSearch('');setFilter('all')}}>Show all packages</button></div>}
+ <div className="gcs-bottom-note"><ShieldCheck size={16}/> Quotation amounts and inclusions are examples, confirmed on enquiry.</div>
+ <StudioNav active="packages"/>
+ </div>;
 }
