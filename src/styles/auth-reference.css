@@ -359,3 +359,17 @@
 @media(prefers-reduced-motion:reduce){
  .gcs-auth-new *{animation:none!important;transition:none!important}
 }
+
+
+/* Reference finishing details: pre-login activity icon and true iOS Apple glyph. */
+.gcs-auth-head-bell{position:relative;pointer-events:none}
+.gcs-auth-head-bell::after{
+ content:"";position:absolute;top:7px;right:7px;
+ width:7px;height:7px;border-radius:50%;
+ background:#f04a32;border:2px solid #fff;
+}
+.gcs-auth-new .gcs-apple-logo{
+ display:block;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+ font-size:31px;font-weight:500;line-height:1.05;color:#111;
+}
+.gcs-auth-new .gcs-apple-logo::before{display:none!important}
