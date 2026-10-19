@@ -1,0 +1,97 @@
+/* Official GOKUL logo system, traced from the supplied studio mark.
+ * Same brand on Home, authentication, package details, bookings and receipts.
+ * Small, stable dimensions prevent headers and iPhone screens from zooming.
+ */
+.studio-brand-logo {
+  display:block;
+  width:170px;
+  max-width:100%;
+  height:auto;
+  aspect-ratio:355 / 120;
+  object-fit:contain;
+  flex:none;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+.studio-brand-logo-small { width:128px; }
+.studio-brand-mark {
+  display:block;
+  width:44px;
+  height:58px;
+  object-fit:contain;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+.gcs-home-2026 .gcs-primary-brand {
+  width:170px;
+  max-width:min(49vw,170px);
+  height:auto;
+  flex:none;
+}
+.gcs-home-2026 .gcs-2026-top { gap:8px!important; }
+.gcs-home-2026 .gcs-2026-actions { margin-left:auto;flex:none; }
+.gcs-home-2026 .gcs-round-action,.gcs-home-2026 .gcs-user-avatar {
+  width:42px!important;height:42px!important;
+  min-height:42px!important;min-width:42px!important;
+  flex:0 0 42px!important;
+}
+.gcs-auth-new .gcs-auth-head { gap:8px;min-height:66px;padding:8px 16px; }
+.gcs-auth-new .gcs-auth-official-brand { width:194px;max-width:calc(100% - 54px); }
+.gcs-auth-new .gcs-auth-head-action {
+  flex:none;margin-left:auto;
+  min-width:42px;min-height:42px;width:42px;height:42px;
+}
+.my-bookings-top .gcs-bookings-brand {
+  width:174px;max-width:min(55vw,174px);
+}
+.iphone-detail-header .gcs-package-brand {
+  width:144px;max-width:48vw;
+}
+.ui-studio-brand {
+  width:138px;max-width:100%;
+}
+.screen-header .ui-studio-brand {
+  width:122px;max-width:50vw;
+}
+.confirmation-top .ui-studio-brand {
+  width:140px;
+}
+.header-side.right {min-width:32px;}
+/* No notification button is rendered. Account and bookings remain accessible. */
+.gcs-home-2026 .gcs-2026-top,
+.my-bookings-top,
+.iphone-detail-header {
+  overflow:visible;
+}
+/* Do not allow a wide logo or the system controls to force a horizontal zoom. */
+.phone-content,.page-flow,.gcs-home-2026,.gcs-auth-new,.my-bookings-page {
+  max-width:100%;
+  min-width:0;
+}
+.gcs-auth-new .gcs-auth-panel,
+.gcs-auth-new .gcs-auth-form,
+.gcs-auth-new .gcs-auth-registration {
+  min-width:0;
+}
+/* Preserve readable fields and eliminate accidental iOS focus zoom. */
+@media(max-width:700px){
+  .gcs-auth-new .input-box input {font-size:16px!important;}
+  .gcs-auth-new .gcs-auth-registration .input-box input {font-size:16px!important;}
+  .gcs-home-2026 .gcs-2026-top {
+    padding-left:16px!important;padding-right:16px!important;
+  }
+  .gcs-home-2026 .gcs-primary-brand {width:170px;max-width:calc(100vw - 152px);}
+  .gcs-home-2026 .gcs-2026-actions {gap:6px!important;}
+  .gcs-auth-new .gcs-auth-head {padding:8px 12px!important;}
+  .gcs-auth-new .gcs-auth-official-brand {width:194px;max-width:calc(100% - 58px);}
+}
+@media(max-width:375px){
+  .gcs-home-2026 .gcs-primary-brand {width:155px;max-width:calc(100vw - 146px);}
+  .gcs-auth-new .gcs-auth-official-brand {width:170px;}
+  .gcs-auth-new .gcs-auth-head {min-height:58px;}
+  .my-bookings-top .gcs-bookings-brand {width:150px;}
+  .iphone-detail-header .gcs-package-brand {width:130px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .studio-brand-logo,.studio-brand-mark{animation:none!important;transition:none!important;}
+}
