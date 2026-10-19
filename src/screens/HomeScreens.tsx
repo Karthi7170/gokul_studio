@@ -3,6 +3,7 @@ import {useNavigate,useSearchParams} from 'react-router-dom';
 import {ArrowRight,Baby,Building2,CalendarDays,Camera,CheckCircle2,ChevronRight,Clapperboard,Grid2X2,Heart,HeartHandshake,Images,MessageCircle,Search,ShieldCheck,Sparkles,UserRound,Video} from 'lucide-react';
 import {useAuth} from '../context/AuthContext';
 import {StudioBrandLogo} from '../components/StudioBrandLogo';
+import {SignedInAvatarButton} from '../components/SignedInAvatarButton';
 import {ProfileAvatarPhoto,useProfileAvatar} from '../components/ProfileAvatarPhoto';
 import {SERVICES,THUMBNAIL_URL,IMAGE_URL,inr,type ServiceId} from '../data/services';
 const benefits=[
@@ -124,7 +125,7 @@ export function BookService(){
  const serviceId=params.get('service');const focusedService=SERVICES.some(s=>s.id===serviceId)?serviceId:null;
  const packages=useMemo(()=>SERVICES.filter(s=>(!focusedService||s.id===focusedService)&&(filter==='all'||groups[s.id]===filter)&&(`${s.name} ${s.detail}`.toLowerCase().includes(search.toLowerCase().trim()))),[filter,search,focusedService]);
  return <div className="inner-screen page-flow gcs-catalog">
- <header className="gcs-catalog-top"><button aria-label="Back to home" onClick={()=>nav('/home')}><ChevronRight size={21} className="gcs-rotated"/></button><div><small>DISCOVER WHAT WE DO</small><strong>Find your perfect package</strong></div><button onClick={()=>nav('/profile')} aria-label="My profile"><UserRound size={19}/></button></header>
+ <header className="gcs-catalog-top"><button aria-label="Back to home" onClick={()=>nav('/home')}><ChevronRight size={21} className="gcs-rotated"/></button><div><small>DISCOVER WHAT WE DO</small><strong>Find your perfect package</strong></div><SignedInAvatarButton className="gcs-catalog-avatar"/></header>
  <div className="gcs-catalog-intro"><span className="gcs-eyebrow">CAPTURE • CREATE • CHERISH</span><h1>Moments are<br/><em>worth keeping.</em></h1><p>Explore our curated photo and film packages, designed around your story.</p></div>
  {focusedService&&<div className="gcs-category-selection">Browsing {SERVICES.find(s=>s.id===focusedService)?.name}<button type="button" onClick={()=>setParams({})}>Clear category ×</button></div>}
  <div className="gcs-search"><Search size={18}/><input aria-label="Search packages" type="search" placeholder="Search wedding, baby, video..." value={search} onChange={e=>setSearch(e.target.value)}/></div>
