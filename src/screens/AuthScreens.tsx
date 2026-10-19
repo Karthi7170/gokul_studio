@@ -1,8 +1,9 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {ArrowLeft,ArrowRight,Bell,Camera,CheckCircle2,LockKeyhole,Mail,Phone,ShieldCheck,UserRound} from 'lucide-react';
+import {ArrowLeft,ArrowRight,CheckCircle2,LockKeyhole,Mail,Phone,ShieldCheck,UserRound} from 'lucide-react';
 import {PrimaryButton,TextInput} from '../components/UI';
 import {useAuth} from '../context/AuthContext';
+import {StudioBrandLogo} from '../components/StudioBrandLogo';
 import {requiredSupabase,authConfigured} from '../lib/supabase';
 
 type AuthPage='signin'|'signup';
@@ -10,9 +11,8 @@ function AuthLayout({children,mode='signin'}:{children:React.ReactNode;mode?:Aut
  const nav=useNavigate();const signup=mode==='signup';
  return <div className={`auth-screen premium-auth gcs-auth-new gcs-auth-${mode} page-flow`}>
   <header className="gcs-auth-head">
-   <span className="gcs-auth-logo"><Camera size={23} strokeWidth={2.1}/></span>
-   <span className="gcs-auth-brand">GOKUL <strong>CREATIVE STUDIO</strong></span>
-   {signup?<button type="button" className="gcs-auth-head-action" aria-label="Back to sign in" onClick={()=>nav('/sign-in')}><ArrowLeft size={21}/></button>:<span className="gcs-auth-head-action gcs-auth-head-bell" aria-hidden="true"><Bell size={20}/></span>}
+   <StudioBrandLogo className="gcs-auth-official-brand"/>
+   {signup&&<button type="button" className="gcs-auth-head-action" aria-label="Back to sign in" onClick={()=>nav('/sign-in')}><ArrowLeft size={21}/></button>}
   </header>
   <section className="gcs-auth-banner">
    {signup?
