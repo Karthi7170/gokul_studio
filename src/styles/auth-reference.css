@@ -1,0 +1,361 @@
+/* GOKUL Creative Studio — photography-inspired authentication (iPhone reference)
+ * Self-contained styles; scoped to .gcs-auth-new so booking pages stay unchanged.
+ */
+.gcs-auth-new {
+  --auth-red:#F04A32;
+  --auth-red-dark:#DB351F;
+  --auth-orange:#FC684F;
+  --auth-black:#17171B;
+  --auth-muted:#77767E;
+  --auth-border:#E7E6E7;
+  --auth-bg:#FFF8F5;
+  padding:0 0 20px!important;
+  background:linear-gradient(145deg,#fffefc 0%,#fffbfa 52%,#ffede7 100%)!important;
+  color:var(--auth-black);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;
+  display:flex!important;
+  flex-direction:column!important;
+  overflow:visible!important;
+  min-height:100%!important;
+  width:100%;
+}
+.gcs-auth-new *{box-sizing:border-box}
+.gcs-auth-new button:focus-visible,.gcs-auth-new input:focus-visible{
+  outline:2px solid var(--auth-red-dark);outline-offset:2px;
+}
+.gcs-auth-head{
+  display:flex;align-items:center;gap:9px;
+  padding:14px 17px 12px;
+  min-height:65px;
+  position:relative;z-index:2;
+}
+.gcs-auth-logo{
+  width:42px;height:42px;display:grid;place-items:center;flex:none;
+  color:#fff;
+  background:linear-gradient(135deg,#FF5D30,#E92C15);
+  box-shadow:0 4px 12px rgba(221,46,24,.15);
+  border-radius:12px;
+}
+.gcs-auth-brand{
+  min-width:0;flex:1;
+  font-size:13px;
+  line-height:18px;
+  font-weight:800;
+  letter-spacing:.14em;
+  white-space:nowrap;
+}
+.gcs-auth-brand strong{
+  color:var(--auth-red-dark);
+  font-weight:800;
+  letter-spacing:.08em;
+}
+.gcs-auth-head-action{
+  width:40px;height:40px;min-width:40px;min-height:40px;
+  display:grid;place-items:center;
+  color:var(--auth-red-dark);
+  background:#fff9f7;border:1px solid #fae4df;
+  border-radius:50%;
+}
+.gcs-auth-head-action:active{transform:scale(.97)}
+.gcs-auth-banner{
+  position:relative;
+  height:235px;min-height:235px;
+  overflow:hidden;
+  margin:0 10px;
+  border-radius:24px 24px 17px 17px;
+  isolation:isolate;
+  background:
+    radial-gradient(circle at 80% 22%,#ff8d62 0%,transparent 44%),
+    radial-gradient(circle at 13% 84%,#ce2b24,transparent 62%),
+    linear-gradient(124deg,#bd2624 0%,#f15139 61%,#f86c4c 100%);
+}
+.gcs-auth-banner::after{
+  content:"";pointer-events:none;position:absolute;inset:0;z-index:0;
+  background:radial-gradient(circle at 70% 100%,#fff6e633,transparent 54%);
+}
+.gcs-auth-signin-slogan{
+  position:absolute;z-index:2;left:21px;top:42px;
+  width:55%;max-width:210px;color:#fff;
+}
+.gcs-auth-signin-slogan em{
+  display:block;
+  font-family:"Snell Roundhand","Apple Chancery","Brush Script MT",cursive;
+  font-size:clamp(27px,9vw,40px);
+  line-height:.98;
+  letter-spacing:-1px;
+  font-weight:400;
+  font-style:italic;
+  transform:rotate(-5deg);
+  text-shadow:0 2px 5px rgba(66,0,0,.09);
+}
+.gcs-auth-signin-slogan p{
+  margin:21px 0 0;
+  max-width:170px;
+  line-height:1.55;
+  letter-spacing:.14em;
+  font-weight:750;
+  font-size:8.5px;
+  color:#fffaf5;
+}
+.gcs-auth-polaroid{
+  position:absolute;z-index:2;display:flex;flex-direction:column;
+  padding:7px;
+  background:#fff;
+  box-shadow:0 7px 20px rgba(45,10,4,.22);
+  border-radius:12px;
+  overflow:hidden;
+}
+.gcs-auth-polaroid img{width:100%;object-fit:cover;display:block;border-radius:7px}
+.gcs-auth-polaroid-couple{
+  width:42%;height:160px;right:12px;top:10px;
+  transform:rotate(10deg);
+}
+.gcs-auth-polaroid-couple img{height:120px}
+.gcs-auth-polaroid-couple span{
+  display:block;text-align:center;
+  font-family:"Snell Roundhand","Apple Chancery",cursive;
+  font-style:italic;font-size:10px;color:#7d6b68;line-height:19px;
+  white-space:nowrap;
+}
+.gcs-auth-polaroid-camera{
+  width:29%;height:106px;top:125px;right:0;
+  transform:rotate(-10deg);
+}
+.gcs-auth-polaroid-camera img{height:100%}
+.gcs-auth-signup-photo{
+  position:absolute;z-index:0;width:100%;height:100%;
+  object-fit:cover;object-position:70% 50%;
+}
+.gcs-auth-signup-art-gradient{
+  position:absolute;z-index:1;inset:0;
+  background:linear-gradient(90deg,rgba(160,22,17,.94),rgba(236,60,41,.72) 55%,rgba(210,43,19,.30)),
+    linear-gradient(0deg,rgba(142,20,17,.4),transparent 60%);
+}
+.gcs-auth-signup-slogan{
+  position:absolute;z-index:2;top:29px;left:24px;right:28px;
+  color:#fff;
+  max-width:245px;
+}
+.gcs-auth-signup-slogan>span{font-size:25px;line-height:1.05;font-weight:850;display:block}
+.gcs-auth-signup-slogan>em{
+  display:block;font-family:"Snell Roundhand","Apple Chancery","Brush Script MT",cursive;
+  font-size:clamp(39px,12vw,54px);line-height:1.0;
+  margin-top:-2px;font-weight:400;
+}
+.gcs-auth-signup-slogan p{max-width:182px;font-size:11.5px;line-height:1.45;color:#fff;margin-top:10px;font-weight:500}
+.gcs-auth-side-script{
+  position:absolute;z-index:2;right:9px;bottom:32px;
+  color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.1);
+  font-family:"Snell Roundhand","Apple Chancery",cursive;
+  font-style:italic;font-size:10px;line-height:1.32;
+  transform:rotate(-8deg);
+}
+.gcs-auth-panel{
+  background:#fff;
+  border:1px solid #f9ece8;
+  border-radius:25px;
+  margin:-25px 15px 0;
+  padding:21px 18px 20px;
+  position:relative;
+  z-index:4;
+  box-shadow:0 8px 25px rgba(79,36,21,.09);
+  min-width:0;
+}
+.gcs-auth-heading{margin-bottom:17px}
+.gcs-auth-eyebrow{
+  font-size:10px;color:var(--auth-red-dark);
+  font-weight:800;letter-spacing:.16em;
+  display:block;margin-bottom:7px;
+}
+.gcs-auth-heading h1{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",system-ui,sans-serif!important;
+  font-weight:800;font-size:25px;line-height:1.16;
+  letter-spacing:-.85px!important;
+  color:var(--auth-black);
+}
+.gcs-auth-heading h1 em{
+  font-weight:500;
+  font-style:normal;color:var(--auth-red-dark);
+}
+.gcs-auth-heading p{
+  color:var(--auth-muted);
+  font-size:12px;
+  line-height:1.55;margin-top:9px;
+}
+.gcs-auth-form{display:flex;flex-direction:column;gap:13px}
+.gcs-auth-new .input-wrapper{margin:0!important;display:block}
+.gcs-auth-new .input-label{
+  display:block;color:#242429;
+  font-size:12px;font-weight:700;margin-bottom:6px;
+}
+.gcs-auth-new .input-box{
+  display:flex;align-items:center;gap:10px;
+  width:100%;height:47px!important;
+  padding:0 12px!important;
+  border:1px solid #e6e4e5!important;
+  border-radius:12px!important;
+  box-shadow:0 1px 5px rgba(0,0,0,.04)!important;
+  background:#fff!important;
+  transition:border-color .2s,box-shadow .2s;
+}
+.gcs-auth-new .input-box:focus-within{
+  border-color:var(--auth-red)!important;
+  box-shadow:0 0 0 2px #f04a3215!important;
+}
+.gcs-auth-new .input-box > svg{
+  color:#3d3d44;width:19px;height:19px;flex:none;stroke-width:1.8;
+}
+.gcs-auth-new .input-box input{
+  font-size:13px!important;min-width:0!important;
+  line-height:20px!important;
+  background:transparent!important;
+}
+.gcs-auth-new .input-box input::placeholder{color:#a6a3ab!important}
+.gcs-auth-new .eye-button{
+  width:35px;min-width:35px;height:35px;
+  display:grid;place-items:center;
+  color:#56555d;
+  border-radius:9px;
+  padding:0!important;
+}
+.gcs-auth-inline{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  min-height:26px;
+  margin:-1px 0 0;
+}
+.gcs-auth-remember{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:11px;color:#353338;
+}
+.gcs-auth-remember svg{color:var(--auth-red-dark);fill:#ffebe7}
+.gcs-auth-inline > button{font-size:11px;color:var(--auth-red-dark);font-weight:700;padding:6px 0}
+.gcs-auth-submit{
+  width:100%;height:49px;min-height:49px;
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  border-radius:13px!important;
+  background:linear-gradient(104deg,#f96c53,#f64b35)!important;
+  color:#fff!important;
+  font-size:13px;font-weight:800;
+  box-shadow:0 4px 13px rgba(228,57,37,.15)!important;
+  margin-top:1px;
+}
+.gcs-auth-submit:not(:disabled):active{transform:scale(.985)}
+.gcs-auth-submit:disabled{opacity:.5;box-shadow:none!important}
+.gcs-auth-submit svg{stroke-width:2}
+.gcs-auth-divider{
+  display:flex;align-items:center;justify-content:center;
+  gap:11px;color:#96929a;font-size:10.5px;
+  margin:18px 0 12px;
+  white-space:nowrap;
+}
+.gcs-auth-divider > span{
+  height:1px;flex:1;background:#e9e5e5;
+}
+.gcs-auth-socials{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:9px;
+}
+.gcs-auth-socials > button{
+  min-height:45px;display:grid;place-items:center;
+  border:1px solid #eeebeb;
+  border-radius:12px;
+  background:#fff;box-shadow:0 2px 6px rgba(33,23,17,.04);
+}
+.gcs-auth-socials > button:active{background:#fff3ef;transform:scale(.98)}
+.gcs-google-letter{
+  font-family:Arial,sans-serif;
+  font-size:25px;font-weight:900;
+  background:conic-gradient(#4285f4 0deg 88deg,#34a853 88deg 157deg,#fbbc05 157deg 220deg,#ea4335 220deg 298deg,#4285f4 298deg 360deg);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.gcs-apple-logo{
+  color:#151515;font-family:system-ui,-apple-system,sans-serif;
+  font-size:25px;font-weight:900;line-height:1;
+}
+.gcs-apple-logo::before{
+  content:"";height:9px;width:6px;
+  transform:rotate(-24deg);
+  border-radius:100% 0 100% 10%;
+  display:block;background:#151515;
+  position:relative;top:2px;left:11px;
+}
+.gcs-facebook-logo{
+  display:grid;place-items:end center;height:26px;width:26px;
+  background:#1877f2;color:white;font-family:Arial,sans-serif;
+  font-size:25px;line-height:1;font-weight:800;
+  border-radius:50%;overflow:hidden;
+}
+.gcs-auth-switch{
+  margin-top:18px;font-size:11.5px;line-height:1.5;
+  color:#78727a;text-align:center;
+}
+.gcs-auth-switch > button{
+  padding:3px 0;
+  font-size:inherit;color:var(--auth-red-dark);font-weight:800;
+}
+.gcs-auth-security{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  margin-top:14px;
+  font-size:10px;color:#807e86;
+}
+.gcs-auth-security svg{color:#15936e}
+.gcs-auth-endnote{
+  font-size:10px;line-height:1.5;
+  padding:15px 0;text-align:center;color:#a8a0a3;
+}
+.gcs-auth-registration{gap:11px}
+.gcs-auth-registration .input-label{font-size:11px!important;margin-bottom:5px}
+.gcs-auth-registration .input-box{height:42px!important}
+.gcs-auth-registration .input-box input{font-size:12px!important}
+.gcs-auth-consent{
+  display:flex;align-items:flex-start;gap:8px;
+  color:#625e63;font-size:10px;line-height:1.4;
+  margin-top:2px;
+}
+.gcs-auth-consent input{
+  accent-color:var(--auth-red-dark);
+  width:16px;height:16px;flex:none;margin:0;
+}
+.gcs-auth-consent span{flex:1}
+.gcs-auth-whatsapp{color:#777178;margin-top:-4px}
+.gcs-auth-signup .gcs-auth-panel{padding-top:18px}
+.gcs-auth-signup .gcs-auth-heading{margin-bottom:14px}
+.gcs-auth-signup .gcs-auth-heading h1{font-size:21px;line-height:1.14}
+.gcs-auth-signup .gcs-auth-heading p{font-size:11px;line-height:1.42;margin-top:7px}
+.gcs-auth-signup .gcs-auth-divider{margin:13px 0 9px}
+.gcs-auth-signup .gcs-auth-socials > button{min-height:41px}
+.gcs-auth-signup .gcs-auth-switch{margin-top:12px}
+.gcs-auth-success{text-align:center;padding:18px 4px;color:#207957}
+.gcs-auth-success h2{font-size:18px;font-weight:800;margin:8px 0;color:#1b1a1c}
+.gcs-auth-success p{font-size:12px;line-height:1.55;color:#79777b;margin:9px 0 15px}
+.gcs-auth-success button{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 16px;border-radius:12px;
+  background:var(--auth-red);color:#fff;font-size:12px;font-weight:750;
+}
+.gcs-auth-new .error-text{
+  background:#fff1ef;padding:8px 10px;border-radius:9px;
+  color:#a71919;font-size:11px;line-height:1.4;
+}
+@media(max-width:365px){
+ .gcs-auth-head{padding:11px 12px 9px;gap:6px}
+ .gcs-auth-logo{width:37px;height:37px}
+ .gcs-auth-brand{font-size:11px;letter-spacing:.05em}
+ .gcs-auth-brand strong{letter-spacing:.02em}
+ .gcs-auth-head-action{width:35px;height:35px;min-width:35px;min-height:35px}
+ .gcs-auth-banner{height:210px;min-height:210px;margin:0 7px}
+ .gcs-auth-signin-slogan{left:15px}
+ .gcs-auth-signin-slogan em{font-size:29px}
+ .gcs-auth-polaroid-couple{height:145px}
+ .gcs-auth-polaroid-couple img{height:103px}
+ .gcs-auth-polaroid-camera{top:115px;height:92px}
+ .gcs-auth-panel{margin-left:10px;margin-right:10px;padding:17px 13px 16px}
+ .gcs-auth-heading h1{font-size:22px}
+ .gcs-auth-signup .gcs-auth-heading h1{font-size:20px}
+}
+@media(min-width:701px){
+ .gcs-auth-banner{height:228px}
+ .gcs-auth-panel{margin-left:13px;margin-right:13px}
+}
+@media(prefers-reduced-motion:reduce){
+ .gcs-auth-new *{animation:none!important;transition:none!important}
+}
