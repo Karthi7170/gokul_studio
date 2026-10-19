@@ -1,7 +1,8 @@
 import {useEffect,useMemo,useRef,useState,type TouchEvent} from 'react';
 import {useNavigate,useSearchParams} from 'react-router-dom';
-import {ArrowRight,Baby,Bell,Building2,CalendarDays,Camera,CheckCircle2,ChevronRight,Clapperboard,Grid2X2,Heart,HeartHandshake,Images,MessageCircle,Search,ShieldCheck,Sparkles,UserRound,Video} from 'lucide-react';
+import {ArrowRight,Baby,Building2,CalendarDays,Camera,CheckCircle2,ChevronRight,Clapperboard,Grid2X2,Heart,HeartHandshake,Images,MessageCircle,Search,ShieldCheck,Sparkles,UserRound,Video} from 'lucide-react';
 import {useAuth} from '../context/AuthContext';
+import {StudioBrandLogo} from '../components/StudioBrandLogo';
 import {SERVICES,THUMBNAIL_URL,IMAGE_URL,inr,type ServiceId} from '../data/services';
 const benefits=[
  {icon:Heart,title:'Moments, beautifully told',desc:'Personalized coverage with attention to the emotions behind the event.'},
@@ -31,7 +32,6 @@ export function Home(){
  const nav=useNavigate();
  const {profile,user}=useAuth();
  const [searchOpen,setSearchOpen]=useState(false);
- const [activityOpen,setActivityOpen]=useState(false);
  const [query,setQuery]=useState('');
  const [heroIndex,setHeroIndex]=useState(0);
  const touchStartX=useRef<number|null>(null);
@@ -54,20 +54,16 @@ export function Home(){
  };
  return <div className="home-screen page-flow gcs-home gcs-home-2026">
   <header className="gcs-2026-top">
-   <div className="gcs-header-brand"><span className="gcs-header-camera"><Camera size={21}/></span><div><strong>GOKUL</strong><small>CREATIVE STUDIO</small></div></div>
+   <StudioBrandLogo className="gcs-primary-brand"/>
    <div className="gcs-2026-actions">
-    <button type="button" className={searchOpen?'gcs-round-action active':'gcs-round-action'} aria-label="Search packages" aria-expanded={searchOpen} onClick={()=>{setSearchOpen(v=>!v);setActivityOpen(false);}}><Search size={21}/></button>
-    <button type="button" className={activityOpen?'gcs-round-action active':'gcs-round-action'} aria-label="Booking activity" aria-expanded={activityOpen} onClick={()=>{setActivityOpen(v=>!v);setSearchOpen(false);}}><Bell size={21}/></button>
+    <button type="button" className={searchOpen?'gcs-round-action active':'gcs-round-action'} aria-label="Search packages" aria-expanded={searchOpen} onClick={()=>setSearchOpen(v=>!v)}><Search size={21}/></button>
+    
     <button type="button" className="gcs-user-avatar" aria-label="My account" onClick={()=>nav('/profile')}>{displayName?<span>{displayName.charAt(0).toUpperCase()}</span>:<UserRound size={20}/>}</button>
    </div>
   </header>
   {searchOpen&&<form className="gcs-home-search-panel" role="search" onSubmit={e=>{e.preventDefault();submitSearch();}}>
    <Search size={17}/><input autoFocus type="search" aria-label="Search photo and film packages" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search wedding, baby, films..." maxLength={75}/><button type="submit">Search <ArrowRight size={15}/></button>
   </form>}
-  {activityOpen&&<div className="gcs-activity-panel" role="status">
-   <strong>Booking activity</strong><p>Review your latest saved requests and their current status in My Bookings.</p>
-   <button type="button" onClick={()=>nav('/bookings')}>Open My Bookings <ArrowRight size={15}/></button>
-  </div>}
   <section className="gcs-2026-welcome">
    <div className="gcs-2026-greeting">
     <span className="gcs-2026-salutation">{salutation},</span>
