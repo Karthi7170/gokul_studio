@@ -95,3 +95,8 @@
 @media(prefers-reduced-motion:reduce){
   .studio-brand-logo,.studio-brand-mark{animation:none!important;transition:none!important;}
 }
+
+/* Official mark on every internal app screen; maintains balanced title alignment. */
+.screen-header .header-side.right{width:38px;min-width:38px;display:flex;justify-content:flex-end;align-items:center}
+.screen-header .header-studio-mark{width:25px!important;height:34px!important;object-fit:contain;max-width:25px;flex:none}
+@media(max-width:375px){.screen-header .header-studio-mark{width:22px!important;height:29px!important}}
