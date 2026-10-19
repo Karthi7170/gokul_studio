@@ -17,15 +17,15 @@ function AuthLayout({children,mode='signin'}:{children:React.ReactNode;mode?:Aut
   <section className="gcs-auth-banner">
    {signup?
     <>
-     <img className="gcs-auth-signup-photo" src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=1200&q=85" onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src='/images/videography.jpg'}} alt="Photographer capturing a creative moment"/>
+     <img className="gcs-auth-signup-photo" src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=1200&q=85" onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=import.meta.env.BASE_URL+'images/videography.jpg'}} alt="Photographer capturing a creative moment"/>
      <div className="gcs-auth-signup-art-gradient"/>
      <div className="gcs-auth-signup-slogan"><span>Join the,</span><em>studio</em><p>Create your account and start capturing beautiful stories.</p></div>
      <span className="gcs-auth-side-script">Same Moments<br/>Bigger Stories</span>
     </>:
     <>
      <div className="gcs-auth-signin-slogan"><em>Capture<br/>the feeling.</em><p>THE MOMENTS YOU LIVE.<br/>THE STORIES WE KEEP.</p></div>
-     <div className="gcs-auth-polaroid gcs-auth-polaroid-couple"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=650&q=80" onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src='/images/combo.jpg'}} alt=""/><span>More than photos — stories ♡</span></div>
-     <div className="gcs-auth-polaroid gcs-auth-polaroid-camera"><img src="https://images.unsplash.com/photo-1452587925148-ce544e77e70d?auto=format&fit=crop&w=450&q=80" onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src='/images/videography.jpg'}} alt=""/></div>
+     <div className="gcs-auth-polaroid gcs-auth-polaroid-couple"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=650&q=80" onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=import.meta.env.BASE_URL+'images/combo.jpg'}} alt=""/><span>More than photos — stories ♡</span></div>
+     <div className="gcs-auth-polaroid gcs-auth-polaroid-camera"><img src="https://images.unsplash.com/photo-1452587925148-ce544e77e70d?auto=format&fit=crop&w=450&q=80" onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=import.meta.env.BASE_URL+'images/videography.jpg'}} alt=""/></div>
     </>}
   </section>
   <main className="gcs-auth-panel">{children}</main>
