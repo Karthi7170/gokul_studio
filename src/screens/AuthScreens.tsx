@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {ArrowLeft,ArrowRight,Camera,CheckCircle2,LockKeyhole,Mail,Phone,ShieldCheck,UserRound,Heart,Image as ImageIcon} from 'lucide-react';
+import {ArrowLeft,ArrowRight,Bell,Camera,CheckCircle2,LockKeyhole,Mail,Phone,ShieldCheck,UserRound} from 'lucide-react';
 import {PrimaryButton,TextInput} from '../components/UI';
 import {useAuth} from '../context/AuthContext';
 import {requiredSupabase,authConfigured} from '../lib/supabase';
@@ -12,9 +12,7 @@ function AuthLayout({children,mode='signin'}:{children:React.ReactNode;mode?:Aut
   <header className="gcs-auth-head">
    <span className="gcs-auth-logo"><Camera size={23} strokeWidth={2.1}/></span>
    <span className="gcs-auth-brand">GOKUL <strong>CREATIVE STUDIO</strong></span>
-   <button type="button" className="gcs-auth-head-action" aria-label={signup?'Back to sign in':'Go to sign up'} onClick={()=>nav(signup?'/sign-in':'/sign-up')}>
-    {signup?<ArrowLeft size={21}/>:<Heart size={20}/>}
-   </button>
+   {signup?<button type="button" className="gcs-auth-head-action" aria-label="Back to sign in" onClick={()=>nav('/sign-in')}><ArrowLeft size={21}/></button>:<span className="gcs-auth-head-action gcs-auth-head-bell" aria-hidden="true"><Bell size={20}/></span>}
   </header>
   <section className="gcs-auth-banner">
    {signup?
@@ -40,7 +38,7 @@ function SocialRow({onProvider}:{onProvider:(provider:OAuthProvider)=>void}){
   <div className="gcs-auth-divider"><span/>Or continue with<span/></div>
   <div className="gcs-auth-socials">
    <button type="button" aria-label="Continue with Google" onClick={()=>onProvider('google')}><span className="gcs-google-letter" aria-hidden="true">G</span></button>
-   <button type="button" aria-label="Continue with Apple" onClick={()=>onProvider('apple')}><span className="gcs-apple-logo" aria-hidden="true">●</span></button>
+   <button type="button" aria-label="Continue with Apple" onClick={()=>onProvider('apple')}><span className="gcs-apple-logo" aria-hidden="true"></span></button>
    <button type="button" aria-label="Continue with Facebook" onClick={()=>onProvider('facebook')}><span className="gcs-facebook-logo" aria-hidden="true">f</span></button>
   </div>
  </>;
