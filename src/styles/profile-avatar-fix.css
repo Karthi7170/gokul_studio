@@ -1,0 +1,114 @@
+/* A single avatar rendering system for Account and Home.
+   The source photo can be tall, wide or square; it never controls frame size. */
+.gcs-avatar-photo-frame {
+  position:absolute !important;
+  inset:0 !important;
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  overflow:hidden !important;
+  border-radius:50% !important;
+  background:#f5ded5;
+  z-index:1;
+  isolation:isolate;
+}
+.gcs-avatar-photo-image {
+  position:absolute !important;
+  inset:0 !important;
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  min-width:100% !important;
+  min-height:100% !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:cover !important;
+  object-position:50% 38% !important;
+  border-radius:50% !important;
+  aspect-ratio:1/1 !important;
+  transform:none !important;
+}
+.gcs-avatar-photo-placeholder {
+  position:absolute !important;
+  inset:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:100% !important;
+  height:100% !important;
+  font-weight:700 !important;
+  color:#7f3927;
+  background:#f6dfd6;
+  text-align:center;
+  border-radius:50%;
+  line-height:1;
+}
+/* Account page: fixed circular frame regardless of portrait orientation. */
+.gcs-account-page .gcs-account-avatar {
+  position:relative !important;
+  display:block !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  flex:none !important;
+  width:140px !important;
+  height:140px !important;
+  min-width:140px !important;
+  min-height:140px !important;
+  max-width:140px !important;
+  max-height:140px !important;
+  aspect-ratio:1/1 !important;
+  padding:0 !important;
+  border-radius:50% !important;
+  border:7px solid white !important;
+  overflow:visible !important;
+  box-sizing:border-box !important;
+}
+.gcs-account-page .gcs-account-camera {
+  position:absolute !important;
+  right:-1px !important;
+  bottom:3px !important;
+  z-index:5 !important;
+}
+.gcs-account-page .gcs-account-identity {
+  position:relative;
+  isolation:isolate;
+}
+.gcs-account-page .gcs-account-identity h2 {
+  position:relative;
+  clear:both;
+  z-index:1;
+}
+/* Home header: same picture, cropped inside the avatar circle. */
+.gcs-home-2026 .gcs-user-avatar {
+  position:relative !important;
+  display:block !important;
+  overflow:hidden !important;
+  border-radius:50% !important;
+  padding:0 !important;
+  aspect-ratio:1 / 1 !important;
+  isolation:isolate;
+  flex:none !important;
+  background:#f6dfd6 !important;
+}
+.gcs-home-2026 .gcs-user-avatar .gcs-avatar-photo-placeholder {
+  font-size:17px !important;
+}
+.gcs-home-2026 .gcs-user-avatar .gcs-avatar-photo-image {
+  object-position:50% 38% !important;
+}
+@media (max-width:700px){
+  .gcs-account-page .gcs-account-avatar {
+    width:132px !important;height:132px !important;
+    min-width:132px !important;min-height:132px !important;
+    max-width:132px !important;max-height:132px !important;
+  }
+}
+@media (max-width:375px){
+  .gcs-account-page .gcs-account-avatar {
+    width:114px !important;height:114px !important;
+    min-width:114px !important;min-height:114px !important;
+    max-width:114px !important;max-height:114px !important;
+  }
+}
