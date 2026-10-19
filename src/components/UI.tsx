@@ -1,13 +1,11 @@
 import { type ReactNode, type InputHTMLAttributes, useState } from 'react';
-import { ArrowLeft, ArrowRight, Bell, Camera, Check, ChevronRight, Eye, EyeOff, LockKeyhole, Mail, Phone, UserRound, CalendarDays, type LucideIcon } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Camera, Check, ChevronRight, Eye, EyeOff, LockKeyhole, Mail, Phone, UserRound, CalendarDays, type LucideIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { StudioBrandLogo } from './StudioBrandLogo';
 
 type IconComp = LucideIcon;
-export function Logo({ compact=false }: { compact?:boolean }) {
-  return <div className={`brand ${compact?'brand-small':''}`} aria-label="Gokul Creative Studio">
-    <div className="brand-row"><span>G</span><span className="brand-camera"><Camera size={compact?23:32} fill="currentColor" strokeWidth={2.1} /></span><span>KUL</span></div>
-    <div className="brand-caption">C r e a t i v e &nbsp; S t u d i o</div>
-  </div>;
+export function Logo({compact=false}:{compact?:boolean}) {
+ return <StudioBrandLogo compact={compact} className="ui-studio-brand"/>;
 }
 export function PrimaryButton({children, onClick, disabled=false, green=false, icon=true, loading=false, className=''}:{children:ReactNode;onClick?:()=>void;disabled?:boolean;green?:boolean;icon?:boolean;loading?:boolean;className?:string}) {
   return <button className={`primary-button ${green?'green-button':''} ${className}`} disabled={disabled||loading} onClick={onClick}>
@@ -19,13 +17,12 @@ export function OutlineButton({children,onClick,disabled=false,className=''}:{ch
 export function BackButton({ to }: { to?:string }) {
   const nav=useNavigate(); return <button aria-label="Back" className="back-icon" onClick={()=>to?nav(to):nav(-1)}><ArrowLeft size={21}/></button>;
 }
-export function Header({title,back,showBell=false,logo=false}: {title?:string;back?:string;showBell?:boolean;logo?:boolean}){
-  const nav=useNavigate();
-  return <header className="screen-header">
-    <div className="header-side"><BackButton to={back}/></div>
-    {logo?<Logo compact/>:<h1 className="header-title">{title}</h1>}
-    <div className="header-side right">{showBell?<button aria-label="Notifications" className="icon-button" onClick={()=>nav('/home')}><Bell size={21}/><span className="notification-dot"/></button>:<span/>}</div>
-  </header>;
+export function Header({title,back,logo=false}: {title?:string;back?:string;logo?:boolean}){
+ return <header className="screen-header">
+   <div className="header-side"><BackButton to={back}/></div>
+   {logo?<Logo compact/>:<h1 className="header-title">{title}</h1>}
+   <div className="header-side right"><span/></div>
+ </header>;
 }
 export function InfoField({ label, icon:Icon, value, onClick, required=false }: {label:string;icon:IconComp;value:string;onClick?:()=>void;required?:boolean}) {
  return <div className="field-group"><label className="field-label">{label}{required&&<em> *</em>}</label>
@@ -59,4 +56,4 @@ export function StatusBadge({status}:{status:'Confirmed'|'Pending'|'Upcoming'}) 
 export function SectionHeading({title,onClick,action='View All'}:{title:string;onClick?:()=>void;action?:string}){
  return <div className="section-heading"><h3>{title}</h3>{onClick&&<button onClick={onClick}>{action} <ArrowRight size={15}/></button>}</div>;
 }
-export {ArrowRight, ArrowLeft, Bell, Camera, Check, ChevronRight, Eye, EyeOff, LockKeyhole, Mail, Phone, UserRound, CalendarDays};
+export {ArrowRight, ArrowLeft, Camera, Check, ChevronRight, Eye, EyeOff, LockKeyhole, Mail, Phone, UserRound, CalendarDays};
