@@ -1,0 +1,190 @@
+
+/* Account screen: iPhone portrait based on the supplied Gokul reference.
+   Keeps real customer values, private photos and working actions. */
+.gcs-account-page {
+ --ac-red:#f03829;
+ --ac-red-dark:#d62921;
+ --ac-soft:#fff1ef;
+ --ac-ink:#17191f;
+ --ac-muted:#777981;
+ background:#fffaf9!important;
+ color:var(--ac-ink)!important;
+ font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;
+ padding:0 0 28px!important;
+}
+.gcs-account-page *{box-sizing:border-box}
+.gcs-account-topbar{
+ display:grid;
+ grid-template-columns:44px 1fr 44px;
+ gap:8px;
+ align-items:center;
+ height:64px;
+ padding:6px 15px;
+ background:#fffbfa;
+ position:relative;z-index:5;
+}
+.gcs-account-topbar h1{
+ font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",system-ui,sans-serif!important;
+ font-size:19px;line-height:26px;font-weight:800;letter-spacing:-.35px!important;
+ text-align:center;color:#1d1d22;
+}
+.gcs-account-back{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:white;box-shadow:0 3px 10px #21120e0b;}
+.gcs-account-topmark{width:37px!important;height:44px!important;object-fit:contain;justify-self:end}
+.gcs-account-cover{
+ height:190px;overflow:hidden;position:relative;
+ background-image:linear-gradient(90deg,rgba(34,2,4,.93),rgba(88,5,11,.77) 48%,rgba(122,13,13,.41)),
+  url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1100&q=85');
+ background-color:#481015;
+ background-size:cover;
+ background-position:center 44%;
+}
+.gcs-account-cover:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(120,20,18,.32),transparent 50%);pointer-events:none}
+.gcs-account-cover-content{position:absolute;z-index:1;top:41px;left:25px;color:white;max-width:215px}
+.gcs-account-cover-content strong{font-size:20px;line-height:1.16;letter-spacing:.02em;font-weight:850}
+.gcs-account-cover-content strong em{font-style:normal;color:#ff5843}
+.gcs-account-cover-content>i{display:block;margin:11px 0 11px;height:1px;background:#fff9;width:143px}
+.gcs-account-cover-content>p{font-size:10px;line-height:1.5;color:#fae6e6;letter-spacing:.01em}
+.gcs-account-content{
+ position:relative;margin-top:-29px;border-radius:48% 48% 0 0 / 32px 32px 0 0;
+ padding:0 16px 30px;
+ background:linear-gradient(180deg,#fffdfd 0%,#fff8f7 100%);
+ z-index:2;
+ min-height:580px;
+}
+.gcs-account-identity{text-align:center;padding-top:0;margin-bottom:19px;position:relative}
+.gcs-account-avatar{
+ position:relative;display:grid;place-items:center;
+ margin:-82px auto 11px;
+ height:140px;width:140px;
+ border:7px solid white;border-radius:50%;
+ background:#f6ddd5;color:#8e3f30;
+ box-shadow:0 4px 15px #52281e1a;
+ z-index:3;
+}
+.gcs-account-avatar>img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.gcs-account-avatar>span{font-size:49px;font-weight:800}
+.gcs-account-photo-input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.gcs-account-camera{
+ position:absolute;bottom:3px;right:-1px;
+ display:grid;place-items:center;
+ height:41px;width:41px;
+ background:var(--ac-red);color:white;
+ border-radius:50%;border:4px solid white;
+ box-shadow:0 3px 7px #0002;
+}
+.gcs-account-camera:disabled{opacity:.6}
+.gcs-account-identity h2{
+ font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",system-ui,sans-serif!important;
+ font-size:24px;line-height:30px;font-weight:800;
+ color:var(--ac-ink);overflow-wrap:anywhere;
+}
+.gcs-account-identity>p{color:#7a7c85;font-size:13px;line-height:20px;margin-top:4px}
+.gcs-account-fields,.gcs-account-options{
+ background:#fff;border:1px solid #fff1ef;
+ border-radius:20px;padding:0 13px;
+ box-shadow:0 4px 20px #6c160b0c;overflow:hidden;
+}
+.gcs-account-field{
+ min-height:77px;display:flex;gap:12px;align-items:center;
+ border-bottom:1px solid #eee8e8;
+ padding:12px 0;
+}
+.gcs-account-field:last-child{border-bottom:0}
+.gcs-account-field-icon,.gcs-account-option-icon{
+ display:grid;place-items:center;width:49px;height:49px;min-width:49px;
+ background:#fff0ee;color:#ea3325;
+ border-radius:50%;flex:none;
+}
+.gcs-account-field-data{min-width:0;flex:1}
+.gcs-account-field-data label{display:block;font-size:12px;line-height:17px;color:#7a7780;margin-bottom:5px}
+.gcs-account-field-data strong{
+ font-size:14px;line-height:20px;display:block;font-weight:600;
+ color:#222126;overflow-wrap:anywhere;
+}
+.gcs-account-field-data input{
+ width:100%;min-width:0;height:34px;
+ font-size:16px!important;line-height:22px;
+ border:1px solid #e9d5d1;border-radius:8px;
+ background:#fffdfa;padding:6px 8px;
+ outline:none;
+}
+.gcs-account-field-data input:focus{border-color:#f0392a;box-shadow:0 0 0 2px #f0382915}
+.gcs-account-field>button{
+ color:#85858c;display:grid;place-items:center;
+ width:34px;height:44px;flex:none;border-radius:9px;
+}
+.gcs-account-field>button:active{background:#fff1ee;color:#e83426}
+.gcs-account-edit-controls{margin-top:13px}
+.gcs-account-main-cta{
+ display:flex;align-items:center;justify-content:center;
+ width:100%;gap:10px;min-height:50px;
+ border-radius:16px;
+ color:#fff;
+ background:linear-gradient(110deg,#f43132,#ff7949);
+ box-shadow:0 6px 15px #fa4b3424;
+ font-size:15px;font-weight:750;
+}
+.gcs-account-main-cta:active{transform:scale(.985)}
+.gcs-account-cancel{
+ display:block;padding:10px 16px;margin:4px auto 0;
+ font-size:13px;color:#bd3d30;font-weight:600;
+}
+.gcs-account-error,.gcs-account-notice{
+ border-radius:11px;padding:10px 12px;margin:12px 0 0;
+ font-size:12px;line-height:18px;
+}
+.gcs-account-error{background:#fff0ef;color:#b3261c}
+.gcs-account-notice{background:#f0f8f4;color:#28634b;display:flex;align-items:center;gap:8px}
+.gcs-account-options{margin-top:17px}
+.gcs-account-option{
+ width:100%;display:flex;align-items:center;gap:12px;text-align:left;
+ min-height:78px;padding:12px 0;border-bottom:1px solid #eee8e8;
+}
+.gcs-account-option:last-child{border-bottom:0}
+.gcs-account-option-text{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
+.gcs-account-option-text strong{font-size:14px;line-height:19px;font-weight:750;color:#191b20}
+.gcs-account-option-text small{color:#7d7e87;font-size:11.5px;line-height:17px}
+.gcs-account-option>svg:last-child{color:#84858b;flex:none}
+.gcs-account-option:active{background:#fff9f8}
+.gcs-account-logout{margin-top:17px}
+.gcs-account-password{
+ background:white;border:1px solid #f7e5e1;border-radius:16px;
+ padding:16px;margin-top:9px;
+ box-shadow:0 3px 15px #6a170909;
+}
+.gcs-account-password h3{font-size:16px;font-weight:750;color:#202126}
+.gcs-account-password>p{color:#74777e;font-size:11px;line-height:17px;margin-top:6px;margin-bottom:13px}
+.gcs-account-password>label{display:block;color:#303238;font-size:12px;font-weight:600;margin:11px 0}
+.gcs-account-password input{
+ width:100%;font-size:16px!important;min-height:43px;
+ border:1px solid #e5dcd9;border-radius:10px;
+ padding:10px;background:#fff;
+}
+.gcs-account-password-input{display:flex;align-items:center}
+.gcs-account-password-input input{flex:1;min-width:0}
+.gcs-account-password-input>button{margin-left:-42px;width:42px;height:42px;display:grid;place-items:center}
+.gcs-account-password-save{
+ min-height:44px;border-radius:11px;padding:10px 16px;
+ background:#ec372a;color:#fff;font-size:13px;font-weight:700;width:100%;
+}
+.gcs-account-password-save:disabled{opacity:.45}
+@media(max-width:700px){
+ .gcs-account-topbar{height:62px;padding:6px 13px}
+ .gcs-account-cover{height:178px}
+ .gcs-account-content{padding-left:14px;padding-right:14px}
+ .gcs-account-avatar{height:132px;width:132px;margin-top:-78px}
+ .gcs-account-option{min-height:72px}
+ .gcs-account-field{min-height:72px}
+}
+@media(max-width:375px){
+ .gcs-account-cover{height:159px}
+ .gcs-account-cover-content{top:26px;left:19px}
+ .gcs-account-cover-content strong{font-size:17px}
+ .gcs-account-avatar{height:114px;width:114px;margin-top:-68px}
+ .gcs-account-field-icon,.gcs-account-option-icon{width:42px;height:42px;min-width:42px}
+ .gcs-account-field,.gcs-account-option{gap:9px}
+ .gcs-account-identity h2{font-size:22px}
+}
+@media(prefers-reduced-motion:reduce){
+ .gcs-account-page *{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+}
