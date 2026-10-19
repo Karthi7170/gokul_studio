@@ -4,6 +4,7 @@ import {ArrowRight,BookOpen,CalendarDays,Camera,Check,CheckCircle2,ChevronRight,
 import {Header,PrimaryButton} from '../components/UI';
 import {SERVICES,IMAGE_URL,THUMBNAIL_URL,inr} from '../data/services';
 import {useBooking} from '../context/BookingContext';
+import {StudioBrandLogo} from '../components/StudioBrandLogo';
 
 export function PackageDetails(){
  const nav=useNavigate();const {id}=useParams();const {update}=useBooking();
@@ -15,7 +16,7 @@ export function PackageDetails(){
  const inclusions=viewAll?pkg.included:pkg.included.slice(0,5);
  return <div className="inner-screen page-flow package-details-ferrari iphone-package-detail">
   <div className="iphone-detail-header"><button type="button" aria-label="Back to packages" onClick={()=>nav('/book')}><ChevronRight size={22}/></button>
-   <div className="iphone-detail-brand"><strong>GOKUL</strong><small>CREATIVE STUDIO</small></div>
+   <StudioBrandLogo className="gcs-package-brand"/>
    <button type="button" className={favorite?'iphone-favorite active':'iphone-favorite'} onClick={()=>setFavorite(x=>!x)} aria-label={favorite?'Remove from favorites':'Mark as favorite'}><Heart size={21} fill={favorite?'currentColor':'none'}/></button>
   </div>
   <div className="iphone-detail-photo">
