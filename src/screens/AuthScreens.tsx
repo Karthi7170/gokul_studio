@@ -92,12 +92,21 @@ export function SignUp(){
  const [terms,setTerms]=useState(false),[consent,setConsent]=useState(false);
  const [error,setError]=useState(''),[success,setSuccess]=useState(''),[busy,setBusy]=useState(false);
  const validName=name.trim().length>=2;
- const validEmail=/^\S+@\S+\.\S+$/.test(email.trim());
+ const validEmail=/^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/.test(email.trim());
  const validPhone=/^\+[1-9]\d{7,14}$/.test(normalizePhone(phone));
  const validPassword=pw.length>=8;
- const valid=validName&&validEmail&&validPhone&&validPassword&&pw===confirm&&terms;
+ const readyToRegister=validName&&validEmail&&validPhone&&validPassword&&pw===confirm&&terms;
  const signup=async()=>{
-  if(!valid||busy)return;setBusy(true);setError('');
+  if(busy)return;
+  setError('');
+  if(!validName){setError('Enter your full name (at least 2 characters).');return;}
+  if(!validEmail){setError('Enter a complete email address, such as name@example.com. Include the domain extension (.com, .in, etc.).');return;}
+  if(!validPhone){setError('Enter a valid phone number. For an Indian number, enter 10 digits or +91 followed by 10 digits.');return;}
+  if(!validPassword){setError('Your password must contain at least 8 characters.');return;}
+  if(pw!==confirm){setError('Your passwords do not match.');return;}
+  if(!terms){setError('Please agree to the booking account terms to continue.');return;}
+  if(!authConfigured){setError('Registration is temporarily unavailable. Please try again later.');return;}
+  setBusy(true);
   try{
    const session=await signUp({fullName:name,email,phone:normalizePhone(phone),password:pw,whatsappOptIn:consent});
    if(session)nav('/home',{replace:true});
@@ -112,9 +121,10 @@ export function SignUp(){
   <div className="gcs-auth-heading"><span className="gcs-auth-eyebrow">CREATE ACCOUNT</span><h1>Join Gokul Creative <em>Studio</em></h1><p>It's quick, easy and free. Let's create something amazing together.</p></div>
   {!success?
    <>
-    <form className="gcs-auth-form gcs-auth-registration" onSubmit={e=>{e.preventDefault();void signup();}}>
+    <form className="gcs-auth-form gcs-auth-registration" noValidate onSubmit={e=>{e.preventDefault();void signup();}}>
      <TextInput label="Full name" icon={UserRound} autoComplete="name" required placeholder="Your full name" value={name} onChange={e=>setName(e.target.value)}/>
-     <TextInput label="Email address" icon={Mail} type="email" autoComplete="email" inputMode="email" required placeholder="you@example.com" value={email} onChange={e=>setEmail(e.target.value)}/>
+     <TextInput label="Email address" icon={Mail} type="email" autoComplete="email" inputMode="email" required placeholder="you@example.com" value={email} hasError={email.trim().length>0&&!validEmail} aria-invalid={email.trim().length>0&&!validEmail} onChange={e=>{setEmail(e.target.value);setError('');}}/>
+     {email.trim().length>0&&!validEmail&&<p className="gcs-signup-field-error" role="status">Enter a complete email address, for example name@example.com (with .com or .in).</p>}
      <TextInput label="Phone number" icon={Phone} type="tel" autoComplete="tel" inputMode="tel" required placeholder="+91 98765 43210" value={phone} onChange={e=>setPhone(e.target.value)}/>
      {phone.trim()&&!validPhone&&<p className="gcs-signup-hint" role="status">Use a valid mobile number, for example +91 98765 43210 or a 10-digit Indian number.</p>}
      <TextInput label="Password" icon={LockKeyhole} autoComplete="new-password" required placeholder="Create a password (8+ characters)" password value={pw} onChange={e=>setPw(e.target.value)}/>
@@ -123,9 +133,10 @@ export function SignUp(){
      <label className="gcs-auth-consent"><input type="checkbox" checked={terms} onChange={e=>setTerms(e.target.checked)}/><span>I agree to create an account and allow my details to be used for booking requests.</span></label>
      <label className="gcs-auth-consent gcs-auth-whatsapp"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/><span>Send optional booking updates to my WhatsApp number when available.</span></label>
      {error&&<p role="alert" className="error-text">{error}</p>}
-     <p className="gcs-signup-hint">All new customers can register with their own name, email, mobile number and password. Email verification may be required before sign-in.</p>
+     {!readyToRegister&&<p className="gcs-signup-requirements" role="status">Please complete all fields with a valid email address and phone number, matching passwords of at least 8 characters, and accept the account terms.</p>}
+     <p className="gcs-signup-hint">New customers can register with their own email address and mobile number. Email verification may be required before sign-in.</p>
      {!authConfigured&&<p className="error-text" role="alert">Registration is temporarily unavailable because the authentication service is not configured.</p>}
-     <button type="submit" className="gcs-auth-submit" disabled={!authConfigured||!valid||busy}>
+     <button type="submit" className="gcs-auth-submit" disabled={busy||!authConfigured}>
       {busy?'Creating account…':<>Create account <ArrowRight size={19}/></>}
      </button>
     </form>
