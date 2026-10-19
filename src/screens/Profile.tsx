@@ -1,46 +1,166 @@
-import {useState} from 'react';
+import {useEffect,useRef,useState,type ChangeEvent} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {LogOut,Mail,Phone,UserRound,ShieldCheck,ChevronRight,CheckCircle2,MessageCircle,Save} from 'lucide-react';
-import {Header,PrimaryButton} from '../components/UI';
+import {ArrowLeft,Camera,Check,ChevronRight,Eye,EyeOff,LockKeyhole,LogOut,Mail,Pencil,Phone,Save,UserRound,CalendarDays,ShieldCheck} from 'lucide-react';
 import {useAuth} from '../context/AuthContext';
+import {StudioBrandMark} from '../components/StudioBrandLogo';
 import {requiredSupabase} from '../lib/supabase';
+
+function normalizedPhone(value:string){
+ const clean=value.replace(/[\s()\-]/g,'');
+ if(/^\d{10}$/.test(clean))return '+91'+clean;
+ if(/^91\d{10}$/.test(clean))return '+'+clean;
+ return clean;
+}
+function ProfileOption({icon:Icon,title,subtitle,onClick,danger=false}:{icon:typeof UserRound;title:string;subtitle:string;onClick:()=>void;danger?:boolean}){
+ return <button type="button" onClick={onClick} className={'gcs-account-option'+(danger?' danger':'')}>
+  <span className="gcs-account-option-icon"><Icon size={21} strokeWidth={1.85}/></span>
+  <span className="gcs-account-option-text"><strong>{title}</strong><small>{subtitle}</small></span>
+  <ChevronRight size={20} strokeWidth={1.9}/>
+ </button>;
+}
 export function Profile(){
- const nav=useNavigate();const {user,profile,signOut,updateProfile}=useAuth();
- const [phone,setPhone]=useState<string|null>(null),[optIn,setOptIn]=useState<boolean|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[saved,setSaved]=useState(false),[otp,setOtp]=useState(''),[codeSent,setCodeSent]=useState(false),[verifyMessage,setVerifyMessage]=useState(''),[verifying,setVerifying]=useState(false);
- const shownPhone=phone??profile?.phone??'';
- const consent=optIn??profile?.whatsapp_opt_in??false;
- const save=async()=>{if(!profile)return;setBusy(true);setError('');setSaved(false);
-  try{if(!/^\+[1-9]\d{7,14}$/.test(shownPhone))throw new Error('Enter your number with country code, such as +919876543210.');
-   await updateProfile({...profile,phone:shownPhone,whatsapp_opt_in:consent});setPhone(null);setOptIn(null);setSaved(true);
-  }catch(e){setError(e instanceof Error?e.message:'Could not save your profile.');}finally{setBusy(false);}
+ const nav=useNavigate();
+ const {user,profile,signOut,updateProfile}=useAuth();
+ const [editing,setEditing]=useState(false);
+ const [name,setName]=useState<string|null>(null),[email,setEmail]=useState<string|null>(null),[phone,setPhone]=useState<string|null>(null);
+ const [busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
+ const [avatar,setAvatar]=useState<string|null>(null),[uploading,setUploading]=useState(false);
+ const [passwordOpen,setPasswordOpen]=useState(false),[password,setPassword]=useState(''),[confirm,setConfirm]=useState(''),[showPassword,setShowPassword]=useState(false),[passwordBusy,setPasswordBusy]=useState(false);
+ const photoRef=useRef<HTMLInputElement>(null),nameRef=useRef<HTMLInputElement>(null),emailRef=useRef<HTMLInputElement>(null),phoneRef=useRef<HTMLInputElement>(null);
+ const fullName=name??profile?.full_name??String(user?.user_metadata?.full_name||'');
+ const currentEmail=email??user?.email??'';
+ const currentPhone=phone??profile?.phone??'';
+ const initials=(fullName.trim().split(/\s+/).slice(0,2).map(p=>p.charAt(0)).join('')||'G').toUpperCase();
+ const avatarPath=typeof user?.user_metadata?.avatar_path==='string'?user.user_metadata.avatar_path:'';
+
+ useEffect(()=>{
+  if(!user?.id||!avatarPath||!avatarPath.startsWith(user.id+'/')){setAvatar(null);return;}
+  let active=true;
+  requiredSupabase().storage.from('profile-avatars').createSignedUrl(avatarPath,60*60)
+   .then(({data,error:fetchError})=>{if(active&&!fetchError&&data?.signedUrl)setAvatar(data.signedUrl);})
+   .catch(()=>{});
+  return ()=>{active=false;};
+ },[user?.id,avatarPath]);
+ const activateEdit=(field?:'name'|'email'|'phone')=>{
+  setEditing(true);setError('');setNotice('');
+  if(field)window.setTimeout(()=>({name:nameRef,email:emailRef,phone:phoneRef}[field].current?.focus()),10);
  };
- const phoneVerified=Boolean(user?.phone_confirmed_at&&user?.phone===shownPhone);
- const sendVerification=async()=>{setVerifying(true);setVerifyMessage('');
-  try{if(!/^\+[1-9]\d{7,14}$/.test(shownPhone))throw Error('Enter a valid phone with country code.');
-   const {error}=await requiredSupabase().auth.updateUser({phone:shownPhone});
-   if(error)throw error;setCodeSent(true);setVerifyMessage('A verification code was requested. Check your SMS inbox.');
-  }catch(e){setVerifyMessage(e instanceof Error?e.message:'SMS verification is not available. The studio needs to configure an SMS provider.');}finally{setVerifying(false);}
+ const cancelEdit=()=>{setEditing(false);setName(null);setEmail(null);setPhone(null);setError('');};
+ const saveProfile=async()=>{
+  if(!user||!profile||busy)return;
+  const nextName=fullName.trim(),nextEmail=currentEmail.trim().toLowerCase(),nextPhone=normalizedPhone(currentPhone);
+  if(nextName.length<2){setError('Enter your full name (at least 2 characters).');return;}
+  if(!/^\S+@\S+\.\S+$/.test(nextEmail)){setError('Enter a valid email address.');return;}
+  if(!/^\+[1-9]\d{7,14}$/.test(nextPhone)){setError('Enter a valid mobile number with country code, such as +919876543210.');return;}
+  setBusy(true);setError('');setNotice('');
+  try{
+   if(nextName!==profile.full_name||nextPhone!==profile.phone){
+    await updateProfile({...profile,full_name:nextName,phone:nextPhone});
+    const {error:metadataError}=await requiredSupabase().auth.updateUser({data:{full_name:nextName,phone:nextPhone}});
+    if(metadataError)throw metadataError;
+   }
+   if(nextEmail!==user.email?.toLowerCase()){
+    const {error:emailError}=await requiredSupabase().auth.updateUser({email:nextEmail});
+    if(emailError)throw emailError;
+    setNotice('Account details saved. Check your new email address to confirm the email change.');
+   }else setNotice('Profile updated successfully.');
+   setEditing(false);setName(null);setEmail(null);setPhone(null);
+  }catch(e){setError(e instanceof Error?e.message:'Unable to save your profile.');}
+  finally{setBusy(false);}
  };
- const verifyNumber=async()=>{setVerifying(true);setVerifyMessage('');
-  try{const {error}=await requiredSupabase().auth.verifyOtp({phone:shownPhone,token:otp,type:'phone_change'});
-   if(error)throw error;setCodeSent(false);setOtp('');setVerifyMessage('Phone number verified. Save your contact details to finish.');
-  }catch(e){setVerifyMessage(e instanceof Error?e.message:'Could not verify your phone.');}finally{setVerifying(false);}
+ const onPhoto=async(event:ChangeEvent<HTMLInputElement>)=>{
+  const file=event.target.files?.[0];event.target.value='';
+  if(!file||!user||uploading)return;
+  const extensions:{[key:string]:string}={'image/jpeg':'jpg','image/png':'png','image/webp':'webp'};
+  const ext=extensions[file.type];
+  if(!ext){setError('Choose a JPG, PNG or WebP photo.');return;}
+  if(file.size>5*1024*1024){setError('Your photo must be smaller than 5 MB.');return;}
+  setUploading(true);setError('');setNotice('');
+  const storage=requiredSupabase().storage.from('profile-avatars');
+  const filename=user.id+'/avatar-'+Date.now()+'.'+ext;
+  try{
+   const {error:uploadError}=await storage.upload(filename,file,{contentType:file.type,cacheControl:'3600'});
+   if(uploadError)throw uploadError;
+   const {error:updateError}=await requiredSupabase().auth.updateUser({data:{avatar_path:filename}});
+   if(updateError)throw updateError;
+   const {data:link,error:linkError}=await storage.createSignedUrl(filename,60*60);
+   if(linkError)throw linkError;
+   setAvatar(link.signedUrl);
+   setNotice('Profile photo updated.');
+  }catch(e){setError(e instanceof Error?e.message:'Unable to upload this photo.');}
+  finally{setUploading(false);}
  };
- const out=async()=>{try{await signOut();nav('/sign-in',{replace:true});}catch(e){setError(e instanceof Error?e.message:'Could not sign out.');}};
- return <div className="inner-screen page-flow"><Header title="My Account" back="/home"/><div className="page-padding">
- <div className="profile-heading"><span><UserRound size={32}/></span><h2>{profile?.full_name||'Your Account'}</h2><p>Gokul Creative Studio customer</p></div>
- <div className="profile-fact"><Mail size={19}/><span>Email</span><strong>{user?.email||'—'}</strong></div>
- <div className="profile-edit-row"><label htmlFor="contact-phone">Registered mobile / WhatsApp number</label><div className="profile-edit-input"><Phone size={17}/><input id="contact-phone" type="tel" value={shownPhone} onChange={e=>setPhone(e.target.value)} placeholder="+91XXXXXXXXXX"/></div></div>
- <label className="profile-whatsapp-consent"><input type="checkbox" checked={consent} onChange={e=>setOptIn(e.target.checked)}/><span>I consent to receive quotation and payment information on this number when the studio enables WhatsApp notifications.</span></label>
- {error&&<p role="alert" className="error-text">{error}</p>}{saved&&<p role="status" className="auth-notice"><CheckCircle2 size={15}/> Contact preferences saved.</p>}
- <PrimaryButton loading={busy} onClick={()=>void save()} disabled={!profile||busy}><Save size={17}/> Save Contact Details</PrimaryButton>
- <div className="phone-verification"><div className="phone-verification-head"><ShieldCheck size={18}/><div><strong>{phoneVerified?'Phone verified':'Verify your phone number'}</strong><p>{phoneVerified?'Eligible for messages after studio integration is configured.':'Phone verification is required before private quotations can be sent to this number.'}</p></div></div>
- {!phoneVerified&&<><button type="button" disabled={verifying} className="phone-verify-btn" onClick={()=>void sendVerification()}>{verifying?'Please wait...':'Send SMS verification code'}</button>
- {codeSent&&<div className="phone-otp-row"><input inputMode="numeric" aria-label="SMS verification code" placeholder="6-digit code" maxLength={6} value={otp} onChange={e=>setOtp(e.target.value.replace(/\D/g,''))}/><button onClick={()=>void verifyNumber()} disabled={otp.length!==6||verifying}>Verify</button></div>}</>}
- {verifyMessage&&<p role="status">{verifyMessage}</p>}</div>
- <div className="profile-session"><ShieldCheck size={20}/><div><strong>Secure account</strong><p>Signed in with Supabase Auth. Your customer record is protected and private.</p></div></div>
- <div className="profile-session profile-info"><MessageCircle size={20}/><div><strong>WhatsApp updates</strong><p>Once the studio connects an approved sender, quotation and payment notifications can be delivered to your opted-in number. Until then, use the share buttons.</p></div></div>
- <button className="profile-packages" onClick={()=>nav('/book')}>Explore our packages <ChevronRight size={18}/></button>
- <button className="profile-signout" onClick={()=>void out()}><LogOut size={17}/> Sign out securely</button>
- </div></div>;
+ const changePassword=async()=>{
+  if(password.length<8){setError('Your new password must have at least 8 characters.');return;}
+  if(password!==confirm){setError('Passwords do not match.');return;}
+  if(passwordBusy)return;
+  setPasswordBusy(true);setError('');setNotice('');
+  try{
+   const {error:passwordError}=await requiredSupabase().auth.updateUser({password});
+   if(passwordError)throw passwordError;
+   setPassword('');setConfirm('');setPasswordOpen(false);setNotice('Your password has been updated.');
+  }catch(e){setError(e instanceof Error?e.message:'Unable to update your password.');}
+  finally{setPasswordBusy(false);}
+ };
+ const logout=async()=>{
+  setError('');
+  try{await signOut();nav('/sign-in',{replace:true});}
+  catch(e){setError(e instanceof Error?e.message:'Could not sign out.');}
+ };
+ return <div className="inner-screen page-flow gcs-account-page">
+  <header className="gcs-account-topbar">
+   <button type="button" aria-label="Back to home" className="gcs-account-back" onClick={()=>nav('/home')}><ArrowLeft size={22}/></button>
+   <h1>My Account</h1>
+   <StudioBrandMark className="gcs-account-topmark"/>
+  </header>
+  <section className="gcs-account-cover" aria-label="Gokul Creative Studio">
+   <div className="gcs-account-cover-content"><strong>GOKUL<br/><em>CREATIVE STUDIO</em></strong><i/><p>THE MOMENTS YOU LIVE.<br/>THE STORIES WE KEEP.</p></div>
+  </section>
+  <div className="gcs-account-content">
+   <section className="gcs-account-identity">
+    <div className="gcs-account-avatar">
+     {avatar?<img src={avatar} alt="Your profile photo"/>:<span aria-label="Profile initials">{initials}</span>}
+     <input ref={photoRef} type="file" accept="image/jpeg,image/png,image/webp" aria-label="Upload profile photo" className="gcs-account-photo-input" onChange={e=>void onPhoto(e)}/>
+     <button type="button" disabled={uploading} aria-label="Change profile photo" className="gcs-account-camera" onClick={()=>photoRef.current?.click()}><Camera size={19}/></button>
+    </div>
+    <h2>{profile?.full_name||'Your Account'}</h2>
+    <p>Gokul Creative Studio Customer</p>
+   </section>
+   <section className="gcs-account-fields" aria-label="Account details">
+    <div className="gcs-account-field">
+     <span className="gcs-account-field-icon"><UserRound size={22}/></span>
+     <div className="gcs-account-field-data"><label htmlFor="gcs-account-name">Full Name</label>{editing?<input id="gcs-account-name" ref={nameRef} autoComplete="name" value={fullName} maxLength={80} onChange={e=>setName(e.target.value)}/>:<strong>{profile?.full_name||'Add your name'}</strong>}</div>
+     <button type="button" aria-label="Edit full name" onClick={()=>activateEdit('name')}><Pencil size={17}/></button>
+    </div>
+    <div className="gcs-account-field">
+     <span className="gcs-account-field-icon"><Mail size={22}/></span>
+     <div className="gcs-account-field-data"><label htmlFor="gcs-account-email">Email Address</label>{editing?<input id="gcs-account-email" ref={emailRef} type="email" autoComplete="email" value={currentEmail} onChange={e=>setEmail(e.target.value)}/>:<strong>{user?.email||'Add your email'}</strong>}</div>
+     <button type="button" aria-label="Change email address" onClick={()=>activateEdit('email')}><Pencil size={17}/></button>
+    </div>
+    <div className="gcs-account-field">
+     <span className="gcs-account-field-icon"><Phone size={22}/></span>
+     <div className="gcs-account-field-data"><label htmlFor="gcs-account-phone">Mobile Number</label>{editing?<input id="gcs-account-phone" ref={phoneRef} type="tel" autoComplete="tel" inputMode="tel" value={currentPhone} placeholder="+91 98765 43210" onChange={e=>setPhone(e.target.value)}/>:<strong>{profile?.phone||'Add mobile number'}</strong>}</div>
+     <button type="button" aria-label="Edit mobile number" onClick={()=>activateEdit('phone')}><Pencil size={17}/></button>
+    </div>
+   </section>
+   <div className="gcs-account-edit-controls">
+    {editing?<><button type="button" className="gcs-account-main-cta" disabled={busy} onClick={()=>void saveProfile()}><Save size={19}/>{busy?'Saving changes…':'Save Profile'}</button><button type="button" className="gcs-account-cancel" onClick={cancelEdit} disabled={busy}>Cancel</button></>:
+    <button type="button" className="gcs-account-main-cta" onClick={()=>activateEdit()}><Pencil size={19}/>Edit Profile</button>}
+   </div>
+   {error&&<p className="gcs-account-error" role="alert">{error}</p>}
+   {notice&&<p className="gcs-account-notice" role="status"><Check size={17}/>{notice}</p>}
+   <nav className="gcs-account-options" aria-label="Account actions">
+    <ProfileOption icon={CalendarDays} title="My Bookings" subtitle="View and manage your bookings" onClick={()=>nav('/bookings')}/>
+    <ProfileOption icon={LockKeyhole} title="Change Password" subtitle="Update your account password" onClick={()=>{setPasswordOpen(x=>!x);setError('');setNotice('');}}/>
+   </nav>
+   {passwordOpen&&<section className="gcs-account-password">
+    <h3>Change Password</h3>
+    <p>Create a new password for your account.</p>
+    <label>New Password<div className="gcs-account-password-input"><input type={showPassword?'text':'password'} autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="At least 8 characters"/><button type="button" aria-label={showPassword?'Hide password':'Show password'} onClick={()=>setShowPassword(p=>!p)}>{showPassword?<EyeOff size={18}/>:<Eye size={18}/>}</button></div></label>
+    <label>Confirm Password<input type={showPassword?'text':'password'} autoComplete="new-password" value={confirm} onChange={e=>setConfirm(e.target.value)} placeholder="Repeat your new password"/></label>
+    <button type="button" className="gcs-account-password-save" disabled={passwordBusy||password.length<8||password!==confirm} onClick={()=>void changePassword()}>{passwordBusy?'Updating…':'Update Password'}</button>
+   </section>}
+   <div className="gcs-account-options gcs-account-logout"><ProfileOption icon={LogOut} title="Log Out" subtitle="Sign out from your account" onClick={()=>void logout()} danger/></div>
+  </div>
+ </div>;
 }
