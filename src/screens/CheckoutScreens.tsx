@@ -109,7 +109,7 @@ export function Confirmed(){
  return <div className="inner-screen page-flow confirmation-screen">
   <div className="confirmation-top"><BackButton to="/home"/><Logo compact/><SignedInAvatarButton className="gcs-confirmation-avatar"/></div>
   <div className="page-padding">
-   <div className="success-circle"><Check size={44}/></div>
+   <div className="confirmation-success-visual" role="img" aria-label={isDemo?"Demo booking saved":"Quotation request saved"}><div className="success-circle"><Check size={40} strokeWidth={3}/></div></div>
    <div className="confirm-heading"><h2>{isDemo?'Demo Booking Created!':'Quotation Request Saved!'}</h2><p>{isDemo?'Your test booking was recorded successfully. No actual payment was made or reservation confirmed.':'Your quotation request has been saved. The studio will confirm actual availability and final pricing.'}</p></div>
    <div className="booking-id-box"><span>{isDemo?'Demo Reference':'Quotation Request ID'}</span><div><strong>{booking.bookingId||'Pending'}</strong><button aria-label="Copy request ID" onClick={()=>void navigator.clipboard?.writeText(booking.bookingId)}><Copy size={18}/></button></div></div>
    <div className="confirmation-details">
