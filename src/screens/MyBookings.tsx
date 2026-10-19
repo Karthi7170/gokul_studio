@@ -1,7 +1,8 @@
 import {useEffect,useMemo,useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {ArrowRight,CalendarDays,Camera,ChevronRight,Clock3,MapPin,RefreshCw,ShieldCheck,UserRound,Wallet} from 'lucide-react';
+import {ArrowRight,CalendarDays,ChevronRight,Clock3,MapPin,RefreshCw,ShieldCheck,UserRound,Wallet} from 'lucide-react';
 import {useAuth} from '../context/AuthContext';
+import {StudioBrandLogo} from '../components/StudioBrandLogo';
 import {requiredSupabase} from '../lib/supabase';
 import {SERVICES,IMAGE_URL,THUMBNAIL_URL,formatDate,to12h,inr,type ServiceId} from '../data/services';
 
@@ -57,7 +58,7 @@ export function MyBookings(){
  const next=useMemo(()=>items.filter(item=>item.event_date&&item.event_date>=now).sort((a,b)=>(a.event_date||'').localeCompare(b.event_date||''))[0]||null,[items,now]);
  const sorted=items.filter(item=>item.id!==next?.id);
  return <div className="page-flow my-bookings-page">
-  <header className="my-bookings-top"><div className="gcs-header-brand"><span className="gcs-header-camera"><Camera size={21}/></span><div><strong>GOKUL</strong><small>CREATIVE STUDIO</small></div></div><button aria-label="View account" onClick={()=>nav('/profile')} className="gcs-profile-action"><UserRound size={20}/></button></header>
+  <header className="my-bookings-top"><StudioBrandLogo className="gcs-bookings-brand"/><button aria-label="View account" onClick={()=>nav('/profile')} className="gcs-profile-action"><UserRound size={20}/></button></header>
   <section className="my-bookings-heading"><span className="reference-kicker">YOUR CREATIVE JOURNEY</span><h1>My Bookings</h1><p>Track all the moments you've planned with us.</p></section>
   <div className="my-bookings-controls"><span>{items.length} saved request{items.length===1?'':'s'}</span><button onClick={()=>setRefresh(n=>n+1)} aria-label="Refresh bookings" disabled={loading}><RefreshCw size={15}/> Refresh</button></div>
   {loading&&<div className="my-bookings-state" role="status"><div className="mini-loading-spinner"/>Loading your bookings…</div>}
