@@ -1,7 +1,8 @@
 import { type ReactNode, type InputHTMLAttributes, useState } from 'react';
 import { ArrowLeft, ArrowRight, Camera, Check, ChevronRight, Eye, EyeOff, LockKeyhole, Mail, Phone, UserRound, CalendarDays, type LucideIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { StudioBrandLogo, StudioBrandMark } from './StudioBrandLogo';
+import { StudioBrandLogo } from './StudioBrandLogo';
+import {SignedInAvatarButton} from './SignedInAvatarButton';
 
 type IconComp = LucideIcon;
 export function Logo({compact=false}:{compact?:boolean}) {
@@ -21,7 +22,7 @@ export function Header({title,back,logo=false}: {title?:string;back?:string;logo
  return <header className="screen-header">
    <div className="header-side"><BackButton to={back}/></div>
    {logo?<Logo compact/>:<h1 className="header-title">{title}</h1>}
-   <div className="header-side right">{logo?<span/>:<StudioBrandMark className="header-studio-mark"/>}</div>
+   <div className="header-side right"><SignedInAvatarButton/></div>
  </header>;
 }
 export function InfoField({ label, icon:Icon, value, onClick, required=false }: {label:string;icon:IconComp;value:string;onClick?:()=>void;required?:boolean}) {
