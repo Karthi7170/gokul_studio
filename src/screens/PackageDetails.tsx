@@ -5,6 +5,7 @@ import {Header,PrimaryButton} from '../components/UI';
 import {SERVICES,IMAGE_URL,THUMBNAIL_URL,inr} from '../data/services';
 import {useBooking} from '../context/BookingContext';
 import {StudioBrandLogo} from '../components/StudioBrandLogo';
+import {SignedInAvatarButton} from '../components/SignedInAvatarButton';
 
 export function PackageDetails(){
  const nav=useNavigate();const {id}=useParams();const {update}=useBooking();
@@ -17,7 +18,7 @@ export function PackageDetails(){
  return <div className="inner-screen page-flow package-details-ferrari iphone-package-detail">
   <div className="iphone-detail-header"><button type="button" aria-label="Back to packages" onClick={()=>nav('/book')}><ChevronRight size={22}/></button>
    <StudioBrandLogo className="gcs-package-brand"/>
-   <button type="button" className={favorite?'iphone-favorite active':'iphone-favorite'} onClick={()=>setFavorite(x=>!x)} aria-label={favorite?'Remove from favorites':'Mark as favorite'}><Heart size={21} fill={favorite?'currentColor':'none'}/></button>
+   <div className="iphone-detail-actions"><button type="button" className={favorite?'iphone-favorite active':'iphone-favorite'} onClick={()=>setFavorite(x=>!x)} aria-label={favorite?'Remove from favorites':'Mark as favorite'}><Heart size={21} fill={favorite?'currentColor':'none'}/></button><SignedInAvatarButton className="gcs-package-avatar"/></div>
   </div>
   <div className="iphone-detail-photo">
    <img src={THUMBNAIL_URL(gallery[photoIndex])} alt={gallery[photoIndex].name+' photography inspiration'} onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=IMAGE_URL(gallery[photoIndex].image)}}/>
