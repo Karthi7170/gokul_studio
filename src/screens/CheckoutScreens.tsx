@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {ArrowRight,CalendarDays,Camera,Check,ChevronRight,Clock3,Copy,CreditCard,Download,FileText,Landmark,Mail,MapPin,MessageCircle,Phone,ShieldCheck,Smartphone,UserRound,Wallet} from 'lucide-react';
 import {BackButton,DetailLine,Header,Logo,OutlineButton,PrimaryButton} from '../components/UI';
+import {SignedInAvatarButton} from '../components/SignedInAvatarButton';
 import {useBooking,type Booking} from '../context/BookingContext';
 import {useAuth} from '../context/AuthContext';
 import {SERVICES,IMAGE_URL,THUMBNAIL_URL,inr,getQuote,getBookingEstimate,ADD_ONS,formatDate,to12h} from '../data/services';
@@ -106,7 +107,7 @@ export function Confirmed(){
  const share=()=>{try{openWhatsApp(booking);setMessage('WhatsApp opened; press Send there to share your details.');}catch(e){setMessage(e instanceof Error?e.message:'WhatsApp unavailable.');}};
  const sendToPhone=async()=>{if(!booking.requestId)return;setSending(true);try{setMessage(await sendCustomerNotification(booking.requestId,isDemo?'payment':'quotation'));}catch(e){setMessage(e instanceof Error?e.message:'Notification unavailable. Use manual share.');}finally{setSending(false);}};
  return <div className="inner-screen page-flow confirmation-screen">
-  <div className="confirmation-top"><BackButton to="/home"/><Logo compact/><span/></div>
+  <div className="confirmation-top"><BackButton to="/home"/><Logo compact/><SignedInAvatarButton className="gcs-confirmation-avatar"/></div>
   <div className="page-padding">
    <div className="success-circle"><Check size={44}/></div>
    <div className="confirm-heading"><h2>{isDemo?'Demo Booking Created!':'Quotation Request Saved!'}</h2><p>{isDemo?'Your test booking was recorded successfully. No actual payment was made or reservation confirmed.':'Your quotation request has been saved. The studio will confirm actual availability and final pricing.'}</p></div>
