@@ -10,6 +10,7 @@ import './styles/auth-reference.css';
 import './styles/official-brand.css';
 import './styles/account-reference.css';
 import './styles/profile-avatar-fix.css';
+import './styles/auth-avatar-polish.css';
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthProvider><BookingProvider><HashRouter><App /></HashRouter></BookingProvider></AuthProvider>
