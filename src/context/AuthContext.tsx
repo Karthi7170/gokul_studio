@@ -47,7 +47,7 @@ export function AuthProvider({children}:{children:ReactNode}){
   const client=requiredSupabase();
   const {data,error}=await client.auth.signUp({
    email:input.email.trim().toLowerCase(),password:input.password,
-   options:{emailRedirectTo:window.location.origin+window.location.pathname+'#/home',
+   options:{emailRedirectTo:window.location.origin+window.location.pathname,
     data:{full_name:input.fullName.trim(),phone:input.phone,whatsapp_opt_in:input.whatsappOptIn}}
   });
   if(error)throw error;
