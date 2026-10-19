@@ -1,0 +1,114 @@
+/* Correct double-border focus on the Gokul sign-in and sign-up forms.
+ * The outer input container remains the single visible focus indicator.
+ */
+.gcs-auth-new .input-box{
+  position:relative;
+}
+.gcs-auth-new .input-box input,
+.gcs-auth-new .input-box input:focus,
+.gcs-auth-new .input-box input:focus-visible {
+  outline:0 !important;
+  outline-offset:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  -webkit-box-shadow:none !important;
+  background:transparent !important;
+  appearance:none;
+  -webkit-appearance:none;
+}
+.gcs-auth-new .input-box:focus-within {
+  outline:0 !important;
+  border-color:#E8431F !important;
+  box-shadow:0 0 0 2px rgba(232,67,31,.12) !important;
+}
+.gcs-auth-new .input-box input::selection{
+  color:#17171B;
+  background:rgba(232,67,31,.2);
+}
+.gcs-signup-hint{
+  margin:0;
+  padding:0 2px;
+  color:#665a5d;
+  font-size:11px;
+  line-height:1.5;
+}
+.gcs-auth-registration .gcs-signup-hint{
+  margin-top:-4px;
+}
+/* Reuse one real, signed-in customer's picture on every app page. */
+.gcs-global-avatar-button{
+  display:block;
+  position:relative;
+  box-sizing:border-box;
+  width:40px;
+  height:40px;
+  min-width:40px;
+  min-height:40px;
+  padding:0;
+  flex:none;
+  border-radius:50%;
+  border:2px solid #F1D7CD;
+  background:#F7E0D4;
+  overflow:hidden;
+  isolation:isolate;
+  cursor:pointer;
+}
+.gcs-global-avatar-button:focus-visible{
+  outline:2px solid #C93616;
+  outline-offset:2px;
+}
+.gcs-global-avatar-button .gcs-avatar-photo-placeholder{
+  font-size:15px !important;
+}
+.gcs-global-avatar-button:active{transform:scale(.97)}
+.screen-header .header-side.right{
+  width:44px;
+  min-width:44px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+}
+.screen-header .gcs-global-avatar-button{
+  width:37px;
+  height:37px;
+  min-width:37px;
+  min-height:37px;
+}
+.gcs-catalog-top .gcs-global-avatar-button,
+.my-bookings-top .gcs-global-avatar-button,
+.iphone-detail-header .gcs-global-avatar-button,
+.confirmation-top .gcs-global-avatar-button{
+  width:39px;
+  height:39px;
+  min-width:39px;
+  min-height:39px;
+  flex:none;
+}
+.iphone-detail-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  min-width:90px;
+}
+.iphone-detail-actions .iphone-favorite{
+  width:39px;
+  height:39px;
+  flex:none;
+}
+.gcs-catalog-top .gcs-global-avatar-button .gcs-avatar-photo-image,
+.my-bookings-top .gcs-global-avatar-button .gcs-avatar-photo-image,
+.iphone-detail-header .gcs-global-avatar-button .gcs-avatar-photo-image{
+  object-fit:cover !important;
+  width:100% !important;
+  height:100% !important;
+}
+@media (max-width:375px){
+  .iphone-detail-actions{min-width:77px;gap:4px}
+  .iphone-detail-actions .iphone-favorite{width:36px;height:36px}
+  .iphone-detail-actions .gcs-global-avatar-button{width:36px;height:36px;min-width:36px;min-height:36px}
+}
+@media(prefers-reduced-motion:reduce){
+  .gcs-global-avatar-button{transition:none!important}
+}
