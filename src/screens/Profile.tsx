@@ -1,6 +1,6 @@
 import {useEffect,useRef,useState,type ChangeEvent} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {ArrowLeft,Camera,Check,ChevronRight,Eye,EyeOff,LockKeyhole,LogOut,Mail,Pencil,Phone,Save,UserRound,CalendarDays,ShieldCheck} from 'lucide-react';
+import {ArrowLeft,Camera,Check,ChevronRight,Eye,EyeOff,LockKeyhole,LogOut,Mail,Pencil,Phone,Save,UserRound,CalendarDays,} from 'lucide-react';
 import {useAuth} from '../context/AuthContext';
 import {StudioBrandMark} from '../components/StudioBrandLogo';
 import {requiredSupabase} from '../lib/supabase';
@@ -84,7 +84,7 @@ export function Profile(){
    const {error:updateError}=await requiredSupabase().auth.updateUser({data:{avatar_path:filename}});
    if(updateError)throw updateError;
    const {data:link,error:linkError}=await storage.createSignedUrl(filename,60*60);
-   if(linkError)throw linkError;
+   if(linkError||!link?.signedUrl)throw linkError??new Error('Could not create a secure photo link.');
    setAvatar(link.signedUrl);
    setNotice('Profile photo updated.');
   }catch(e){setError(e instanceof Error?e.message:'Unable to upload this photo.');}
