@@ -1,9 +1,10 @@
-import {useEffect,useRef,useState,type ChangeEvent} from 'react';
+import {useRef,useState,type ChangeEvent} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {ArrowLeft,Camera,Check,ChevronRight,Eye,EyeOff,LockKeyhole,LogOut,Mail,Pencil,Phone,Save,UserRound,CalendarDays,} from 'lucide-react';
+import {ArrowLeft,Camera,Check,ChevronRight,Eye,EyeOff,LockKeyhole,LogOut,Mail,Pencil,Phone,Save,UserRound,CalendarDays} from 'lucide-react';
 import {useAuth} from '../context/AuthContext';
 import {StudioBrandMark} from '../components/StudioBrandLogo';
 import {requiredSupabase} from '../lib/supabase';
+import {ProfileAvatarPhoto,useProfileAvatar} from '../components/ProfileAvatarPhoto';
 
 function normalizedPhone(value:string){
  const clean=value.replace(/[\s()\-]/g,'');
@@ -24,23 +25,13 @@ export function Profile(){
  const [editing,setEditing]=useState(false);
  const [name,setName]=useState<string|null>(null),[email,setEmail]=useState<string|null>(null),[phone,setPhone]=useState<string|null>(null);
  const [busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
- const [avatar,setAvatar]=useState<string|null>(null),[uploading,setUploading]=useState(false);
+ const {avatarUrl,uploading,uploadAvatar,markAvatarBroken}=useProfileAvatar();
  const [passwordOpen,setPasswordOpen]=useState(false),[password,setPassword]=useState(''),[confirm,setConfirm]=useState(''),[showPassword,setShowPassword]=useState(false),[passwordBusy,setPasswordBusy]=useState(false);
  const photoRef=useRef<HTMLInputElement>(null),nameRef=useRef<HTMLInputElement>(null),emailRef=useRef<HTMLInputElement>(null),phoneRef=useRef<HTMLInputElement>(null);
  const fullName=name??profile?.full_name??String(user?.user_metadata?.full_name||'');
  const currentEmail=email??user?.email??'';
  const currentPhone=phone??profile?.phone??'';
  const initials=(fullName.trim().split(/\s+/).slice(0,2).map(p=>p.charAt(0)).join('')||'G').toUpperCase();
- const avatarPath=typeof user?.user_metadata?.avatar_path==='string'?user.user_metadata.avatar_path:'';
-
- useEffect(()=>{
-  if(!user?.id||!avatarPath||!avatarPath.startsWith(user.id+'/')){setAvatar(null);return;}
-  let active=true;
-  requiredSupabase().storage.from('profile-avatars').createSignedUrl(avatarPath,60*60)
-   .then(({data,error:fetchError})=>{if(active&&!fetchError&&data?.signedUrl)setAvatar(data.signedUrl);})
-   .catch(()=>{});
-  return ()=>{active=false;};
- },[user?.id,avatarPath]);
  const activateEdit=(field?:'name'|'email'|'phone')=>{
   setEditing(true);setError('');setNotice('');
   if(field)window.setTimeout(()=>({name:nameRef,email:emailRef,phone:phoneRef}[field].current?.focus()),10);
@@ -69,26 +60,14 @@ export function Profile(){
   finally{setBusy(false);}
  };
  const onPhoto=async(event:ChangeEvent<HTMLInputElement>)=>{
-  const file=event.target.files?.[0];event.target.value='';
-  if(!file||!user||uploading)return;
-  const extensions:{[key:string]:string}={'image/jpeg':'jpg','image/png':'png','image/webp':'webp'};
-  const ext=extensions[file.type];
-  if(!ext){setError('Choose a JPG, PNG or WebP photo.');return;}
-  if(file.size>5*1024*1024){setError('Your photo must be smaller than 5 MB.');return;}
-  setUploading(true);setError('');setNotice('');
-  const storage=requiredSupabase().storage.from('profile-avatars');
-  const filename=user.id+'/avatar-'+Date.now()+'.'+ext;
+  const file=event.target.files?.[0];
+  event.target.value='';
+  if(!file)return;
+  setError('');setNotice('');
   try{
-   const {error:uploadError}=await storage.upload(filename,file,{contentType:file.type,cacheControl:'3600'});
-   if(uploadError)throw uploadError;
-   const {error:updateError}=await requiredSupabase().auth.updateUser({data:{avatar_path:filename}});
-   if(updateError)throw updateError;
-   const {data:link,error:linkError}=await storage.createSignedUrl(filename,60*60);
-   if(linkError||!link?.signedUrl)throw linkError??new Error('Could not create a secure photo link.');
-   setAvatar(link.signedUrl);
-   setNotice('Profile photo updated.');
-  }catch(e){setError(e instanceof Error?e.message:'Unable to upload this photo.');}
-  finally{setUploading(false);}
+   await uploadAvatar(file);
+   setNotice('Profile photo updated. It will also appear on your Home screen.');
+  }catch(e){setError(e instanceof Error?e.message:'Unable to upload your photo.');}
  };
  const changePassword=async()=>{
   if(password.length<8){setError('Your new password must have at least 8 characters.');return;}
@@ -119,7 +98,7 @@ export function Profile(){
   <div className="gcs-account-content">
    <section className="gcs-account-identity">
     <div className="gcs-account-avatar">
-     {avatar?<img src={avatar} alt="Your profile photo"/>:<span aria-label="Profile initials">{initials}</span>}
+     <ProfileAvatarPhoto avatarUrl={avatarUrl} initials={initials} onError={markAvatarBroken}/>
      <input ref={photoRef} type="file" accept="image/jpeg,image/png,image/webp" aria-label="Upload profile photo" className="gcs-account-photo-input" onChange={e=>void onPhoto(e)}/>
      <button type="button" disabled={uploading} aria-label="Change profile photo" className="gcs-account-camera" onClick={()=>photoRef.current?.click()}><Camera size={19}/></button>
     </div>
