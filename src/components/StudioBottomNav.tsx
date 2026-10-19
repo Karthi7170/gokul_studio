@@ -2,8 +2,8 @@ import {CalendarDays,Grid2X2,House,UserRound} from 'lucide-react';
 import {useLocation,useNavigate} from 'react-router-dom';
 const items=[
  {label:'Home',href:'/home',icon:House},
- {label:'Packages',href:'/book',icon:Grid2X2},
  {label:'Bookings',href:'/bookings',icon:CalendarDays},
+ {label:'Packages',href:'/book',icon:Grid2X2},
  {label:'Account',href:'/profile',icon:UserRound},
 ] as const;
 export function StudioBottomNav(){
