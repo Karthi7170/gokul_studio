@@ -3,6 +3,7 @@ import {useNavigate,useSearchParams} from 'react-router-dom';
 import {ArrowRight,Baby,Building2,CalendarDays,Camera,CheckCircle2,ChevronRight,Clapperboard,Grid2X2,Heart,HeartHandshake,Images,MessageCircle,Search,ShieldCheck,Sparkles,UserRound,Video} from 'lucide-react';
 import {useAuth} from '../context/AuthContext';
 import {StudioBrandLogo} from '../components/StudioBrandLogo';
+import {ProfileAvatarPhoto,useProfileAvatar} from '../components/ProfileAvatarPhoto';
 import {SERVICES,THUMBNAIL_URL,IMAGE_URL,inr,type ServiceId} from '../data/services';
 const benefits=[
  {icon:Heart,title:'Moments, beautifully told',desc:'Personalized coverage with attention to the emotions behind the event.'},
@@ -31,6 +32,7 @@ const featured=[
 export function Home(){
  const nav=useNavigate();
  const {profile,user}=useAuth();
+ const {avatarUrl,markAvatarBroken}=useProfileAvatar();
  const [searchOpen,setSearchOpen]=useState(false);
  const [query,setQuery]=useState('');
  const [heroIndex,setHeroIndex]=useState(0);
@@ -58,7 +60,7 @@ export function Home(){
    <div className="gcs-2026-actions">
     <button type="button" className={searchOpen?'gcs-round-action active':'gcs-round-action'} aria-label="Search packages" aria-expanded={searchOpen} onClick={()=>setSearchOpen(v=>!v)}><Search size={21}/></button>
     
-    <button type="button" className="gcs-user-avatar" aria-label="My account" onClick={()=>nav('/profile')}>{displayName?<span>{displayName.charAt(0).toUpperCase()}</span>:<UserRound size={20}/>}</button>
+    <button type="button" className="gcs-user-avatar" aria-label="My account" onClick={()=>nav('/profile')}><ProfileAvatarPhoto avatarUrl={avatarUrl} initials={displayName?displayName.charAt(0).toUpperCase():'G'} onError={markAvatarBroken}/></button>
    </div>
   </header>
   {searchOpen&&<form className="gcs-home-search-panel" role="search" onSubmit={e=>{e.preventDefault();submitSearch();}}>
