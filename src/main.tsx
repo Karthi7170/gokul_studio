@@ -7,6 +7,7 @@ import App from './App';
 import './style.css';
 import './styles/ios-home.css';
 import './styles/auth-reference.css';
+import './styles/official-brand.css';
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthProvider><BookingProvider><HashRouter><App /></HashRouter></BookingProvider></AuthProvider>
