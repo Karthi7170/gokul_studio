@@ -1,9 +1,10 @@
-import {useState} from 'react';
+import {useEffect,useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {ArrowLeft,ArrowRight,CheckCircle2,LockKeyhole,Mail,Phone,ShieldCheck,UserRound} from 'lucide-react';
 import {PrimaryButton,TextInput} from '../components/UI';
 import {useAuth} from '../context/AuthContext';
 import {StudioBrandLogo} from '../components/StudioBrandLogo';
+import {SocialProviderIcon,type SocialProvider} from '../components/SocialProviderIcon';
 import {requiredSupabase,authConfigured} from '../lib/supabase';
 
 type AuthPage='signin'|'signup';
@@ -25,23 +26,64 @@ function AuthLayout({children,mode='signin'}:{children:React.ReactNode;mode?:Aut
   <div className="gcs-petal-bottom-art" aria-hidden="true"/>
  </div>;
 }
-type OAuthProvider='google'|'apple'|'facebook';
-function SocialRow({onProvider}:{onProvider:(provider:OAuthProvider)=>void}){
+type OAuthProvider=SocialProvider;
+const socialProviders=[
+ {id:'google',label:'Continue with Google'},
+ {id:'apple',label:'Continue with Apple'},
+ {id:'facebook',label:'Continue with Facebook'}
+] as const;
+
+function SocialRow({onProvider,busyProvider}:{onProvider:(provider:OAuthProvider)=>void;busyProvider:OAuthProvider|null}){
  return <div className="gcs-petal-social-group">
   <div className="gcs-auth-divider"><span/>OR<span/></div>
   <div className="gcs-auth-socials">
-   <button type="button" aria-label="Continue with Google" onClick={()=>onProvider('google')}><span className="gcs-google-letter" aria-hidden="true">G</span><strong>Sign in with Google</strong></button>
-   <button type="button" aria-label="Continue with Apple" onClick={()=>onProvider('apple')}><span className="gcs-apple-logo" aria-hidden="true"></span><strong>Sign in with Apple</strong></button>
-   <button type="button" className="gcs-petal-facebook" aria-label="Continue with Facebook" onClick={()=>onProvider('facebook')}><span className="gcs-facebook-logo" aria-hidden="true">f</span><strong>Continue with Facebook</strong></button>
+   {socialProviders.map(item=><button key={item.id} type="button" aria-label={item.label}
+    disabled={!authConfigured||busyProvider!==null}
+    aria-busy={busyProvider===item.id}
+    className={`gcs-oauth-button gcs-oauth-${item.id}`}
+    onClick={()=>onProvider(item.id)}>
+     <SocialProviderIcon provider={item.id}/>
+     <strong>{busyProvider===item.id?'Connecting…':item.label}</strong>
+    </button>)}
   </div>
  </div>;
 }
+
 async function startOAuth(provider:OAuthProvider){
- const {error}=await requiredSupabase().auth.signInWithOAuth({
+ if(!authConfigured)throw new Error('Social sign-in is currently unavailable. Please use your email and password.');
+ // Return to a real Vercel page, not a hash route: Supabase automatically
+ // exchanges the PKCE code on page load; HashRouter then enters /home.
+ const redirectTo=window.location.origin+window.location.pathname;
+ const {data,error}=await requiredSupabase().auth.signInWithOAuth({
   provider,
-  options:{redirectTo:window.location.origin+window.location.pathname}
+  options:{redirectTo,...(provider==='facebook'?{scopes:'email,public_profile'}:{})}
  });
  if(error)throw error;
+ if(!data.url)throw new Error('This provider has not been fully configured. Please use email sign-in.');
+}
+
+function oauthMessage(provider:OAuthProvider,error:unknown){
+ const providerName={google:'Google',apple:'Apple',facebook:'Facebook'}[provider];
+ const raw=error instanceof Error?error.message:'';
+ if(/provider.*(not enabled|disabled|not configured)|unsupported provider|provider not found/i.test(raw))
+  return `${providerName} sign-in is not enabled for Gokul Creative Studio yet. You can use email/password while the studio configures it.`;
+ if(/access.denied|cancel/i.test(raw))return `${providerName} sign-in was cancelled. Please try again if you want to continue.`;
+ return `${providerName} sign-in could not start. ${raw?raw.slice(0,160):'Please try again or use email and password.'}`;
+}
+
+function useOAuthRedirectError(show:(message:string)=>void){
+ useEffect(()=>{
+  const params=new URLSearchParams(window.location.search);
+  const error=params.get('error');
+  if(!error)return;
+  const cancelled=error==='access_denied';
+  show(cancelled?'Social sign-in was cancelled. Try again when you are ready.':
+   'Social sign-in could not be completed. Please try again or use your email and password.');
+  // Remove only OAuth error parameters, retaining any unrelated URL query.
+  for(const key of ['error','error_code','error_description','error_uri','state'])params.delete(key);
+  const clean=window.location.pathname+(params.toString()?'?'+params.toString():'')+window.location.hash;
+  window.history.replaceState(window.history.state,'',clean);
+ },[show]);
 }
 function normalizePhone(phone:string){
  const raw=phone.replace(/[\s()\-]/g,'');
@@ -52,6 +94,8 @@ function normalizePhone(phone:string){
 export function SignIn(){
  const nav=useNavigate(),{signIn}=useAuth();
  const [email,setEmail]=useState(''),[password,setPassword]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false);
+ const [oauthError,setOAuthError]=useState(''),[busyProvider,setBusyProvider]=useState<OAuthProvider|null>(null);
+ useOAuthRedirectError(setOAuthError);
  const login=async()=>{if(!email.trim()||!password||busy)return;
   setBusy(true);setError('');
   try{await signIn(email,password);nav('/home',{replace:true});}
@@ -59,8 +103,11 @@ export function SignIn(){
   finally{setBusy(false);}
  };
  const oauth=async(provider:OAuthProvider)=>{
-  setError('');
-  try{await startOAuth(provider);}catch(e){setError(e instanceof Error?e.message:'This sign-in provider is not available. Try your email and password.');}
+  if(busyProvider)return;
+  setOAuthError('');setBusyProvider(provider);
+  try{await startOAuth(provider);}
+  catch(e){setOAuthError(oauthMessage(provider,e));}
+  finally{setBusyProvider(null);}
  };
  return <AuthLayout>
   <div className="gcs-auth-heading"><h2>Sign in</h2><p>Your bookings, quotations and memories in one place.</p></div>
@@ -74,7 +121,8 @@ export function SignIn(){
     {busy?'Signing in…':<>Sign In <ArrowRight size={19}/></>}
    </button>
   </form>
-  <SocialRow onProvider={p=>void oauth(p)}/>
+  <SocialRow onProvider={p=>void oauth(p)} busyProvider={busyProvider}/>
+  {oauthError&&<p className="gcs-oauth-error" role="alert">{oauthError}</p>}
   <p className="gcs-auth-switch">New to Gokul Studio? <button type="button" onClick={()=>nav('/sign-up')}>Create an account</button></p>
   <div className="gcs-auth-security"><ShieldCheck size={16}/> Secure account powered by Supabase Auth</div>
  </AuthLayout>;
@@ -84,6 +132,8 @@ export function SignUp(){
  const [name,setName]=useState(''),[email,setEmail]=useState(''),[phone,setPhone]=useState(''),[pw,setPw]=useState(''),[confirm,setConfirm]=useState('');
  const [terms,setTerms]=useState(false),[consent,setConsent]=useState(false);
  const [error,setError]=useState(''),[success,setSuccess]=useState(''),[busy,setBusy]=useState(false);
+ const [oauthError,setOAuthError]=useState(''),[busyProvider,setBusyProvider]=useState<OAuthProvider|null>(null);
+ useOAuthRedirectError(setOAuthError);
  const validName=name.trim().length>=2;
  const validEmail=/^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/.test(email.trim());
  const validPhone=/^\+[1-9]\d{7,14}$/.test(normalizePhone(phone));
@@ -107,8 +157,11 @@ export function SignUp(){
   }catch(e){setError(e instanceof Error?e.message:'Could not create your account.');}finally{setBusy(false);}
  };
  const oauth=async(provider:OAuthProvider)=>{
-  setError('');
-  try{await startOAuth(provider);}catch(e){setError(e instanceof Error?e.message:'This sign-up provider is not available. Try your email and password.');}
+  if(busyProvider)return;
+  setOAuthError('');setBusyProvider(provider);
+  try{await startOAuth(provider);}
+  catch(e){setOAuthError(oauthMessage(provider,e));}
+  finally{setBusyProvider(null);}
  };
  return <AuthLayout mode="signup">
   <div className="gcs-auth-heading"><h2>Create your account</h2><p>Join us and make your moments memorable.</p></div>
@@ -133,7 +186,8 @@ export function SignUp(){
       {busy?'Creating account…':<>Create account <ArrowRight size={19}/></>}
      </button>
     </form>
-    <SocialRow onProvider={p=>void oauth(p)}/>
+    <SocialRow onProvider={p=>void oauth(p)} busyProvider={busyProvider}/>
+    {oauthError&&<p className="gcs-oauth-error" role="alert">{oauthError}</p>}
    </>:
    <div className="gcs-auth-success" role="status"><CheckCircle2 size={40}/><h2>Email confirmation required</h2><p>{success}</p><button type="button" onClick={()=>nav('/sign-in')}>Go to Sign In <ArrowRight size={17}/></button></div>}
   <p className="gcs-auth-switch">Already have an account? <button type="button" onClick={()=>nav('/sign-in')}>Sign in</button></p>
