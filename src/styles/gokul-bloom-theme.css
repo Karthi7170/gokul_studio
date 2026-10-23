@@ -369,3 +369,22 @@ body, button, input, textarea, select {font-family:-apple-system,BlinkMacSystemF
 @media(prefers-reduced-motion:reduce){
  .gcs-petal-auth *, .phone-content * {animation:none !important;transition:none !important;}
 }
+
+
+/* Loading screen uses the same official Gokul logo and pale-pink canvas. */
+.auth-loading {
+ background:
+  radial-gradient(ellipse at 9% 7%,#ffe0e6,transparent 38%),
+  radial-gradient(ellipse at 91% 95%,#ffd9e2,transparent 35%),
+  #fffdfd !important;
+ color:var(--gcs-bloom-text) !important;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+}
+.auth-loading .gcs-loading-official-logo {
+ width:min(210px,66%) !important;
+ max-width:210px !important;
+ height:auto !important;
+ object-fit:contain;
+}
+.auth-loading p {color:var(--gcs-bloom-muted) !important;font-size:13px;text-align:center;}
+.auth-loading .loading-pulse {background:var(--gcs-bloom-red) !important;box-shadow:none !important;}
