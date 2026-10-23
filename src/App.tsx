@@ -6,6 +6,7 @@ import {PackageDetails} from './screens/PackageDetails';
 import {Profile} from './screens/Profile';
 import {MyBookings} from './screens/MyBookings';
 import {StudioBottomNav} from './components/StudioBottomNav';
+import {StudioBrandLogo} from './components/StudioBrandLogo';
 import {BookingDetails} from './screens/BookingScreens';
 import {Quotation, Payment, Confirmed, WhatsApp} from './screens/CheckoutScreens';
 import {useAuth} from './context/AuthContext';
@@ -15,7 +16,7 @@ const screens=['/sign-in','/sign-up','/home','/book','/bookings','/packages/wedd
 export default function App(){
  const location=useLocation();const {signedIn,loading}=useAuth();
  const showTabs=signedIn&&(['/home','/book','/bookings','/profile','/booking-details'].includes(location.pathname)||location.pathname.startsWith('/packages/'));
- if(loading)return <div className="desktop-stage"><div className="phone-shell"><div className="auth-loading"><div className="auth-loading-logo">G<span>●</span>KUL</div><p>Preparing your studio experience...</p><div className="loading-pulse"/></div></div></div>;
+ if(loading)return <div className="desktop-stage"><div className="phone-shell"><div className="auth-loading"><StudioBrandLogo className="gcs-loading-official-logo"/><p>Preparing your studio experience...</p><div className="loading-pulse"/></div></div></div>;
  return <div className="desktop-stage"><div className="phone-shell"><div className="top-notch" aria-hidden="true"/><div className="ios-status"><span>9:41</span><span className="status-right">▂▄▆　◕　▰</span></div>
  <main key={location.pathname} className={'phone-content'+(showTabs?' with-studio-tabs':'')} aria-label="Gokul Creative Studio booking application">
  {loading?<div className="session-loading">Preparing your studio…</div>:<Routes location={location}>
