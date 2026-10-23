@@ -37,7 +37,7 @@ export default function App(){
  <Route path="/confirmed" element={<Private><Confirmed/></Private>}/>
  <Route path="/whatsapp" element={<Private><WhatsApp/></Private>}/>
  <Route path="*" element={<Navigate to={signedIn?'/home':'/sign-in'} replace/>}/>
- </Routes>}</main>{showTabs&&<StudioBottomNav/>}<div className="home-indicator" aria-hidden="true"/></div>
+ </Routes>}</main>{showTabs&&<StudioBottomNav/>}</div>
  <div className="desktop-meta"><h1>GOKUL <span>Creative Studio</span></h1><p>iPhone booking experience · 6 packages</p><nav>{screens.map((p,i)=><a key={p} href={`#${p}`}>{i+1}</a>)}</nav></div>
  </div>;
 }
