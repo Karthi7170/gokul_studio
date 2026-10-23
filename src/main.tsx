@@ -13,6 +13,7 @@ import './styles/profile-avatar-fix.css';
 import './styles/auth-avatar-polish.css';
 import './styles/confirmation-green.css';
 import './styles/gokul-bloom-theme.css';
+import './styles/mobile-fullscreen.css';
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthProvider><BookingProvider><HashRouter><App /></HashRouter></BookingProvider></AuthProvider>
