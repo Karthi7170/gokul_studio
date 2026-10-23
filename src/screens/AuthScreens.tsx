@@ -8,40 +8,33 @@ import {requiredSupabase,authConfigured} from '../lib/supabase';
 
 type AuthPage='signin'|'signup';
 function AuthLayout({children,mode='signin'}:{children:React.ReactNode;mode?:AuthPage}){
- const nav=useNavigate();const signup=mode==='signup';
- return <div className={`auth-screen premium-auth gcs-auth-new gcs-auth-${mode} page-flow`}>
-  <header className="gcs-auth-head">
-   <StudioBrandLogo className="gcs-auth-official-brand"/>
-   {signup&&<button type="button" className="gcs-auth-head-action" aria-label="Back to sign in" onClick={()=>nav('/sign-in')}><ArrowLeft size={21}/></button>}
+ const nav=useNavigate();
+ return <div className={`auth-screen premium-auth gcs-auth-new gcs-auth-${mode} gcs-petal-auth page-flow`}>
+  <div className="gcs-petal-top-art" aria-hidden="true"/>
+  <header className="gcs-petal-brand-area">
+    {mode==='signup'&&<button type="button" className="gcs-petal-back" aria-label="Back to sign in" onClick={()=>nav('/sign-in')}><ArrowLeft size={20}/></button>}
+    <StudioBrandLogo className="gcs-petal-official-logo"/>
+    <span className="gcs-petal-camera-outline" aria-hidden="true"/>
   </header>
-  <section className="gcs-auth-banner">
-   {signup?
-    <>
-     <img className="gcs-auth-signup-photo" src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=1200&q=85" onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=import.meta.env.BASE_URL+'images/videography.jpg'}} alt="Photographer capturing a creative moment"/>
-     <div className="gcs-auth-signup-art-gradient"/>
-     <div className="gcs-auth-signup-slogan"><span>Join the,</span><em>studio</em><p>Create your account and start capturing beautiful stories.</p></div>
-     <span className="gcs-auth-side-script">Same Moments<br/>Bigger Stories</span>
-    </>:
-    <>
-     <div className="gcs-auth-signin-slogan"><em>Capture<br/>the feeling.</em><p>THE MOMENTS YOU LIVE.<br/>THE STORIES WE KEEP.</p></div>
-     <div className="gcs-auth-polaroid gcs-auth-polaroid-couple"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=650&q=80" onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=import.meta.env.BASE_URL+'images/combo.jpg'}} alt=""/><span>More than photos — stories ♡</span></div>
-     <div className="gcs-auth-polaroid gcs-auth-polaroid-camera"><img src="https://images.unsplash.com/photo-1452587925148-ce544e77e70d?auto=format&fit=crop&w=450&q=80" onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=import.meta.env.BASE_URL+'images/videography.jpg'}} alt=""/></div>
-    </>}
-  </section>
-  <main className="gcs-auth-panel">{children}</main>
-  <p className="gcs-auth-endnote">Capture the feeling. Keep the story.</p>
+  <div className="gcs-petal-welcome">
+    <span>Welcome to</span>
+    <h1>Gokul Creative Studio</h1>
+    <p>Capture <b>·</b> Create <b>·</b> Cherish</p>
+  </div>
+  <main className="gcs-auth-panel gcs-petal-auth-panel">{children}</main>
+  <div className="gcs-petal-bottom-art" aria-hidden="true"/>
  </div>;
 }
 type OAuthProvider='google'|'apple'|'facebook';
 function SocialRow({onProvider}:{onProvider:(provider:OAuthProvider)=>void}){
- return <>
-  <div className="gcs-auth-divider"><span/>Or continue with<span/></div>
+ return <div className="gcs-petal-social-group">
+  <div className="gcs-auth-divider"><span/>OR<span/></div>
   <div className="gcs-auth-socials">
-   <button type="button" aria-label="Continue with Google" onClick={()=>onProvider('google')}><span className="gcs-google-letter" aria-hidden="true">G</span></button>
-   <button type="button" aria-label="Continue with Apple" onClick={()=>onProvider('apple')}><span className="gcs-apple-logo" aria-hidden="true"></span></button>
-   <button type="button" aria-label="Continue with Facebook" onClick={()=>onProvider('facebook')}><span className="gcs-facebook-logo" aria-hidden="true">f</span></button>
+   <button type="button" aria-label="Continue with Google" onClick={()=>onProvider('google')}><span className="gcs-google-letter" aria-hidden="true">G</span><strong>Sign in with Google</strong></button>
+   <button type="button" aria-label="Continue with Apple" onClick={()=>onProvider('apple')}><span className="gcs-apple-logo" aria-hidden="true"></span><strong>Sign in with Apple</strong></button>
+   <button type="button" className="gcs-petal-facebook" aria-label="Continue with Facebook" onClick={()=>onProvider('facebook')}><span className="gcs-facebook-logo" aria-hidden="true">f</span><strong>Continue with Facebook</strong></button>
   </div>
- </>;
+ </div>;
 }
 async function startOAuth(provider:OAuthProvider){
  const {error}=await requiredSupabase().auth.signInWithOAuth({
@@ -70,7 +63,7 @@ export function SignIn(){
   try{await startOAuth(provider);}catch(e){setError(e instanceof Error?e.message:'This sign-in provider is not available. Try your email and password.');}
  };
  return <AuthLayout>
-  <div className="gcs-auth-heading"><span className="gcs-auth-eyebrow">WELCOME BACK</span><h1>Sign in to your <em>studio</em></h1><p>Your memories, bookings and quotations in one place.</p></div>
+  <div className="gcs-auth-heading"><h2>Sign in</h2><p>Your bookings, quotations and memories in one place.</p></div>
   <form className="gcs-auth-form" onSubmit={e=>{e.preventDefault();void login();}}>
    <TextInput label="Email address" icon={Mail} type="email" autoComplete="email" inputMode="email" required placeholder="you@example.com" value={email} onChange={e=>setEmail(e.target.value)}/>
    <TextInput label="Password" icon={LockKeyhole} autoComplete="current-password" required placeholder="Your password" password value={password} onChange={e=>setPassword(e.target.value)}/>
@@ -78,7 +71,7 @@ export function SignIn(){
    {!authConfigured&&<p role="alert" className="error-text">Authentication is not configured for this environment.</p>}
    {error&&<p role="alert" className="error-text">{error}</p>}
    <button type="submit" className="gcs-auth-submit" disabled={!authConfigured||!email.trim()||!password||busy}>
-    {busy?'Signing in…':<>Secure Sign In <ArrowRight size={19}/></>}
+    {busy?'Signing in…':<>Sign In <ArrowRight size={19}/></>}
    </button>
   </form>
   <SocialRow onProvider={p=>void oauth(p)}/>
@@ -118,7 +111,7 @@ export function SignUp(){
   try{await startOAuth(provider);}catch(e){setError(e instanceof Error?e.message:'This sign-up provider is not available. Try your email and password.');}
  };
  return <AuthLayout mode="signup">
-  <div className="gcs-auth-heading"><span className="gcs-auth-eyebrow">CREATE ACCOUNT</span><h1>Join Gokul Creative <em>Studio</em></h1><p>It's quick, easy and free. Let's create something amazing together.</p></div>
+  <div className="gcs-auth-heading"><h2>Create your account</h2><p>Join us and make your moments memorable.</p></div>
   {!success?
    <>
     <form className="gcs-auth-form gcs-auth-registration" noValidate onSubmit={e=>{e.preventDefault();void signup();}}>
