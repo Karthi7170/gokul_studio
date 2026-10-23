@@ -20,7 +20,7 @@ export default function App(){
  return <div className="desktop-stage"><div className="phone-shell"><div className="top-notch" aria-hidden="true"/><div className="ios-status"><span>9:41</span><span className="status-right">▂▄▆　◕　▰</span></div>
  <main key={location.pathname} className={'phone-content'+(showTabs?' with-studio-tabs':'')} aria-label="Gokul Creative Studio booking application">
  {loading?<div className="session-loading">Preparing your studio…</div>:<Routes location={location}>
- <Route path="/" element={<Navigate to={signedIn?'/home':'/sign-up'} replace/>}/>
+ <Route path="/" element={<Navigate to={signedIn?'/home':'/sign-in'} replace/>}/>
  <Route path="/sign-in" element={<GuestOnly><SignIn/></GuestOnly>}/>
  <Route path="/sign-up" element={<GuestOnly><SignUp/></GuestOnly>}/>
  <Route path="/forgot-password" element={<GuestOnly><ForgotPassword/></GuestOnly>}/>
