@@ -1,0 +1,82 @@
+/* Gokul OAuth brand buttons: real vector marks, readable labels, iPhone touch targets */
+.gcs-petal-auth .gcs-oauth-button {
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:12px !important;
+  width:100% !important;
+  min-height:50px !important;
+  padding:10px 18px !important;
+  border:1px solid #e9e7eb !important;
+  border-radius:999px !important;
+  background:#fff !important;
+  box-shadow:0 2px 8px rgba(39,25,31,.055) !important;
+  color:#211e25 !important;
+  cursor:pointer;
+  font-size:14px !important;
+  font-weight:600 !important;
+  line-height:20px !important;
+  -webkit-tap-highlight-color:transparent;
+}
+.gcs-petal-auth .gcs-oauth-button strong {
+  display:block;
+  min-width:0;
+  font-size:13px !important;
+  line-height:20px !important;
+  font-weight:600 !important;
+  color:#211e25 !important;
+}
+.gcs-petal-auth .gcs-social-vector {
+  display:block !important;
+  width:24px !important;
+  height:24px !important;
+  min-width:24px !important;
+  min-height:24px !important;
+  max-width:24px !important;
+  max-height:24px !important;
+  overflow:visible !important;
+  flex:none !important;
+}
+.gcs-petal-auth .gcs-oauth-button:hover:not(:disabled) {
+  background:#fff9fa !important;
+  border-color:#f0cdd5 !important;
+}
+.gcs-petal-auth .gcs-oauth-button:active:not(:disabled) {
+  transform:scale(.97);
+}
+.gcs-petal-auth .gcs-oauth-button:focus-visible {
+  outline:2px solid #c60825 !important;
+  outline-offset:3px !important;
+}
+.gcs-petal-auth .gcs-oauth-button:disabled {
+  opacity:.54 !important;
+  cursor:not-allowed !important;
+}
+.gcs-petal-auth .gcs-oauth-button[aria-busy="true"] {
+  border-color:#e9a6b4 !important;
+  background:#fff7f8 !important;
+}
+.gcs-petal-auth .gcs-oauth-error {
+  display:block;
+  margin:11px 1px 0;
+  padding:10px 12px;
+  border:1px solid #e9bdc5;
+  border-radius:12px;
+  background:#fff3f5;
+  color:#8c2033;
+  font-size:12px;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+.gcs-petal-auth .gcs-auth-socials {
+  display:flex !important;
+  flex-direction:column !important;
+  gap:10px !important;
+}
+@media(max-width:360px){
+  .gcs-petal-auth .gcs-oauth-button {
+    min-height:48px !important;
+    padding:8px 12px !important;
+  }
+  .gcs-petal-auth .gcs-auth-socials {gap:8px !important;}
+}
