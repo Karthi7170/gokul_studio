@@ -1,0 +1,371 @@
+/**
+ * GOKUL Creative Studio — BLOOM visual system
+ * Source: white iPhone reference with red Gokul logo, pale pink
+ * corner ribbons, crisp forms and high-contrast red actions.
+ * Imported LAST to supersede the old orange/Ferrari style layers.
+ * Design tokens are reusable on every screen.
+ */
+:root {
+ --gcs-bloom-red:#e60019;
+ --gcs-bloom-red-strong:#cb071d;
+ --gcs-bloom-red-light:#fb2942;
+ --gcs-bloom-pink:#ffd5da;
+ --gcs-bloom-pink-light:#fff1f3;
+ --gcs-bloom-pink-mist:#fff7f8;
+ --gcs-bloom-text:#171419;
+ --gcs-bloom-muted:#57515b;
+ --gcs-bloom-border:#f2e3e7;
+ --gcs-bloom-surface:#ffffff;
+ --gcs-bloom-bg:#fffcfd;
+ --gcs-bloom-shadow:0 5px 20px rgba(90,23,38,.055);
+ --gcs-bloom-radius-sm:12px;
+ --gcs-bloom-radius-card:20px;
+ --gcs-bloom-radius-pill:999px;
+ --gcs-bloom-space-1:4px;
+ --gcs-bloom-space-2:8px;
+ --gcs-bloom-space-3:12px;
+ --gcs-bloom-space-4:16px;
+ --gcs-bloom-space-6:24px;
+ --gcs-bloom-ease:250ms cubic-bezier(.2,.7,.25,1);
+ --red:var(--gcs-bloom-red);
+ --blush:var(--gcs-bloom-pink-light);
+ --gcs-wine:var(--gcs-bloom-red);
+ --gcs-red-outline:var(--gcs-bloom-border);
+ --gcs-red-wash:var(--gcs-bloom-pink-light);
+ --ios-accent:var(--gcs-bloom-red);
+ --ios-accent-ink:var(--gcs-bloom-red-strong);
+ --ios-cta:var(--gcs-bloom-red);
+ --ios-background:var(--gcs-bloom-bg);
+ --ios-surface:#fff;
+ --ios-border:var(--gcs-bloom-border);
+ --ios-soft:var(--gcs-bloom-pink-light);
+ --ac-red:var(--gcs-bloom-red);
+ --ac-red-dark:var(--gcs-bloom-red-strong);
+}
+html, body, #root {background:var(--gcs-bloom-bg); -webkit-text-size-adjust:100%;}
+body, button, input, textarea, select {font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;}
+.desktop-stage {
+ background:radial-gradient(ellipse at 4% 7%,#ffe0e5 0%,transparent 37%),
+            radial-gradient(ellipse at 94% 97%,#ffdde4 0%,transparent 31%),
+            #fff9fa !important;
+}
+.phone-shell {background:var(--gcs-bloom-bg) !important;}
+.phone-content {background:var(--gcs-bloom-bg) !important;}
+.phone-content .page-flow {color:var(--gcs-bloom-text);}
+.phone-content :is(button,input,textarea,select) {touch-action:manipulation;}
+.phone-content button:not(:disabled) {transition:transform var(--gcs-bloom-ease),background-color var(--gcs-bloom-ease),box-shadow var(--gcs-bloom-ease);}
+.phone-content button:not(:disabled):active {transform:scale(.97);}
+.phone-content :is(input,textarea,select):focus-visible {outline:none !important;}
+.phone-content :is(input,textarea,select):focus {
+ border-color:var(--gcs-bloom-red) !important;
+ box-shadow:0 0 0 2px rgba(230,0,25,.11) !important;
+}
+.phone-content .input-box:focus-within {border-color:var(--gcs-bloom-red) !important;box-shadow:0 0 0 2px rgba(230,0,25,.10) !important;}
+.phone-content .input-box input:focus {border:0 !important;box-shadow:none !important;}
+.phone-content :is(.screen-header,.iphone-detail-header,.gcs-2026-top,.gcs-catalog-top,.my-bookings-top,.gcs-account-topbar) {
+ background:#fff !important; border-color:var(--gcs-bloom-border) !important;
+}
+.phone-content :is(.screen-header,.iphone-detail-header,.gcs-account-topbar) {
+ border-bottom:1px solid var(--gcs-bloom-border) !important;
+}
+.phone-content :is(.header-title,.iphone-detail-title h1,.checkout-heading h2,.my-bookings-heading h1) {color:var(--gcs-bloom-text) !important;}
+.phone-content :is(.back-icon,.gcs-account-back,.iphone-detail-header>button) {
+ color:var(--gcs-bloom-red-strong) !important;
+ background:var(--gcs-bloom-pink-light) !important;
+ border-radius:50% !important;
+}
+.phone-content :is(.primary-button,.primary-button.green-button,.gcs-auth-submit,.iphone-book-submit,.ferrari-download-button,.gcs-account-main-cta,.iphone-double-cta .book-button,.gcs-2026-story>button,.gcs-2026-hero-copy>button) {
+ background:linear-gradient(105deg,#ec0620,#d6051c) !important;
+ color:#fff !important;
+ box-shadow:0 5px 14px rgba(196,0,31,.13) !important;
+ border:0 !important;
+ font-weight:700 !important;
+}
+.phone-content :is(.primary-button,.iphone-book-submit,.gcs-auth-submit):disabled {opacity:.5;box-shadow:none !important;}
+.phone-content :is(.outline-button,.iphone-double-cta .quote-button,.ferrari-quote-back,.gcs-view-packages) {
+ background:white !important;
+ color:var(--gcs-bloom-red-strong) !important;
+ border:1px solid #f0bac5 !important;
+ box-shadow:none !important;
+}
+.phone-content :is(.reference-kicker,.gcs-eyebrow,.ferrari-quote-eyebrow,.gcs-2026-section-head>div>span,.gcs-2026-section-head>button,.gcs-collection-tag) {
+ color:var(--gcs-bloom-red-strong) !important;
+}
+.phone-content :is(.gcs-2026-package,.gcs-collection-card,.iphone-detail-section,.iphone-book-panel,.my-booking-card,.payment-summary,.gcs-account-fields,.gcs-account-options,.ferrari-quote-feature) {
+ background:#fff !important;
+ border:1px solid var(--gcs-bloom-border) !important;
+ box-shadow:var(--gcs-bloom-shadow) !important;
+ border-radius:var(--gcs-bloom-radius-card) !important;
+}
+.phone-content :is(.gcs-2026-category-icon,.iphone-inclusions-grid>div>span,.gcs-account-field-icon,.gcs-account-option-icon,.demo-payment-icon) {
+ background:var(--gcs-bloom-pink-light) !important;
+ color:var(--gcs-bloom-red-strong) !important;
+}
+.phone-content :is(.iphone-detail-price strong,.iphone-book-package b,.iphone-summary-total strong:last-child,.ferrari-quote-pricing strong,.ferrari-quote-feature small,.ferrari-quote-section-heading>span,.my-booking-tail>svg,.gcs-2026-package-arrow,.gcs-2026-hero-pagination>button.active::after) {
+ color:var(--gcs-bloom-red-strong) !important;
+}
+.phone-content :is(.iphone-summary-total,.payment-total,.ferrari-quote-pricing,.package-estimate,.booking-id-box,.iphone-detail-note,.gcs-account-cover-content>i) {
+ background:var(--gcs-bloom-pink-light) !important;
+ border-color:#f7ccd3 !important;
+}
+.phone-content :is(.demo-payment-icon,.gcs-account-option-icon) svg {stroke-width:1.8;}
+.phone-content :is(.gcs-home,.gcs-catalog,.iphone-booking-screen,.iphone-package-detail,.payment-screen,.ferrari-quotation-screen,.confirmation-screen,.whatsapp-page,.my-bookings-page,.gcs-account-page) {
+ background:var(--gcs-bloom-bg) !important;
+}
+.phone-content :is(.gcs-catalog,.gcs-account-page,.my-bookings-page,.iphone-package-detail,.iphone-booking-screen,.payment-screen,.ferrari-quotation-screen) {
+ background-image:radial-gradient(ellipse 78% 130px at 100% 0%,#ffe7ed 0%,transparent 90%) !important;
+}
+/* Floating tab: reference capsule, easy to scan and never overlays a page. */
+.studio-ios-tabs {
+ background:rgba(255,255,255,.98) !important;
+ border:1px solid #f4e4e9 !important;
+ box-shadow:0 4px 16px rgba(60,20,35,.08) !important;
+ border-radius:999px !important;
+}
+.studio-ios-tabs>button.active {color:var(--gcs-bloom-red-strong) !important;}
+.studio-ios-tabs>button.active>i {background:var(--gcs-bloom-red) !important;}
+/* Home keeps the photography but picks up the white/pink card treatment. */
+.gcs-home-2026 {
+ background:radial-gradient(ellipse 180px 85px at 0 0,#ffe3e7 0%,transparent 100%),var(--gcs-bloom-bg) !important;
+}
+.gcs-home-2026 .gcs-2026-hero {
+ box-shadow:var(--gcs-bloom-shadow) !important;
+ border-radius:24px !important;
+}
+.gcs-home-2026 .gcs-2026-book-shortcut {
+ background:#fff !important;
+ border:1px solid var(--gcs-bloom-border) !important;
+ box-shadow:var(--gcs-bloom-shadow) !important;
+}
+.gcs-home-2026 .gcs-2026-book-shortcut strong,
+.gcs-home-2026 .gcs-2026-book-shortcut>svg {color:var(--gcs-bloom-red-strong) !important;}
+.gcs-home-2026 .gcs-2026-categories>button.active .gcs-2026-category-icon {background:#ffe7eb !important;color:var(--gcs-bloom-red) !important;}
+.gcs-home-2026 .gcs-2026-category-indicator {background:var(--gcs-bloom-red) !important;}
+.gcs-home-2026 .gcs-2026-popular-track {gap:12px !important;}
+.gcs-home-2026 .gcs-2026-package {overflow:hidden;}
+.gcs-home-2026 .gcs-2026-story-shade {background:linear-gradient(90deg,#20090cc7,#3b071f7d,transparent) !important;}
+/* Catalog: clearer filter chips, softened rows. */
+.gcs-catalog .gcs-filter-bar button.active {background:var(--gcs-bloom-red) !important;border-color:var(--gcs-bloom-red) !important;color:white !important;}
+.gcs-catalog .gcs-filter-bar button:not(.active) {background:white !important;border-color:var(--gcs-bloom-border) !important;color:#7d293a !important;}
+.gcs-catalog .gcs-search {border:1px solid var(--gcs-bloom-border);border-radius:14px !important;background:white !important;}
+.gcs-catalog .gcs-collection-image {border-radius:15px;}
+/* Packages and booking summary */
+.iphone-package-detail .iphone-detail-price>span {background:#fff0f3 !important;color:var(--gcs-bloom-red-strong) !important;}
+.iphone-package-detail .iphone-detail-highlights>div,
+.iphone-package-detail .iphone-inclusions-grid>div>span,
+.iphone-package-detail .iphone-detail-note {border-color:var(--gcs-bloom-border) !important;}
+.iphone-booking-screen .iphone-book-field,
+.iphone-booking-screen .iphone-contact-field,
+.iphone-booking-screen .iphone-notes textarea {
+ background:#fffafb !important;
+ border:1px solid var(--gcs-bloom-border) !important;
+}
+.iphone-booking-screen .iphone-book-field>div svg,
+.iphone-booking-screen .iphone-book-heading h2>span,
+.iphone-booking-screen .iphone-summary-total strong:last-child {color:var(--gcs-bloom-red-strong) !important;}
+.iphone-booking-screen .iphone-addon.active {
+ background:#fff2f5 !important;border-color:#f3a6b6 !important;
+}
+.iphone-booking-screen .iphone-addon.active>i {background:var(--gcs-bloom-red) !important;}
+.iphone-booking-screen .iphone-book-submit {border-radius:999px !important;min-height:48px !important;}
+/* Payment: demo-only clearly differentiated from real payment. */
+.demo-payment-screen .demo-payment-method {border:1px solid var(--gcs-bloom-border) !important;border-radius:16px !important;background:#fff !important;}
+.demo-payment-screen .demo-payment-method:hover {border-color:#efb9c4 !important;}
+.demo-payment-screen .demo-payment-icon {background:var(--gcs-bloom-pink-light) !important;color:var(--gcs-bloom-red-strong) !important;}
+.demo-payment-screen .payment-total {background:var(--gcs-bloom-pink-light) !important;color:#8f263a !important;}
+.demo-payment-screen .payment-demo-notice,
+.confirmation-screen .demo-confirm-warning {background:#fff3f6 !important;border:1px solid #f5cdd6 !important;color:#70243b !important;}
+/* Keep the green check on a saved demo request; never imply money was collected. */
+.confirmation-screen .confirmation-success-visual .success-circle {background:#16a34a !important;color:#fff !important;}
+/* My bookings — same white surface and pale pink line art */
+.my-bookings-page .my-bookings-next {background:linear-gradient(135deg,#fff7f9,#ffe4ea) !important;border-color:var(--gcs-bloom-border) !important;}
+.my-bookings-page .my-bookings-next-status {background:#fff !important;}
+.my-bookings-page .my-bookings-empty {background:#fff !important;border-color:var(--gcs-bloom-border) !important;}
+.my-bookings-page .my-bookings-empty>button {background:var(--gcs-bloom-red) !important;}
+/* Account removes the old cinematic-heavy red panel; retains user portrait and editable fields. */
+.gcs-account-page .gcs-account-cover {
+ background-image:linear-gradient(110deg,rgba(124,12,39,.73),rgba(234,67,91,.4)),url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=900&q=75') !important;
+ background-color:#fff0f3 !important;
+}
+.gcs-account-page .gcs-account-content {background:linear-gradient(180deg,#fff,#fff8fa) !important;}
+.gcs-account-page .gcs-account-option-icon {background:var(--gcs-bloom-pink-light) !important;}
+.gcs-account-page .gcs-account-edit-controls .gcs-account-main-cta,
+.gcs-account-page .gcs-account-password-save {background:linear-gradient(110deg,#e60019,#d4051d) !important;color:white !important;border-radius:999px !important;}
+.gcs-account-page .gcs-account-camera {background:var(--gcs-bloom-red) !important;}
+.gcs-account-page .gcs-account-field-data input {background:#fffafb !important;border-color:var(--gcs-bloom-border) !important;}
+/* AUTH — same visual hierarchy as the reference, not a screenshot of a phone in a phone. */
+.gcs-petal-auth.gcs-auth-new {
+ --auth-red:var(--gcs-bloom-red);
+ --auth-red-dark:var(--gcs-bloom-red-strong);
+ --auth-bg:var(--gcs-bloom-bg);
+ --auth-muted:var(--gcs-bloom-muted);
+ position:relative;
+ isolation:isolate;
+ display:flex !important;
+ flex-direction:column !important;
+ align-items:stretch !important;
+ min-height:100% !important;
+ padding:10px 22px 30px !important;
+ overflow:hidden !important;
+ background:radial-gradient(ellipse 190px 115px at 0 0,#ffe1e5 0%,transparent 100%),
+            radial-gradient(ellipse 145px 145px at 100% 0,#fff3f4 0%,transparent 100%),#fff !important;
+}
+.gcs-petal-auth > *:not(.gcs-petal-top-art):not(.gcs-petal-bottom-art) {position:relative;z-index:2;}
+.gcs-petal-top-art, .gcs-petal-bottom-art {position:absolute;z-index:0;pointer-events:none;}
+.gcs-petal-top-art {
+ top:-70px;left:-102px;width:270px;height:190px;
+ border-radius:45% 55% 50% 50%;
+ transform:rotate(-27deg);
+ background:linear-gradient(125deg,#ffd3da,#fff0f2);
+ opacity:.82;
+}
+.gcs-petal-top-art::after {
+ content:"";position:absolute;top:73px;left:56px;width:220px;height:94px;
+ border:19px solid #fff9fa;border-radius:50%;transform:rotate(10deg);
+}
+.gcs-petal-bottom-art {
+ left:-35%;bottom:-84px;width:170%;height:160px;
+ border-radius:51% 48% 0 0 / 52% 64% 0 0;
+ transform:rotate(-9deg);
+ background:linear-gradient(125deg,#ffa8b5 6%,#ff6c82 52%,#ffd7df 94%);
+}
+.gcs-petal-bottom-art::after {
+ content:"";position:absolute;left:20%;top:-39px;width:82%;height:72px;
+ border-radius:50%;background:#fff0f3;transform:rotate(8deg);
+}
+.gcs-petal-brand-area {
+ min-height:128px !important;
+ display:flex !important;align-items:center !important;justify-content:center !important;
+ padding:26px 0 6px !important;
+ position:relative;
+}
+.gcs-petal-official-logo {
+ width:166px !important;max-width:64% !important;
+ height:auto !important;max-height:80px !important;
+ object-fit:contain !important;
+ filter:none !important;
+}
+.gcs-petal-back {
+ position:absolute;left:0;top:17px;display:grid;place-items:center;
+ height:44px;width:44px;border-radius:50%;
+ background:white;border:1px solid #f3e4e7;box-shadow:var(--gcs-bloom-shadow);
+ color:var(--gcs-bloom-red-strong);
+}
+.gcs-petal-camera-outline {
+ position:absolute;right:-21px;top:-8px;
+ display:block;width:94px;height:88px;
+ border:7px solid #ffebee;border-radius:50%;
+ opacity:.76;
+}
+.gcs-petal-camera-outline::before {
+ content:"";position:absolute;inset:12px;border:5px solid #ffe0e6;border-radius:50%;
+}
+.gcs-petal-welcome {text-align:center;margin:0 auto 15px !important;max-width:320px;}
+.gcs-petal-welcome>span {font-size:14px;line-height:19px;color:#3a3337;font-weight:600;}
+.gcs-petal-welcome h1 {
+ color:var(--gcs-bloom-red) !important;
+ font-size:20px !important;line-height:26px !important;
+ font-weight:800 !important;margin:4px 0 !important;letter-spacing:-.35px !important;
+}
+.gcs-petal-welcome p {font-size:12px !important;line-height:17px !important;color:#777078;}
+.gcs-petal-welcome b {font-weight:600;color:var(--gcs-bloom-red);}
+.gcs-petal-auth .gcs-petal-auth-panel {
+ margin:0 !important;padding:0 !important;
+ background:transparent !important;border:0 !important;
+ border-radius:0 !important;box-shadow:none !important;
+ width:100% !important;min-width:0 !important;
+}
+.gcs-petal-auth .gcs-auth-heading {text-align:center;margin:0 0 14px !important;}
+.gcs-petal-auth .gcs-auth-heading h2 {
+ font-size:16px !important;line-height:21px !important;font-weight:700 !important;color:#272129 !important;
+}
+.gcs-petal-auth .gcs-auth-heading p {font-size:11.5px !important;line-height:17px !important;color:#746f76 !important;margin-top:4px !important;}
+.gcs-petal-auth .gcs-auth-form {gap:12px !important;}
+.gcs-petal-auth .gcs-auth-new .input-wrapper {margin:0;}
+.gcs-petal-auth .input-label {font-size:12px !important;line-height:16px !important;font-weight:600 !important;color:#2e292e !important;margin-bottom:5px !important;}
+.gcs-petal-auth .input-box,
+.gcs-petal-auth .gcs-auth-registration .input-box {
+ border:1px solid #e9e5e8 !important;
+ background:#fff !important;
+ border-radius:12px !important;
+ height:47px !important;
+ padding:0 12px !important;
+ box-shadow:0 2px 8px rgba(0,0,0,.025) !important;
+}
+.gcs-petal-auth .input-box>svg {width:19px !important;height:19px !important;stroke-width:1.8 !important;color:#4b4750 !important;}
+.gcs-petal-auth .input-box input,
+.gcs-petal-auth .gcs-auth-registration .input-box input {
+ font-size:16px !important;
+ line-height:22px !important;appearance:none;
+ color:var(--gcs-bloom-text) !important;
+ outline:0 !important;border:0 !important;box-shadow:none !important;
+}
+.gcs-petal-auth .input-box input:focus {box-shadow:none !important;border:0 !important;}
+.gcs-petal-auth .input-box input::placeholder {color:#9d98a0 !important;}
+.gcs-petal-auth .input-box:focus-within {border-color:var(--gcs-bloom-red) !important;box-shadow:0 0 0 2px rgba(230,0,25,.10) !important;}
+.gcs-petal-auth .eye-button {width:38px !important;height:38px !important;display:grid;place-items:center;}
+.gcs-petal-auth .gcs-auth-inline {margin:0 0 1px !important;min-height:26px;}
+.gcs-petal-auth .gcs-auth-inline>button {color:var(--gcs-bloom-red-strong) !important;font-size:12px !important;}
+.gcs-petal-auth .gcs-auth-remember {font-size:11px !important;}
+.gcs-petal-auth .gcs-auth-submit {
+ min-height:48px !important;height:48px !important;border-radius:999px !important;
+ margin-top:3px !important;
+ background:linear-gradient(100deg,#ed0b21,#d80019) !important;
+ color:#fff !important;box-shadow:0 6px 13px rgba(221,0,29,.16) !important;
+ font-size:14px !important;line-height:19px !important;font-weight:700 !important;
+}
+.gcs-petal-auth .gcs-auth-divider {color:#918a92;font-size:10px !important;margin:15px 0 11px !important;}
+.gcs-petal-auth .gcs-auth-divider>span {background:#eee7eb;}
+.gcs-petal-auth .gcs-auth-socials {
+ display:flex !important;flex-direction:column !important;
+ grid-template-columns:none !important;gap:9px !important;
+}
+.gcs-petal-auth .gcs-auth-socials>button {
+ width:100% !important;min-height:45px !important;
+ display:flex !important;justify-content:center !important;align-items:center !important;
+ gap:12px !important;
+ border:1px solid #ebe7e9 !important;border-radius:999px !important;
+ background:#fff !important;box-shadow:0 2px 6px rgba(70,20,30,.04) !important;
+ color:#252028 !important;
+}
+.gcs-petal-auth .gcs-auth-socials>button strong {font-weight:650 !important;font-size:12px !important;line-height:18px !important;}
+.gcs-petal-auth .gcs-auth-socials>button .gcs-google-letter {font-size:21px !important;}
+.gcs-petal-auth .gcs-auth-socials>button .gcs-apple-logo {font-size:24px !important;}
+.gcs-petal-auth .gcs-auth-socials>button .gcs-facebook-logo {height:21px;width:21px;font-size:20px;}
+.gcs-petal-auth .gcs-auth-switch {
+ margin-top:15px !important;color:#777079 !important;
+ font-size:12px !important;line-height:17px !important;
+}
+.gcs-petal-auth .gcs-auth-switch>button {color:var(--gcs-bloom-red-strong) !important;font-weight:700 !important;}
+.gcs-petal-auth .gcs-auth-security {margin-top:13px !important;font-size:10px !important;color:#777079 !important;}
+.gcs-petal-auth .gcs-auth-registration {gap:10px !important;}
+.gcs-petal-auth .gcs-auth-consent {font-size:11px !important;color:#4f4951 !important;}
+.gcs-petal-auth .gcs-auth-consent input {accent-color:var(--gcs-bloom-red) !important;}
+.gcs-petal-auth .gcs-signup-field-error {background:#fff2f3;border-color:var(--gcs-bloom-red);color:#a62235;}
+.gcs-petal-auth .gcs-signup-requirements {border-color:#f3dae0;background:#fff7f8;}
+.gcs-petal-auth .gcs-auth-success {color:#165b3b;}
+.gcs-petal-auth .gcs-auth-success>button {background:var(--gcs-bloom-red) !important;border-radius:999px !important;}
+/* Small-screen phone shell and keyboard adjustments; never hide form behind tabs. */
+@media(max-width:700px){
+ .gcs-petal-auth.gcs-auth-new {padding:0 19px calc(64px + env(safe-area-inset-bottom,0px)) !important;min-height:100% !important;}
+ .gcs-petal-brand-area {min-height:125px !important;padding-top:25px !important;}
+ .gcs-petal-official-logo {width:152px !important;}
+ .gcs-petal-bottom-art {height:130px;bottom:-93px;}
+ .gcs-home-2026 .gcs-2026-popular {margin-top:20px !important;}
+ .studio-ios-tabs {height:66px !important;min-height:66px !important;bottom:calc(8px + env(safe-area-inset-bottom,0px)) !important;}
+ .phone-content.with-studio-tabs {bottom:calc(78px + env(safe-area-inset-bottom,0px)) !important;}
+ .gcs-account-page,.my-bookings-page,.iphone-booking-screen,.iphone-package-detail {padding-bottom:26px !important;}
+}
+@media(max-width:360px){
+ .gcs-petal-auth.gcs-auth-new {padding-inline:14px !important;}
+ .gcs-petal-brand-area {min-height:106px !important;}
+ .gcs-petal-welcome {margin-bottom:10px !important;}
+ .gcs-petal-auth .gcs-auth-form {gap:9px !important;}
+ .gcs-petal-auth .gcs-auth-socials {gap:6px !important;}
+ .gcs-petal-auth .gcs-auth-socials>button {min-height:42px !important;}
+ .gcs-petal-auth .gcs-auth-heading {margin-bottom:10px !important;}
+ .gcs-home-2026 .gcs-2026-popular-track {gap:8px !important;}
+}
+@media(prefers-reduced-motion:reduce){
+ .gcs-petal-auth *, .phone-content * {animation:none !important;transition:none !important;}
+}
