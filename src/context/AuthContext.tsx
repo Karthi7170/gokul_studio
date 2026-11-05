@@ -1,95 +1,33 @@
-import {createContext,useCallback,useContext,useEffect,useState,type ReactNode} from 'react';
+import {createContext,useContext,useState,type ReactNode} from 'react';
 import type {User} from '@supabase/supabase-js';
-import {requiredSupabase,supabase} from '../lib/supabase';
+
+// Demo-only identity: stored on this device, never used to authorize server data.
 export type CustomerProfile={full_name:string;phone:string;whatsapp_opt_in:boolean};
 type Register={fullName:string;email:string;phone:string;password:string;whatsappOptIn:boolean};
 type AuthState={
  signedIn:boolean;loading:boolean;user:User|null;profile:CustomerProfile|null;
- signUp:(input:Register)=>Promise<boolean>;signIn:(email:string,password:string)=>Promise<void>;
+ signUp:(input:Register)=>Promise<boolean>;signIn:(name:string,password:string)=>Promise<void>;
  signOut:()=>Promise<void>;sendPasswordReset:(email:string)=>Promise<void>;
  updateProfile:(profile:CustomerProfile)=>Promise<void>;
 };
+const KEY='gcs-demo-display-name-v1';
+function savedName(){try{return (localStorage.getItem(KEY)||'').trim().slice(0,80);}catch{return '';}}
+function demoUser(name:string):User{return {id:'demo-local-user',aud:'demo',role:'demo',email:'',app_metadata:{},user_metadata:{full_name:name},created_at:new Date(0).toISOString()} as User;}
 const AuthContext=createContext<AuthState|null>(null);
-function profileFromUser(user:User):CustomerProfile{
- return {full_name:String(user.user_metadata?.full_name||''),phone:String(user.user_metadata?.phone||''),whatsapp_opt_in: Boolean(user.user_metadata?.whatsapp_opt_in)};
-}
 export function AuthProvider({children}:{children:ReactNode}){
- const [loading,setLoading]=useState(true),[user,setUser]=useState<User|null>(null),[profile,setProfile]=useState<CustomerProfile|null>(null);
- const loadProfile=useCallback(async(u:User)=>{
-  const base=profileFromUser(u);
-  if(!supabase)return;
-  const {data,error}=await supabase.from('gcs_customer_profiles').select('full_name,phone,whatsapp_opt_in').eq('user_id',u.id).maybeSingle();
-  if(data){setProfile(data as CustomerProfile);return;}
-  // New email-confirmed accounts have profile info in their private auth user metadata.
-  if(!error&&base.full_name&&base.phone){
-   const {error:saveError}=await supabase.from('gcs_customer_profiles').upsert({user_id:u.id,...base});
-   if(!saveError)setProfile(base);else setProfile(base);
-  }else setProfile(base);
- },[]);
- useEffect(()=>{
-  if(!supabase){setLoading(false);return;}
-  let live=true;
-  // Never leave the entire app stuck if the authentication service is waking up.
-  const loadingTimeout=window.setTimeout(()=>{if(live)setLoading(false);},12000);
-  supabase.auth.getSession().then(({data:{session}})=>{
-   if(!live)return;
-   setUser(session?.user||null);
-   if(session?.user)void loadProfile(session.user);else setProfile(null);
-   setLoading(false);
-  }).catch(()=>{if(live)setLoading(false);});
-  const {data:{subscription}}=supabase.auth.onAuthStateChange((_event,session)=>{
-   if(!live)return;
-   const u=session?.user||null;setUser(u);
-   if(!u)setProfile(null);
-   else window.setTimeout(()=>{if(live)void loadProfile(u);},0);
-  });
-  return ()=>{live=false;window.clearTimeout(loadingTimeout);subscription.unsubscribe();};
- },[loadProfile]);
- const signUp=async(input:Register)=>{
-  const client=requiredSupabase();
-  const {data,error}=await client.auth.signUp({
-   email:input.email.trim().toLowerCase(),password:input.password,
-   options:{emailRedirectTo:window.location.origin+window.location.pathname,
-    data:{full_name:input.fullName.trim(),phone:input.phone,whatsapp_opt_in:input.whatsappOptIn}}
-  });
-  if(error)throw error;
-  if(data.session?.user){setUser(data.session.user);await loadProfile(data.session.user);}
-  return Boolean(data.session);
+ const [name,setName]=useState(savedName);
+ const profile=name?{full_name:name,phone:'',whatsapp_opt_in:false}:null;
+ const user=name?demoUser(name):null;
+ const signIn=async(input:string,_password:string)=>{
+  const clean=input.trim().replace(/\s+/g,' ').slice(0,80);
+  if(clean.length<2)throw new Error('Please enter your name (at least 2 characters).');
+  try{localStorage.setItem(KEY,clean);}catch{/* session still works */}
+  setName(clean);
  };
- const signIn=async(email:string,password:string)=>{
-  const client=requiredSupabase();
-  // Limit a stalled auth request without bypassing Supabase authentication.
-  // A late successful response may still establish a session through onAuthStateChange.
-  let timeoutId:ReturnType<typeof setTimeout>|undefined;
-  try{
-   const timeout=new Promise<never>((_,reject)=>{
-    timeoutId=setTimeout(()=>reject(new Error('The login service is taking too long to respond. Please retry when the connection is available.')),15000);
-   });
-   const {data,error}=await Promise.race([
-    client.auth.signInWithPassword({email:email.trim().toLowerCase(),password}),
-    timeout
-   ]);
-   if(error)throw error;
-   if(!data.user)throw new Error('Unable to verify your account. Please try again.');
-   setUser(data.user);void loadProfile(data.user);
-  }catch(e){
-   const message=e instanceof Error?e.message:'';
-   if(/load failed|failed to fetch|networkerror|fetch failed/i.test(message))
-    throw new Error('Cannot reach the login server. Please check your connection or try again after the Supabase service becomes available.');
-   throw e;
-  }finally{if(timeoutId!==undefined)clearTimeout(timeoutId);}
- };
- const signOut=async()=>{const {error}=await requiredSupabase().auth.signOut();if(error)throw error;setUser(null);setProfile(null);};
- const sendPasswordReset=async(email:string)=>{
-  const {error}=await requiredSupabase().auth.resetPasswordForEmail(email.trim().toLowerCase(),{redirectTo:window.location.origin+window.location.pathname+'#/reset-password'});
-  if(error)throw error;
- };
- const updateProfile=async(next:CustomerProfile)=>{
-  const client=requiredSupabase();if(!user)throw new Error('Please sign in to continue.');
-  const {error}=await client.from('gcs_customer_profiles').upsert({user_id:user.id,...next,updated_at:new Date().toISOString()});
-  if(error)throw error;
-  setProfile(next);
- };
- return <AuthContext.Provider value={{signedIn:!!user,loading,user,profile,signUp,signIn,signOut,sendPasswordReset,updateProfile}}>{children}</AuthContext.Provider>;
+ const signOut=async()=>{try{localStorage.removeItem(KEY);}catch{/* ignore */}setName('');};
+ const updateProfile=async(next:CustomerProfile)=>{await signIn(next.full_name,'');};
+ const signUp=async(input:Register)=>{await signIn(input.fullName,'');return true;};
+ const sendPasswordReset=async()=>{throw new Error('Password recovery is not needed in demo mode.');};
+ return <AuthContext.Provider value={{signedIn:Boolean(name),loading:false,user,profile,signIn,signOut,signUp,sendPasswordReset,updateProfile}}>{children}</AuthContext.Provider>;
 }
 export function useAuth(){const ctx=useContext(AuthContext);if(!ctx)throw new Error('useAuth must be used inside AuthProvider');return ctx;}
