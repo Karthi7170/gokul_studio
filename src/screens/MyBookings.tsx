@@ -8,7 +8,7 @@ import {requiredSupabase} from '../lib/supabase';
 import {SERVICES,IMAGE_URL,THUMBNAIL_URL,formatDate,to12h,inr,type ServiceId} from '../data/services';
 
 type BookingRow={
- id:string;package_id:string;event_type:string;event_date:string|null;event_time:string|null;
+ id:string;customer_name:string|null;package_id:string;event_type:string;event_date:string|null;event_time:string|null;
  venue:string;estimated_amount:number;payment_status:string;payment_method:string|null;
  add_ons:string[]|null;created_at:string;notes:string;
 };
@@ -26,7 +26,7 @@ function BookingCard({item,featured=false}:{item:BookingRow;featured?:boolean}){
    <span className="my-booking-tail"><b className={item.payment_status==='demo_only'?'demo':'pending'}>{stateText(item)}</b><ChevronRight size={17} className={expanded?'rotated':''}/></span>
   </button>
   {expanded&&<div className="my-booking-expanded">
-    <div><span>Reference</span><strong>GCS-RQ-{item.id.slice(0,8).toUpperCase()}</strong></div>
+    <div><span>Customer</span><strong>{item.customer_name||'Demo Guest'}</strong></div><div><span>Reference</span><strong>GCS-RQ-{item.id.slice(0,8).toUpperCase()}</strong></div>
     <div><span>Event</span><strong>{item.event_type}</strong></div>
     {item.event_time&&<div><span>Time</span><strong>{to12h(item.event_time)}</strong></div>}
     <div><span>Estimated amount</span><strong>{inr(item.estimated_amount)}</strong></div>
@@ -45,7 +45,7 @@ export function MyBookings(){
   void (async()=>{
    try{
     const {data,error:dbError}=await requiredSupabase().from('gcs_booking_requests')
-     .select('id,package_id,event_type,event_date,event_time,venue,estimated_amount,payment_status,payment_method,add_ons,created_at,notes')
+     .select('id,customer_name,package_id,event_type,event_date,event_time,venue,estimated_amount,payment_status,payment_method,add_ons,created_at,notes')
      .eq('user_id',user.id).order('created_at',{ascending:false}).limit(80);
     if(!alive)return;
     if(dbError){setError('Unable to load your bookings. Please try again.');setItems([]);}
