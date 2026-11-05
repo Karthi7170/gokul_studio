@@ -92,17 +92,45 @@ function normalizePhone(phone:string){
  return raw;
 }
 export function SignIn(){
- const nav=useNavigate(),{signIn}=useAuth();
- const [name,setName]=useState(''),[error,setError]=useState('');
- const login=async()=>{setError('');try{await signIn(name,'');nav('/home',{replace:true});}catch(e){setError(e instanceof Error?e.message:'Enter your name.');}};
+ const nav=useNavigate();
+ const {signIn,signInDemo}=useAuth();
+ const [name,setName]=useState('');
+ const [phone,setPhone]=useState('');
+ const [error,setError]=useState('');
+ const [busy,setBusy]=useState(false);
+ const [busySocial,setBusySocial]=useState<'google'|'apple'|null>(null);
+ const login=async()=>{
+  if(busy||busySocial)return;
+  setError('');setBusy(true);
+  try{await signIn(name,phone);nav('/home',{replace:true});}
+  catch(e){setError(e instanceof Error?e.message:'Unable to enter the demo.');}
+  finally{setBusy(false);}
+ };
+ const socialLogin=async(provider:'google'|'apple')=>{
+  if(busy||busySocial)return;
+  setError('');setBusySocial(provider);
+  try{await signInDemo(provider);nav('/home',{replace:true});}
+  catch(e){setError(e instanceof Error?e.message:'Could not start social demo.');}
+  finally{setBusySocial(null);}
+ };
  return <AuthLayout>
-  <div className="gcs-auth-heading"><h2>Welcome to the Demo</h2><p>Enter your name to explore Gokul Creative Studio. No account or password needed.</p></div>
+  <div className="gcs-auth-heading"><h2>Welcome to the Demo</h2><p>Enter your name and mobile number to explore Gokul Creative Studio. No password or OTP needed.</p></div>
   <form className="gcs-auth-form" onSubmit={e=>{e.preventDefault();void login();}}>
-   <TextInput label="Your name" icon={UserRound} autoComplete="name" required placeholder="Enter your full name" value={name} onChange={e=>setName(e.target.value)} />
+   <TextInput label="Your name" icon={UserRound} autoComplete="name" required maxLength={80} placeholder="Enter your full name" value={name} onChange={e=>setName(e.target.value)} />
+   <TextInput label="Mobile number" icon={Phone} autoComplete="tel" type="tel" inputMode="tel" required placeholder="+91 98765 43210" value={phone} onChange={e=>setPhone(e.target.value)} helper="India: 10 digits. Other countries: +country code and number." />
    {error&&<p role="alert" className="error-text">{error}</p>}
-   <button type="submit" className="gcs-auth-submit" disabled={name.trim().length<2}>Continue to Demo <ArrowRight size={19}/></button>
+   <button type="submit" className="gcs-auth-submit" disabled={busy||Boolean(busySocial)||name.trim().length<2||phone.trim().length<8}>{busy?'Opening demo…':<>Continue to Demo <ArrowRight size={19}/></>}</button>
   </form>
-  <p className="gcs-auth-switch">Demo access only · No login authentication required</p>
+  <div className="gcs-petal-social-group">
+   <div className="gcs-auth-divider"><span/>OR TRY SOCIAL DEMO<span/></div>
+   <div className="gcs-auth-socials">
+    {(['google','apple'] as const).map(provider=><button key={provider} type="button" className={`gcs-oauth-button gcs-oauth-${provider}`} disabled={busy||Boolean(busySocial)} onClick={()=>void socialLogin(provider)}>
+     <SocialProviderIcon provider={provider}/>
+     <strong>{busySocial===provider?'Opening demo…':`Continue with ${provider==='google'?'Google':'Apple'} (Demo)`}</strong>
+    </button>)}
+   </div>
+  </div>
+  <p className="gcs-auth-switch">Demo only · Google and Apple buttons simulate sign-in; no real accounts are connected.</p>
  </AuthLayout>;
 }
 export function SignUp(){
