@@ -16,7 +16,7 @@ export function AuthProvider({children}:{children:ReactNode}){
  const loading=false;
  const user=name?({id:'gcs-local-demo',email:'',user_metadata:{full_name:name}} as User):null;
  const signIn=async(input:string,_password:string)=>{
-  const clean=input.trim().replace(/\\s+/g,' ').slice(0,80);
+  const clean=input.trim().replace(/\s+/g,' ').slice(0,80);
   if(clean.length<2)throw new Error('Please enter your name (at least 2 characters).');
   try{localStorage.setItem(KEY,clean);}catch{throw new Error('Please enable browser storage to use the demo.');}
   setName(clean);
