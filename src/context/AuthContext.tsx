@@ -1,6 +1,5 @@
-import {createContext,useContext,useEffect,useState,type ReactNode} from 'react';
+import {createContext,useContext,useState,type ReactNode} from 'react';
 import type {User} from '@supabase/supabase-js';
-import {requiredSupabase,supabase} from '../lib/supabase';
 export type CustomerProfile={full_name:string;phone:string;whatsapp_opt_in:boolean};
 type Register={fullName:string;email:string;phone:string;password:string;whatsappOptIn:boolean};
 type AuthState={
@@ -14,30 +13,12 @@ function savedName(){try{return (localStorage.getItem(KEY)||'').trim().slice(0,8
 const AuthContext=createContext<AuthState|null>(null);
 export function AuthProvider({children}:{children:ReactNode}){
  const [name,setName]=useState(savedName);
- const [user,setUser]=useState<User|null>(null);
- const [loading,setLoading]=useState(true);
- useEffect(()=>{
-  let live=true;
-  if(!supabase){setLoading(false);return;}
-  // Reuse the anonymous Supabase session on refresh; do not create a new owner ID.
-  void supabase.auth.getSession().then(({data})=>{if(live)setUser(data.session?.user??null);}).catch(()=>{}).finally(()=>{if(live)setLoading(false);});
-  const {data:{subscription}}=supabase.auth.onAuthStateChange((_event,session)=>{if(live)setUser(session?.user??null);});
-  return ()=>{live=false;subscription.unsubscribe();};
- },[]);
+ const loading=false;
+ const user=name?({id:'gcs-local-demo',email:'',user_metadata:{full_name:name}} as User):null;
  const signIn=async(input:string,_password:string)=>{
-  const clean=input.trim().replace(/\s+/g,' ').slice(0,80);
+  const clean=input.trim().replace(/\\s+/g,' ').slice(0,80);
   if(clean.length<2)throw new Error('Please enter your name (at least 2 characters).');
-  const client=requiredSupabase();
-  let {data:{session},error:sessionError}=await client.auth.getSession();
-  if(sessionError)throw sessionError;
-  if(!session?.user){
-   const {data,error}=await client.auth.signInAnonymously();
-   if(error)throw new Error('Demo booking connection is unavailable. Enable Anonymous Sign-Ins in Supabase Auth settings. '+error.message);
-   session=data.session;
-  }
-  if(!session?.user)throw new Error('Unable to start a demo session. Please try again.');
-  setUser(session.user);
-  try{localStorage.setItem(KEY,clean);}catch{/* session still works */}
+  try{localStorage.setItem(KEY,clean);}catch{throw new Error('Please enable browser storage to use the demo.');}
   setName(clean);
  };
  const signOut=async()=>{
@@ -48,7 +29,7 @@ export function AuthProvider({children}:{children:ReactNode}){
  const updateProfile=async(next:CustomerProfile)=>{
   const clean=next.full_name.trim().replace(/\s+/g,' ').slice(0,80);
   if(clean.length<2)throw new Error('Enter a name of at least 2 characters.');
-  try{localStorage.setItem(KEY,clean);}catch{/* ignore */}
+  try{localStorage.setItem(KEY,clean);}catch{throw new Error('Unable to save your demo profile.');}
   setName(clean);
  };
  const signUp=async(input:Register)=>{await signIn(input.fullName,'');return true;};
