@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {ArrowLeft,Check,LogOut,Pencil,Save,UserRound,CalendarDays} from 'lucide-react';
+import {ArrowLeft,Check,LogOut,Pencil,Save,UserRound,CalendarDays,Phone} from 'lucide-react';
 import {useAuth} from '../context/AuthContext';
 import {StudioBrandMark} from '../components/StudioBrandLogo';
 export function Profile(){
@@ -8,11 +8,13 @@ export function Profile(){
  const {profile,signOut,updateProfile}=useAuth();
  const [editing,setEditing]=useState(false);
  const [name,setName]=useState<string|null>(null);
+ const [phone,setPhone]=useState<string|null>(null);
  const [error,setError]=useState(''),[notice,setNotice]=useState('');
  const displayName=name??profile?.full_name??'';
+ const displayPhone=phone??profile?.phone??'';
  const save=async()=>{
   if(displayName.trim().length<2){setError('Please enter at least 2 characters.');return;}
-  try{await updateProfile({full_name:displayName.trim(),phone:'',whatsapp_opt_in:false});setName(null);setEditing(false);setError('');setNotice('Demo profile updated.');}
+  try{await updateProfile({full_name:displayName.trim(),phone:displayPhone.trim(),whatsapp_opt_in:false});setName(null);setPhone(null);setEditing(false);setError('');setNotice('Demo profile updated.');}
   catch(e){setError(e instanceof Error?e.message:'Unable to update profile.');}
  };
  const logout=async()=>{await signOut();nav('/sign-in',{replace:true});};
@@ -21,8 +23,8 @@ export function Profile(){
   <section className="gcs-account-cover" aria-label="Gokul Creative Studio"><div className="gcs-account-cover-content"><strong>GOKUL<br/><em>CREATIVE STUDIO</em></strong><i/><p>THE MOMENTS YOU LIVE.<br/>THE STORIES WE KEEP.</p></div></section>
   <div className="gcs-account-content">
    <section className="gcs-account-identity"><div className="gcs-account-avatar"><span className="gcs-account-option-icon"><UserRound size={34}/></span></div><h2>{profile?.full_name||'Demo Guest'}</h2><p>Gokul Creative Studio · Demo Profile</p></section>
-   <section className="gcs-account-fields" aria-label="Demo profile"><div className="gcs-account-field"><span className="gcs-account-field-icon"><UserRound size={22}/></span><div className="gcs-account-field-data"><label htmlFor="gcs-account-name">Full Name</label>{editing?<input id="gcs-account-name" autoComplete="name" maxLength={80} value={displayName} onChange={e=>setName(e.target.value)}/>:<strong>{profile?.full_name||'Your name'}</strong>}</div><button type="button" aria-label="Edit name" onClick={()=>setEditing(true)}><Pencil size={17}/></button></div></section>
-   <div className="gcs-account-edit-controls">{editing?<><button type="button" className="gcs-account-main-cta" onClick={()=>void save()}><Save size={19}/>Save Name</button><button type="button" className="gcs-account-cancel" onClick={()=>{setEditing(false);setName(null);setError('');}}>Cancel</button></>:<button type="button" className="gcs-account-main-cta" onClick={()=>setEditing(true)}><Pencil size={19}/>Edit Name</button>}</div>
+   <section className="gcs-account-fields" aria-label="Demo profile"><div className="gcs-account-field"><span className="gcs-account-field-icon"><UserRound size={22}/></span><div className="gcs-account-field-data"><label htmlFor="gcs-account-name">Full Name</label>{editing?<input id="gcs-account-name" autoComplete="name" maxLength={80} value={displayName} onChange={e=>setName(e.target.value)}/>:<strong>{profile?.full_name||'Your name'}</strong>}</div><button type="button" aria-label="Edit name" onClick={()=>setEditing(true)}><Pencil size={17}/></button></div><div className="gcs-account-field"><span className="gcs-account-field-icon"><Phone size={22}/></span><div className="gcs-account-field-data"><label htmlFor="gcs-account-phone">Mobile Number</label>{editing?<input id="gcs-account-phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="+91 98765 43210" value={displayPhone} onChange={e=>setPhone(e.target.value)}/>:<strong>{profile?.phone||'Not provided (social demo)'}</strong>}</div><button type="button" aria-label="Edit mobile number" onClick={()=>setEditing(true)}><Pencil size={17}/></button></div></section>
+   <div className="gcs-account-edit-controls">{editing?<><button type="button" className="gcs-account-main-cta" onClick={()=>void save()}><Save size={19}/>Save Profile</button><button type="button" className="gcs-account-cancel" onClick={()=>{setEditing(false);setName(null);setPhone(null);setError('');}}>Cancel</button></>:<button type="button" className="gcs-account-main-cta" onClick={()=>setEditing(true)}><Pencil size={19}/>Edit Profile</button>}</div>
    {error&&<p role="alert" className="gcs-account-error">{error}</p>}{notice&&<p role="status" className="gcs-account-notice"><Check size={17}/>{notice}</p>}
    <nav className="gcs-account-options"><button type="button" className="gcs-account-option" onClick={()=>nav('/bookings')}><CalendarDays size={21}/> My Bookings</button><button type="button" className="gcs-account-option danger" onClick={()=>void logout()}><LogOut size={21}/> Exit Demo</button></nav>
   </div>
