@@ -131,6 +131,7 @@ export function SignIn(){
    </div>
   </div>
   <p className="gcs-auth-switch">Demo only · Google and Apple buttons simulate sign-in; no real accounts are connected.</p>
+  <p className="gcs-auth-switch" style={{textAlign:"center",marginTop:"18px",fontSize:"12px",opacity:0.8}}>Demo created by <strong>AI x MAD Studio</strong></p>
  </AuthLayout>;
 }
 export function SignUp(){
