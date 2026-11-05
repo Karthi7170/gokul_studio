@@ -4,14 +4,10 @@ import {ArrowRight,CalendarDays,ChevronRight,Clock3,MapPin,RefreshCw,ShieldCheck
 import {useAuth} from '../context/AuthContext';
 import {StudioBrandLogo} from '../components/StudioBrandLogo';
 import {SignedInAvatarButton} from '../components/SignedInAvatarButton';
-import {requiredSupabase} from '../lib/supabase';
+import {readDemoBookings,type DemoBookingRow} from '../lib/requests';
 import {SERVICES,IMAGE_URL,THUMBNAIL_URL,formatDate,to12h,inr,type ServiceId} from '../data/services';
 
-type BookingRow={
- id:string;customer_name:string|null;package_id:string;event_type:string;event_date:string|null;event_time:string|null;
- venue:string;estimated_amount:number;payment_status:string;payment_method:string|null;
- add_ons:string[]|null;created_at:string;notes:string;
-};
+type BookingRow=DemoBookingRow;
 function matched(row:BookingRow){return SERVICES.find(s=>s.id===row.package_id)||SERVICES[0];}
 function stateText(row:BookingRow){
  return row.payment_status==='demo_only'?'Demo booking':row.payment_status==='not_paid'?'Quotation request':'Request under review';
@@ -37,24 +33,14 @@ function BookingCard({item,featured=false}:{item:BookingRow;featured?:boolean}){
  </article>;
 }
 export function MyBookings(){
- const nav=useNavigate();const {user}=useAuth();
+ const nav=useNavigate();const {profile}=useAuth();
  const [items,setItems]=useState<BookingRow[]>([]),[loading,setLoading]=useState(true),[error,setError]=useState(''),[refresh,setRefresh]=useState(0);
  useEffect(()=>{
-  if(!user?.id){setItems([]);setLoading(false);return;}
-  let alive=true;setLoading(true);setError('');
-  void (async()=>{
-   try{
-    const {data,error:dbError}=await requiredSupabase().from('gcs_booking_requests')
-     .select('id,customer_name,package_id,event_type,event_date,event_time,venue,estimated_amount,payment_status,payment_method,add_ons,created_at,notes')
-     .eq('user_id',user.id).order('created_at',{ascending:false}).limit(80);
-    if(!alive)return;
-    if(dbError){setError('Unable to load your bookings. Please try again.');setItems([]);}
-    else setItems((data||[]) as BookingRow[]);
-   }catch{if(alive){setError('Could not connect to your bookings.');setItems([]);}}
-   finally{if(alive)setLoading(false);}
-  })();
-  return ()=>{alive=false;};
- },[user?.id,refresh]);
+  setLoading(true);setError('');
+  try{setItems(readDemoBookings().filter(item=>item.customer_name.toLocaleLowerCase()===String(profile?.full_name||'').toLocaleLowerCase()));}
+  catch{setError('Unable to read demo bookings stored on this device.');}
+  finally{setLoading(false);}
+ },[profile?.full_name,refresh]);
  const now=new Date().toISOString().slice(0,10);
  const next=useMemo(()=>items.filter(item=>item.event_date&&item.event_date>=now).sort((a,b)=>(a.event_date||'').localeCompare(b.event_date||''))[0]||null,[items,now]);
  const sorted=items.filter(item=>item.id!==next?.id);
@@ -75,6 +61,6 @@ export function MyBookings(){
   {!loading&&!error&&items.length>0&&<section className="my-bookings-all"><div className="my-bookings-list-heading"><h2>All Requests</h2><span>{items.length} total</span></div>
     {items.map(item=><BookingCard key={item.id} item={item}/>)}
   </section>}
-  <div className="my-bookings-help"><ShieldCheck size={18}/><p>Only your own bookings are shown. Demo payments do not create a paid reservation.</p></div>
+  <div className="my-bookings-help"><ShieldCheck size={18}/><p>Bookings are stored only in this browser under your demo name. No real payment or reservation is made.</p></div>
  </div>;
 }
