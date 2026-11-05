@@ -29,6 +29,8 @@ export function AuthProvider({children}:{children:ReactNode}){
  useEffect(()=>{
   if(!supabase){setLoading(false);return;}
   let live=true;
+  // Never leave the entire app stuck if the authentication service is waking up.
+  const loadingTimeout=window.setTimeout(()=>{if(live)setLoading(false);},12000);
   supabase.auth.getSession().then(({data:{session}})=>{
    if(!live)return;
    setUser(session?.user||null);
@@ -41,7 +43,7 @@ export function AuthProvider({children}:{children:ReactNode}){
    if(!u)setProfile(null);
    else window.setTimeout(()=>{if(live)void loadProfile(u);},0);
   });
-  return ()=>{live=false;subscription.unsubscribe();};
+  return ()=>{live=false;window.clearTimeout(loadingTimeout);subscription.unsubscribe();};
  },[loadProfile]);
  const signUp=async(input:Register)=>{
   const client=requiredSupabase();
@@ -55,9 +57,27 @@ export function AuthProvider({children}:{children:ReactNode}){
   return Boolean(data.session);
  };
  const signIn=async(email:string,password:string)=>{
-  const {data,error}=await requiredSupabase().auth.signInWithPassword({email:email.trim().toLowerCase(),password});
-  if(error)throw error;
-  setUser(data.user);void loadProfile(data.user);
+  const client=requiredSupabase();
+  // Limit a stalled auth request without bypassing Supabase authentication.
+  // A late successful response may still establish a session through onAuthStateChange.
+  let timeoutId:ReturnType<typeof setTimeout>|undefined;
+  try{
+   const timeout=new Promise<never>((_,reject)=>{
+    timeoutId=setTimeout(()=>reject(new Error('The login service is taking too long to respond. Please retry when the connection is available.')),15000);
+   });
+   const {data,error}=await Promise.race([
+    client.auth.signInWithPassword({email:email.trim().toLowerCase(),password}),
+    timeout
+   ]);
+   if(error)throw error;
+   if(!data.user)throw new Error('Unable to verify your account. Please try again.');
+   setUser(data.user);void loadProfile(data.user);
+  }catch(e){
+   const message=e instanceof Error?e.message:'';
+   if(/load failed|failed to fetch|networkerror|fetch failed/i.test(message))
+    throw new Error('Cannot reach the login server. Please check your connection or try again after the Supabase service becomes available.');
+   throw e;
+  }finally{if(timeoutId!==undefined)clearTimeout(timeoutId);}
  };
  const signOut=async()=>{const {error}=await requiredSupabase().auth.signOut();if(error)throw error;setUser(null);setProfile(null);};
  const sendPasswordReset=async(email:string)=>{
