@@ -93,38 +93,16 @@ function normalizePhone(phone:string){
 }
 export function SignIn(){
  const nav=useNavigate(),{signIn}=useAuth();
- const [email,setEmail]=useState(''),[password,setPassword]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false);
- const [oauthError,setOAuthError]=useState(''),[busyProvider,setBusyProvider]=useState<OAuthProvider|null>(null);
- useOAuthRedirectError(setOAuthError);
- const login=async()=>{if(!email.trim()||!password||busy)return;
-  setBusy(true);setError('');
-  try{await signIn(email,password);nav('/home',{replace:true});}
-  catch(e){const message=e instanceof Error?e.message:'Could not sign in. Please try again.';setError(/email not confirmed/i.test(message)?'Please verify your email using the confirmation link before signing in.':message);}
-  finally{setBusy(false);}
- };
- const oauth=async(provider:OAuthProvider)=>{
-  if(busyProvider)return;
-  setOAuthError('');setBusyProvider(provider);
-  try{await startOAuth(provider);}
-  catch(e){setOAuthError(oauthMessage(provider,e));}
-  finally{setBusyProvider(null);}
- };
+ const [name,setName]=useState(''),[error,setError]=useState('');
+ const login=async()=>{setError('');try{await signIn(name,'');nav('/home',{replace:true});}catch(e){setError(e instanceof Error?e.message:'Enter your name.');}};
  return <AuthLayout>
-  <div className="gcs-auth-heading"><h2>Sign in</h2><p>Your bookings, quotations and memories in one place.</p></div>
+  <div className="gcs-auth-heading"><h2>Welcome to the Demo</h2><p>Enter your name to explore Gokul Creative Studio. No account or password needed.</p></div>
   <form className="gcs-auth-form" onSubmit={e=>{e.preventDefault();void login();}}>
-   <TextInput label="Email address" icon={Mail} type="email" autoComplete="email" inputMode="email" required placeholder="you@example.com" value={email} onChange={e=>setEmail(e.target.value)}/>
-   <TextInput label="Password" icon={LockKeyhole} autoComplete="current-password" required placeholder="Your password" password value={password} onChange={e=>setPassword(e.target.value)}/>
-   <div className="gcs-auth-inline"><span className="gcs-auth-remember"><CheckCircle2 size={17}/> Remember me</span><button type="button" onClick={()=>nav('/forgot-password')}>Forgot password?</button></div>
-   {!authConfigured&&<p role="alert" className="error-text">Authentication is not configured for this environment.</p>}
+   <TextInput label="Your name" icon={UserRound} autoComplete="name" required placeholder="Enter your full name" value={name} onChange={e=>setName(e.target.value)} />
    {error&&<p role="alert" className="error-text">{error}</p>}
-   <button type="submit" className="gcs-auth-submit" disabled={!authConfigured||!email.trim()||!password||busy}>
-    {busy?'Signing in…':<>Sign In <ArrowRight size={19}/></>}
-   </button>
+   <button type="submit" className="gcs-auth-submit" disabled={name.trim().length<2}>Continue to Demo <ArrowRight size={19}/></button>
   </form>
-  <SocialRow onProvider={p=>void oauth(p)} busyProvider={busyProvider}/>
-  {oauthError&&<p className="gcs-oauth-error" role="alert">{oauthError}</p>}
-  <p className="gcs-auth-switch">New to Gokul Studio? <button type="button" onClick={()=>nav('/sign-up')}>Create an account</button></p>
-  <div className="gcs-auth-security"><ShieldCheck size={16}/> Secure account powered by Supabase Auth</div>
+  <p className="gcs-auth-switch">Demo access only · No login authentication required</p>
  </AuthLayout>;
 }
 export function SignUp(){
