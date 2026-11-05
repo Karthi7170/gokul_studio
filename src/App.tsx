@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import type {ReactNode} from 'react';
-import {SignIn, SignUp, ForgotPassword, ResetPassword} from './screens/AuthScreens';
+import {SignIn} from './screens/AuthScreens';
 import {Home, BookService} from './screens/HomeScreens';
 import {PackageDetails} from './screens/PackageDetails';
 import {Profile} from './screens/Profile';
@@ -22,9 +22,9 @@ export default function App(){
  {loading?<div className="session-loading">Preparing your studio…</div>:<Routes location={location}>
  <Route path="/" element={<Navigate to={signedIn?'/home':'/sign-in'} replace/>}/>
  <Route path="/sign-in" element={<GuestOnly><SignIn/></GuestOnly>}/>
- <Route path="/sign-up" element={<GuestOnly><SignUp/></GuestOnly>}/>
- <Route path="/forgot-password" element={<GuestOnly><ForgotPassword/></GuestOnly>}/>
- <Route path="/reset-password" element={<ResetPassword/>}/>
+ <Route path="/sign-up" element={<Navigate to="/sign-in" replace/>}/>
+ <Route path="/forgot-password" element={<Navigate to="/sign-in" replace/>}/>
+ <Route path="/reset-password" element={<Navigate to="/sign-in" replace/>}/>
  <Route path="/home" element={<Private><Home/></Private>}/>
  <Route path="/book" element={<Private><BookService/></Private>}/>
  <Route path="/bookings" element={<Private><MyBookings/></Private>}/>
