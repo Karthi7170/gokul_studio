@@ -21,11 +21,17 @@ export async function submitQuoteRequest(booking:Booking,_userId:string):Promise
  return id;
 }
 export async function completeDemoPayment(booking:Booking,userId:string,method:Booking['paymentMethod']):Promise<string>{
- const id=booking.requestId||await submitQuoteRequest(booking,userId);
- const rows=readDemoBookings();
- const row=rows.find(r=>r.id===id);
- if(!row)throw new Error('Demo booking not found. Please start a new booking.');
+ // Old Supabase request IDs can survive in a draft after switching to local demo mode.
+ // Create a local record when the draft points to a nonexistent local booking.
+ let rows=readDemoBookings();
+ let row=booking.requestId?rows.find(r=>r.id===booking.requestId):undefined;
+ if(!row){
+  const newId=await submitQuoteRequest(booking,userId);
+  rows=readDemoBookings();
+  row=rows.find(r=>r.id===newId);
+ }
+ if(!row)throw new Error('Unable to save this demo booking. Please check browser storage.');
  row.payment_status='demo_only';row.payment_method=method;
  save(rows);
- return id;
+ return row.id;
 }
