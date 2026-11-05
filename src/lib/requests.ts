@@ -8,7 +8,7 @@ export async function submitQuoteRequest(booking:Booking,userId:string):Promise<
  if(!booking.eventType.trim()||!booking.venue.trim()||!/^\d{4}-\d{2}-\d{2}$/.test(booking.date)||booking.date<today||!/^([01]\d|2[0-3]):[0-5]\d$/.test(booking.time))throw new Error('Choose a future event date, time and venue before continuing.');
  const api=requiredSupabase();
  const {data,error}=await api.from('gcs_booking_requests').insert({
-  user_id:userId,package_id:booking.serviceId,event_type:booking.eventType,
+  user_id:userId,customer_name:booking.fullName.trim(),package_id:booking.serviceId,event_type:booking.eventType,
   event_date:booking.date,event_time:booking.time,venue:booking.venue.trim(),
   notes:booking.notes,add_ons:booking.addOns,estimated_amount:getBookingEstimate(booking.serviceId,booking.addOns).total,
   payment_status:'not_paid'
