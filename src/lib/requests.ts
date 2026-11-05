@@ -15,7 +15,7 @@ export async function submitQuoteRequest(booking:Booking,_userId:string):Promise
  const now=new Date();
  const today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');
  if(!booking.eventType.trim()||!booking.venue.trim()||!/^\d{4}-\d{2}-\d{2}$/.test(booking.date)||booking.date<today||!/^([01]\d|2[0-3]):[0-5]\d$/.test(booking.time))throw new Error('Choose a future event date, time and venue before continuing.');
- const id=crypto.randomUUID();
+ const id=typeof crypto!=='undefined'&&typeof crypto.randomUUID==='function'?crypto.randomUUID():`demo-${Date.now()}-${Math.random().toString(36).slice(2,12)}`;
  const row:DemoBookingRow={id,customer_name:booking.fullName.trim(),package_id:booking.serviceId,event_type:booking.eventType,event_date:booking.date,event_time:booking.time,venue:booking.venue.trim(),notes:booking.notes,add_ons:booking.addOns,estimated_amount:getBookingEstimate(booking.serviceId,booking.addOns).total,payment_status:'not_paid',payment_method:null,created_at:new Date().toISOString()};
  save([row,...readDemoBookings()]);
  return id;
