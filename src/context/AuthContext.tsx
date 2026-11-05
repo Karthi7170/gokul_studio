@@ -14,7 +14,7 @@ const AuthContext=createContext<AuthState|null>(null);
 export function AuthProvider({children}:{children:ReactNode}){
  const [name,setName]=useState(savedName);
  const loading=false;
- const user=name?({id:'gcs-local-demo',email:'',user_metadata:{full_name:name}} as User):null;
+ const user=name?({id:'gcs-local-demo',email:'',user_metadata:{full_name:name},app_metadata:{provider:'demo',providers:['demo']},aud:'authenticated',created_at:new Date(0).toISOString()} satisfies User):null;
  const signIn=async(input:string,_password:string)=>{
   const clean=input.trim().replace(/\s+/g,' ').slice(0,80);
   if(clean.length<2)throw new Error('Please enter your name (at least 2 characters).');
