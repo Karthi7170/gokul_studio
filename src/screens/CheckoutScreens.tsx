@@ -64,10 +64,9 @@ export function Payment(){
  const detailsReady=Boolean(booking.eventType.trim()&&booking.venue.trim()&&/^\d{4}-\d{2}-\d{2}$/.test(booking.date)&&booking.date>=today&&/^([01]\d|2[0-3]):[0-5]\d$/.test(booking.time));
  const selectPayment=async(method:Booking['paymentMethod'])=>{
   if(processing)return;
-  if(!user){setError('Please sign in first.');return;}
   setProcessing(method);setError('');
   try{
-   const id=await completeDemoPayment(booking,user.id,method);
+   const id=await completeDemoPayment(booking,user?.id||'local-demo',method);
    update({...refUpdate(id),paymentMethod:method,paymentStatus:'Demo Only'});
    nav('/confirmed',{replace:true});
   }catch(e){setError(e instanceof Error?e.message:'Could not complete the demo. Please try again.');}
