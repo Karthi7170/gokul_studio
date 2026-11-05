@@ -1,33 +1,31 @@
 import type {Booking} from '../context/BookingContext';
 import {getBookingEstimate} from '../data/services';
-import {requiredSupabase} from './supabase';
-
-export async function submitQuoteRequest(booking:Booking,userId:string):Promise<string>{
+export type DemoBookingRow={
+ id:string;customer_name:string;package_id:string;event_type:string;event_date:string|null;event_time:string|null;
+ venue:string;estimated_amount:number;payment_status:string;payment_method:string|null;
+ add_ons:string[];created_at:string;notes:string;
+};
+const STORAGE_KEY='gcs-demo-bookings-v2';
+export function readDemoBookings():DemoBookingRow[]{
+ try{const parsed:unknown=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');return Array.isArray(parsed)?parsed.filter((r):r is DemoBookingRow=>Boolean(r&&typeof r==='object'&&typeof r.id==='string')):[];}
+ catch{return [];}
+}
+function save(rows:DemoBookingRow[]){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(rows.slice(0,100)));}catch{throw new Error('Cannot save demo booking. Enable browser storage or free up device space.');}}
+export async function submitQuoteRequest(booking:Booking,_userId:string):Promise<string>{
  const now=new Date();
  const today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');
- if(!booking.eventType.trim()||!booking.venue.trim()||!/^\d{4}-\d{2}-\d{2}$/.test(booking.date)||booking.date<today||!/^([01]\d|2[0-3]):[0-5]\d$/.test(booking.time))throw new Error('Choose a future event date, time and venue before continuing.');
- const api=requiredSupabase();
- const {data,error}=await api.from('gcs_booking_requests').insert({
-  user_id:userId,customer_name:booking.fullName.trim(),package_id:booking.serviceId,event_type:booking.eventType,
-  event_date:booking.date,event_time:booking.time,venue:booking.venue.trim(),
-  notes:booking.notes,add_ons:booking.addOns,estimated_amount:getBookingEstimate(booking.serviceId,booking.addOns).total,
-  payment_status:'not_paid'
- }).select('id').single();
- if(error)throw error;
- return String(data.id);
+ if(!booking.eventType.trim()||!booking.venue.trim()||!/^\\d{4}-\\d{2}-\\d{2}$/.test(booking.date)||booking.date<today||!/^([01]\\d|2[0-3]):[0-5]\\d$/.test(booking.time))throw new Error('Choose a future event date, time and venue before continuing.');
+ const id=crypto.randomUUID();
+ const row:DemoBookingRow={id,customer_name:booking.fullName.trim(),package_id:booking.serviceId,event_type:booking.eventType,event_date:booking.date,event_time:booking.time,venue:booking.venue.trim(),notes:booking.notes,add_ons:booking.addOns,estimated_amount:getBookingEstimate(booking.serviceId,booking.addOns).total,payment_status:'not_paid',payment_method:null,created_at:new Date().toISOString()};
+ save([row,...readDemoBookings()]);
+ return id;
 }
-
-/**
- * Demo only: updates a booking request to a visibly non-financial state.
- * Neither this function nor its database status is evidence of real payment.
- */
 export async function completeDemoPayment(booking:Booking,userId:string,method:Booking['paymentMethod']):Promise<string>{
- const api=requiredSupabase();
- const requestId=booking.requestId||await submitQuoteRequest(booking,userId);
- const {data,error}=await api.from('gcs_booking_requests')
-  .update({payment_status:'demo_only',payment_method:method})
-  .eq('id',requestId).eq('user_id',userId).select('id').single();
- if(error)throw error;
- if(!data)throw new Error('Could not record the demo booking.');
- return String(data.id);
+ const id=booking.requestId||await submitQuoteRequest(booking,userId);
+ const rows=readDemoBookings();
+ const row=rows.find(r=>r.id===id);
+ if(!row)throw new Error('Demo booking not found. Please start a new booking.');
+ row.payment_status='demo_only';row.payment_method=method;
+ save(rows);
+ return id;
 }
